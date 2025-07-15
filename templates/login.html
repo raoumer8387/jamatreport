@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>امارت اسلامیہ - لاگ ان</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Jammat e Islami</h1>
+            <h2> ضلعی رپورٹ سسٹم</h2>
+        </div>
+        
+        <div class="login-form-container">
+            <h3>ضلعی امیروں کے لیے لاگ ان</h3>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+            
+            <form method="POST" class="login-form">
+                <div class="form-group">
+                    <label for="username">یوزر نیم:</label>
+                    <input type="text" id="username" name="username" required dir="ltr" lang="en" style="text-align: left;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">پاس ورڈ:</label>
+                    <input type="password" id="password" name="password" required dir="ltr" lang="en" style="text-align: left;">
+                </div>
+                
+                <button type="submit" class="login-btn">لاگ ان کریں</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>ڈیفالٹ اکاؤنٹس:</p>
+                <ul>
+                    <li><strong>Admin:</strong> admin / admin123</li>
+                    <li><strong>Karachi:</strong> karachi / khi123</li>
+                    <li><strong>Lahore:</strong> lahore / lhr123</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

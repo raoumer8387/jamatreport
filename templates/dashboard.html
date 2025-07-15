@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڈیش بورڈ - امارت اسلامیہ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>امارت اسلامیہ</h1>
+                <h2>ڈیش بورڈ</h2>
+            </div>
+            <div class="header-actions">
+                <a href="{{ url_for('report') }}" class="report-btn">رپورٹ فارم</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">لاگ آؤٹ</a>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card">
+                <h3>کل اضلاع</h3>
+                <div class="card-value">{{ summary.total_zilas }}</div>
+            </div>
+            <div class="card">
+                <h3>کل ارکان</h3>
+                <div class="card-value">{{ summary.total_arkaan }}</div>
+            </div>
+            <div class="card">
+                <h3>کل ممبرز</h3>
+                <div class="card-value">{{ summary.total_members }}</div>
+            </div>
+            <div class="card">
+                <h3>کل مالی چندہ</h3>
+                <div class="card-value">{{ "{:,.0f}".format(summary.total_collections) }} روپے</div>
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="reports-section">
+            <h3>اس مہینے کی رپورٹس</h3>
+            {% if reports %}
+                <div class="table-responsive">
+                    <table class="reports-table">
+                        <thead>
+                            <tr>
+                                <th>ضلع</th>
+                                <th>ارکان</th>
+                                <th>ممبرز</th>
+                                <th>رفقاء</th>
+                                <th>امیدوار</th>
+                                <th>مالی چندہ</th>
+                                <th>جمع کنندہ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in reports %}
+                                <tr>
+                                    <td>{{ report.zila }}</td>
+                                    <td>{{ report.arkaan }}</td>
+                                    <td>{{ report.members }}</td>
+                                    <td>{{ report.rafaqa }}</td>
+                                    <td>{{ report.umeedwaar }}</td>
+                                    <td>{{ "{:,.0f}".format(report.financial_collections) }} روپے</td>
+                                    <td>{{ report.submitted_by }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="no-reports">
+                    <p>اس مہینے کی کوئی رپورٹ موجود نہیں ہے۔</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <h3>گرافیکل خلاصہ</h3>
+            <div class="chart-container">
+                <canvas id="organizationChart"></canvas>
+            </div>
+        </div>
+    </div>
+<!-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Create organization chart
+        const ctx = document.getElementById('organizationChart').getContext('2d');
+        const organizationChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for report in reports %}
+                        '{{ report.zila }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'ارکان',
+                    data: [
+                        {% for report in reports %}
+                            {{ report.arkaan }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: '#4CAF50',
+                    borderColor: '#45a049',
+                    borderWidth: 1
+                }, {
+                    label: 'ممبرز',
+                    data: [
+                        {% for report in reports %}
+                            {{ report.members }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: '#2196F3',
+                    borderColor: '#1976D2',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'تنظیمی اعداد و شمار'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
