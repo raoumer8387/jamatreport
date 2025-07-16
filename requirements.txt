@@ -1,7 +1,10 @@
-Flask==2.3.3
-pandas==2.0.3
-openpyxl==3.1.2
-gspread==5.12.0
-google-auth==2.23.4
-google-auth-oauthlib==1.1.0
-google-auth-httplib2==0.1.1 
+Flask
+pandas
+openpyxl
+requests
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+oauth2client
+Werkzeug
