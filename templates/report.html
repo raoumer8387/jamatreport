@@ -20,8 +20,9 @@
             </div>
         </header>
 
-        <div class="alert alert-info">
-            <strong>نوٹ:</strong> آپ نے اس مہینے کی رپورٹ پہلے سے جمع کی ہے۔ آپ اسے دوبارہ اپ ڈیٹ کر سکتے ہیں۔
+
+        <div class="alert alert-warning" style="margin-bottom: 20px;">
+            <strong>نوٹ:</strong> براہ کرم کوئی بھی فیلڈ خالی نہ چھوڑیں۔
         </div>
 
         <form method="POST" class="report-form">
@@ -58,7 +59,10 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-union">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0" required value="{{ form_data.get('nazm_qaim_union', '') }}" {% if report_exists %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0" required value="{{ form_data.get('nazm_qaim_union', '') }}" placeholder="0" {% if locked_fields['nazm_qaim_union'] %}readonly{% endif %}>
+                        {% if locked_fields['nazm_qaim_union'] %}
+                          <input type="hidden" name="nazm_qaim_union" value="{{ form_data.get('nazm_qaim_union', '') }}">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -69,7 +73,10 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-wards">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0" required value="{{ form_data.get('nazm_qaim_wards', '') }}" {% if report_exists %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0" required value="{{ form_data.get('nazm_qaim_wards', '') }}" placeholder="0" {% if locked_fields['nazm_qaim_wards'] %}readonly{% endif %}>
+                        {% if locked_fields['nazm_qaim_wards'] %}
+                          <input type="hidden" name="nazm_qaim_wards" value="{{ form_data.get('nazm_qaim_wards', '') }}">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -80,7 +87,10 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-blockcode">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0" required value="{{ form_data.get('nazm_qaim_blockcode', '') }}" {% if report_exists %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0" required value="{{ form_data.get('nazm_qaim_blockcode', '') }}" placeholder="0" {% if locked_fields['nazm_qaim_blockcode'] %}readonly{% endif %}>
+                        {% if locked_fields['nazm_qaim_blockcode'] %}
+                          <input type="hidden" name="nazm_qaim_blockcode" value="{{ form_data.get('nazm_qaim_blockcode', '') }}">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -91,7 +101,10 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-cantonment">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0" required value="{{ form_data.get('nazm_qaim_cantonment', '') }}" {% if report_exists %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0" required value="{{ form_data.get('nazm_qaim_cantonment', '') }}" placeholder="0" {% if locked_fields['nazm_qaim_cantonment'] %}readonly{% endif %}>
+                        {% if locked_fields['nazm_qaim_cantonment'] %}
+                          <input type="hidden" name="nazm_qaim_cantonment" value="{{ form_data.get('nazm_qaim_cantonment', '') }}">
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -103,6 +116,16 @@
                     const ikhtitaam = aghaaz + izafa - kami;
                     document.getElementById(prefix + '-ikhtitaam').textContent = ikhtitaam;
                 }
+                // Add event listeners for new rows
+                document.addEventListener('DOMContentLoaded', function () {
+                    ['nizam-e-fajar', 'awaami-committee'].forEach(function(prefix) {
+                        const izafa = document.getElementById(prefix + '-izafa');
+                        const kami = document.getElementById(prefix + '-kami');
+                        if (izafa) izafa.addEventListener('input', function() { calculateIkhtitaam(prefix); });
+                        if (kami) kami.addEventListener('input', function() { calculateIkhtitaam(prefix); });
+                        calculateIkhtitaam(prefix);
+                    });
+                });
             </script>
             <!-- تنظیمی ہیٔت -->
             <div class="form-section">
@@ -124,48 +147,126 @@
                             <td class="prev-value" id="alaqajat-hadaf">{{ form_data.get('alaqajat_target', 0) }}</td>
                             <td class="prev-value" id="alaqajat-aghaaz">{{ form_data.get('alaqajat_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="alaqajat-izafa" name="alaqajat_izafa" min="0" value="{{ form_data.get('alaqajat_izafa', '') }}" oninput="calculateIkhtitaam('alaqajat')" {% if form_data.get('alaqajat_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="alaqajat-izafa" name="alaqajat_izafa" min="0" required value="{{ form_data.get('alaqajat_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('alaqajat')" {% if locked_fields['alaqajat_izafa'] %}readonly{% endif %}>
+                                {% if locked_fields['alaqajat_izafa'] %}
+                                  <input type="hidden" name="alaqajat_izafa" value="{{ form_data.get('alaqajat_izafa', '') }}">
+                                {% endif %}
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="alaqajat-kami" name="alaqajat_kami" min="0" value="{{ form_data.get('alaqajat_kami', '') }}" oninput="calculateIkhtitaam('alaqajat')" {% if form_data.get('alaqajat_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="alaqajat-kami" name="alaqajat_kami" min="0" required value="{{ form_data.get('alaqajat_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('alaqajat')" {% if locked_fields['alaqajat_kami'] %}readonly{% endif %}>
+                                {% if locked_fields['alaqajat_kami'] %}
+                                  <input type="hidden" name="alaqajat_kami" value="{{ form_data.get('alaqajat_kami', '') }}">
+                                {% endif %}
                             </td>
-                            <td class="calculated-value" id="alaqajat-ikhtitaam">{{ (form_data.get('alaqajat_start', 0) | int) + (form_data.get('alaqajat_izafa', 0) | int) - (form_data.get('alaqajat_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="alaqajat-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('alaqajat_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('alaqajat_start', 0) | int) + (form_data.get('alaqajat_izafa', 0) | int) - (form_data.get('alaqajat_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>حلقہ جات </td>
                             <td class="prev-value" id="halqajat-hadaf">{{ form_data.get('halqajat_target', 0) }}</td>
                             <td class="prev-value" id="halqajat-aghaaz">{{ form_data.get('halqajat_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="halqajat-izafa" name="halqajat_izafa" min="0" value="{{ form_data.get('halqajat_izafa', '') }}" oninput="calculateIkhtitaam('halqajat')" {% if form_data.get('halqajat_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="halqajat-izafa" name="halqajat_izafa" min="0" required value="{{ form_data.get('halqajat_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('halqajat')" {% if locked_fields['halqajat_izafa'] %}readonly{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="halqajat-kami" name="halqajat_kami" min="0" value="{{ form_data.get('halqajat_kami', '') }}" oninput="calculateIkhtitaam('halqajat')" {% if form_data.get('halqajat_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="halqajat-kami" name="halqajat_kami" min="0" required value="{{ form_data.get('halqajat_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('halqajat')" {% if locked_fields['halqajat_kami'] %}readonly{% endif %}>
                             </td>
-                            <td class="calculated-value" id="halqajat-ikhtitaam">{{ (form_data.get('halqajat_start', 0) | int) + (form_data.get('halqajat_izafa', 0) | int) - (form_data.get('halqajat_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="halqajat-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('halqajat_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('halqajat_start', 0) | int) + (form_data.get('halqajat_izafa', 0) | int) - (form_data.get('halqajat_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>کتنے حلقہ جات وارڈ کی سطح پر قائم ہیں  </td>
                             <td class="prev-value" id="halqajat-ward-hadaf">{{ form_data.get('halqajat_ward_target', 0) }}</td>
                             <td class="prev-value" id="halqajat-ward-aghaaz">{{ form_data.get('halqajat_ward_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="halqajat-ward-izafa" name="halqajat_ward_izafa" min="0" value="{{ form_data.get('halqajat_ward_izafa', '') }}" oninput="calculateIkhtitaam('halqajat-ward')" {% if form_data.get('halqajat_ward_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="halqajat-ward-izafa" name="halqajat_ward_izafa" min="0" required value="{{ form_data.get('halqajat_ward_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('halqajat-ward')" {% if locked_fields['halqajat_ward_izafa'] %}readonly{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="halqajat-ward-kami" name="halqajat_ward_kami" min="0" value="{{ form_data.get('halqajat_ward_kami', '') }}" oninput="calculateIkhtitaam('halqajat-ward')" {% if form_data.get('halqajat_ward_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="halqajat-ward-kami" name="halqajat_ward_kami" min="0" required value="{{ form_data.get('halqajat_ward_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('halqajat-ward')" {% if locked_fields['halqajat_ward_kami'] %}readonly{% endif %}>
                             </td>
-                            <td class="calculated-value" id="halqajat-ward-ikhtitaam">{{ (form_data.get('halqajat_ward_start', 0) | int) + (form_data.get('halqajat_ward_izafa', 0) | int) - (form_data.get('halqajat_ward_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="halqajat-ward-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('halqajat_ward_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('halqajat_ward_start', 0) | int) + (form_data.get('halqajat_ward_izafa', 0) | int) - (form_data.get('halqajat_ward_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>بلاک کوڈ انچارجز </td>
                             <td class="prev-value" id="block-code-hadaf">{{ form_data.get('block_code_target', 0) }}</td>
                             <td class="prev-value" id="block-code-aghaaz">{{ form_data.get('block_code_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="block-code-izafa" name="block_code_izafa" min="0" value="{{ form_data.get('block_code_izafa', '') }}" oninput="calculateIkhtitaam('block-code')" {% if form_data.get('block_code_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="block-code-izafa" name="block_code_izafa" min="0" required value="{{ form_data.get('block_code_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('block-code')" {% if locked_fields['block_code_izafa'] %}readonly{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="block-code-kami" name="block_code_kami" min="0" value="{{ form_data.get('block_code_kami', '') }}" oninput="calculateIkhtitaam('block-code')" {% if form_data.get('block_code_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="block-code-kami" name="block_code_kami" min="0" required value="{{ form_data.get('block_code_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('block-code')" {% if locked_fields['block_code_kami'] %}readonly{% endif %}>
                             </td>
-                            <td class="calculated-value" id="block-code-ikhtitaam">{{ (form_data.get('block_code_start', 0) | int) + (form_data.get('block_code_izafa', 0) | int) - (form_data.get('block_code_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="block-code-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('block_code_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('block_code_start', 0) | int) + (form_data.get('block_code_izafa', 0) | int) - (form_data.get('block_code_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>نظام فجر</td>
+                            <td class="prev-value" id="nizam-e-fajar-hadaf">{{ form_data.get('nizam_e_fajar_target', 0) }}</td>
+                            <td class="prev-value" id="nizam-e-fajar-aghaaz">{{ form_data.get('nizam_e_fajar_start', 0) }}</td>
+                            <td>
+                                <input type="number" class="input-field" id="nizam-e-fajar-izafa" name="nizam_e_fajar_izafa" min="0" required value="{{ form_data.get('nizam_e_fajar_izafa', '') }}" placeholder="0" {% if locked_fields['nizam_e_fajar_izafa'] %}readonly{% endif %}>
+                                {% if locked_fields['nizam_e_fajar_izafa'] %}
+                                  <input type="hidden" name="nizam_e_fajar_izafa" value="{{ form_data.get('nizam_e_fajar_izafa', '') }}">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="number" class="input-field" id="nizam-e-fajar-kami" name="nizam_e_fajar_kami" min="0" required value="{{ form_data.get('nizam_e_fajar_kami', '') }}" placeholder="0" {% if locked_fields['nizam_e_fajar_kami'] %}readonly{% endif %}>
+                                {% if locked_fields['nizam_e_fajar_kami'] %}
+                                  <input type="hidden" name="nizam_e_fajar_kami" value="{{ form_data.get('nizam_e_fajar_kami', '') }}">
+                                {% endif %}
+                            </td>
+                            <td class="calculated-value" id="nizam-e-fajar-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('nizam_e_fajar_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('nizam_e_fajar_start', 0) | int) + (form_data.get('nizam_e_fajar_izafa', 0) | int) - (form_data.get('nizam_e_fajar_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>عوامی کمیٹی</td>
+                            <td class="prev-value" id="awaami-committee-hadaf">{{ form_data.get('awaami_committee_target', 0) }}</td>
+                            <td class="prev-value" id="awaami-committee-aghaaz">{{ form_data.get('awaami_committee_start', 0) }}</td>
+                            <td>
+                                <input type="number" class="input-field" id="awaami-committee-izafa" name="awaami_committee_izafa" min="0" required value="{{ form_data.get('awaami_committee_izafa', '') }}" placeholder="0" {% if locked_fields['awaami_committee_izafa'] %}readonly{% endif %}>
+                                {% if locked_fields['awaami_committee_izafa'] %}
+                                  <input type="hidden" name="awaami_committee_izafa" value="{{ form_data.get('awaami_committee_izafa', '') }}">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="number" class="input-field" id="awaami-committee-kami" name="awaami_committee_kami" min="0" required value="{{ form_data.get('awaami_committee_kami', '') }}" placeholder="0" {% if locked_fields['awaami_committee_kami'] %}readonly{% endif %}>
+                                {% if locked_fields['awaami_committee_kami'] %}
+                                  <input type="hidden" name="awaami_committee_kami" value="{{ form_data.get('awaami_committee_kami', '') }}">
+                                {% endif %}
+                            </td>
+                            <td class="calculated-value" id="awaami-committee-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('awaami_committee_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('awaami_committee_start', 0) | int) + (form_data.get('awaami_committee_izafa', 0) | int) - (form_data.get('awaami_committee_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -191,36 +292,54 @@
                             <td class="prev-value" id="arkaan-hadaf">{{ form_data.get('arkaan_target', 0) }}</td>
                             <td class="prev-value" id="arkaan-aghaaz">{{ form_data.get('arkaan_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="arkaan-izafa" name="arkaan_izafa" min="0" value="{{ form_data.get('arkaan_izafa', '') }}" oninput="calculateIkhtitaam('arkaan')" {% if form_data.get('arkaan_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="arkaan-izafa" name="arkaan_izafa" min="0" required value="{{ form_data.get('arkaan_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('arkaan')" {% if form_data.get('arkaan_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="arkaan-kami" name="arkaan_kami" min="0" value="{{ form_data.get('arkaan_kami', '') }}" oninput="calculateIkhtitaam('arkaan')" {% if form_data.get('arkaan_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="arkaan-kami" name="arkaan_kami" min="0" required value="{{ form_data.get('arkaan_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('arkaan')" {% if form_data.get('arkaan_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="arkaan-ikhtitaam">{{ (form_data.get('arkaan_start', 0) | int) + (form_data.get('arkaan_izafa', 0) | int) - (form_data.get('arkaan_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="arkaan-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('arkaan_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('arkaan_start', 0) | int) + (form_data.get('arkaan_izafa', 0) | int) - (form_data.get('arkaan_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>امیدواران رکنیت </td>
                             <td class="prev-value" id="umeedwaran-hadaf">{{ form_data.get('umeedwaran_target', 0) }}</td>
                             <td class="prev-value" id="umeedwaran-start">{{ form_data.get('umeedwaran_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="umeedwaran-izafa" name="umeedwaran_izafa" min="0" value="{{ form_data.get('umeedwaran_izafa', '') }}" oninput="calculateIkhtitaam('umeedwaran')" {% if form_data.get('umeedwaran_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="umeedwaran-izafa" name="umeedwaran_izafa" min="0" required value="{{ form_data.get('umeedwaran_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('umeedwaran')" {% if form_data.get('umeedwaran_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="umeedwaran-kami" name="umeedwaran_kami" min="0" value="{{ form_data.get('umeedwaran_kami', '') }}" oninput="calculateIkhtitaam('umeedwaran')" {% if form_data.get('umeedwaran_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="umeedwaran-kami" name="umeedwaran_kami" min="0" required value="{{ form_data.get('umeedwaran_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('umeedwaran')" {% if form_data.get('umeedwaran_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="umeedwaran-ikhtitaam">{{ (form_data.get('umeedwaran_start', 0) | int) + (form_data.get('umeedwaran_izafa', 0) | int) - (form_data.get('umeedwaran_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="umeedwaran-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('umeedwaran_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('umeedwaran_start', 0) | int) + (form_data.get('umeedwaran_izafa', 0) | int) - (form_data.get('umeedwaran_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>ہنگامی/ دیگر کارکنان</td>   
                             <td class="prev-value" id="hangami-hadaf">{{ form_data.get('hangami_target', 0) }}</td>
                             <td class="prev-value" id="hangami-aghaaz">{{ form_data.get('hangami_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="hangami-izafa" name="hangami_izafa" min="0" value="{{ form_data.get('hangami_izafa', '') }}" oninput="calculateIkhtitaam('hangami')" {% if form_data.get('hangami_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="hangami-izafa" name="hangami_izafa" min="0" required value="{{ form_data.get('hangami_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('hangami')" {% if form_data.get('hangami_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="hangami-kami" name="hangami_kami" min="0" value="{{ form_data.get('hangami_kami', '') }}" oninput="calculateIkhtitaam('hangami')" {% if form_data.get('hangami_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="hangami-kami" name="hangami_kami" min="0" required value="{{ form_data.get('hangami_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('hangami')" {% if form_data.get('hangami_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="hangami-ikhtitaam">{{ (form_data.get('hangami_start', 0) | int) + (form_data.get('hangami_izafa', 0) | int) - (form_data.get('hangami_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="hangami-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('hangami_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('hangami_start', 0) | int) + (form_data.get('hangami_izafa', 0) | int) - (form_data.get('hangami_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         
                         <tr>
@@ -228,36 +347,54 @@
                             <td class="prev-value" id="muawanin-hadaf">{{ form_data.get('muawanin_target', 0) }}</td>
                             <td class="prev-value" id="muawanin-aghaaz">{{ form_data.get('muawanin_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="muawanin-izafa" name="muawanin_izafa" min="0" value="{{ form_data.get('muawanin_izafa', '') }}" oninput="calculateIkhtitaam('muawanin')" {% if form_data.get('muawanin_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="muawanin-izafa" name="muawanin_izafa" min="0" required value="{{ form_data.get('muawanin_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('muawanin')" {% if form_data.get('muawanin_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="muawanin-kami" name="muawanin_kami" min="0" value="{{ form_data.get('muawanin_kami', '') }}" oninput="calculateIkhtitaam('muawanin')" {% if form_data.get('muawanin_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="muawanin-kami" name="muawanin_kami" min="0" required value="{{ form_data.get('muawanin_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('muawanin')" {% if form_data.get('muawanin_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="muawanin-ikhtitaam">{{ (form_data.get('muawanin_start', 0) | int) + (form_data.get('muawanin_izafa', 0) | int) - (form_data.get('muawanin_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="muawanin-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('muawanin_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('muawanin_start', 0) | int) + (form_data.get('muawanin_izafa', 0) | int) - (form_data.get('muawanin_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>متعین افراد</td>
                             <td class="prev-value" id="mutayyin-afrad-hadaf">{{ form_data.get('mutayyin_afrad_target', 0) }}</td>
                             <td class="prev-value" id="mutayyin-afrad-aghaaz">{{ form_data.get('mutayyin_afrad_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="mutayyin-afrad-izafa" name="mutayyin_afrad_izafa" min="0" value="{{ form_data.get('mutayyin_afrad_izafa', '') }}" oninput="calculateIkhtitaam('mutayyin-afrad')" {% if form_data.get('mutayyin_afrad_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="mutayyin-afrad-izafa" name="mutayyin_afrad_izafa" min="0" required value="{{ form_data.get('mutayyin_afrad_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('mutayyin-afrad')" {% if form_data.get('mutayyin_afrad_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="mutayyin-afrad-kami" name="mutayyin_afrad_kami" min="0" value="{{ form_data.get('mutayyin_afrad_kami', '') }}" oninput="calculateIkhtitaam('mutayyin-afrad')" {% if form_data.get('mutayyin_afrad_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="mutayyin-afrad-kami" name="mutayyin_afrad_kami" min="0" required value="{{ form_data.get('mutayyin_afrad_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('mutayyin-afrad')" {% if form_data.get('mutayyin_afrad_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="mutayyin-afrad-ikhtitaam">{{ (form_data.get('mutayyin_afrad_start', 0) | int) + (form_data.get('mutayyin_afrad_izafa', 0) | int) - (form_data.get('mutayyin_afrad_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="mutayyin-afrad-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('mutayyin_afrad_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('mutayyin_afrad_start', 0) | int) + (form_data.get('mutayyin_afrad_izafa', 0) | int) - (form_data.get('mutayyin_afrad_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                         <tr>
                             <td>ممبران</td>
                             <td class="prev-value" id="member-hadaf">{{ form_data.get('member_target', 0) }}</td>
                             <td class="prev-value" id="member-aghaaz">{{ form_data.get('member_start', 0) }}</td>
                             <td>
-                                <input type="number" class="input-field" id="member-izafa" name="member_izafa" min="0" value="{{ form_data.get('member_izafa', '') }}" oninput="calculateIkhtitaam('member')" {% if form_data.get('member_izafa', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="member-izafa" name="member_izafa" min="0" required value="{{ form_data.get('member_izafa', '') }}" placeholder="0" oninput="calculateIkhtitaam('member')" {% if form_data.get('member_izafa', '') != '' %}disabled{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" id="member-kami" name="member_kami" min="0" value="{{ form_data.get('member_kami', '') }}" oninput="calculateIkhtitaam('member')" {% if form_data.get('member_kami', '') != '' %}disabled{% endif %}>
+                                <input type="number" class="input-field" id="member-kami" name="member_kami" min="0" required value="{{ form_data.get('member_kami', '') }}" placeholder="0" oninput="calculateIkhtitaam('member')" {% if form_data.get('member_kami', '') != '' %}disabled{% endif %}>
                             </td>
-                            <td class="calculated-value" id="member-ikhtitaam">{{ (form_data.get('member_start', 0) | int) + (form_data.get('member_izafa', 0) | int) - (form_data.get('member_kami', 0) | int) }}</td>
+                            <td class="calculated-value" id="member-ikhtitaam">
+                              {% if report_exists %}
+                                {{ form_data.get('member_ikhtitaam', '') }}
+                              {% else %}
+                                {{ (form_data.get('member_start', 0) | int) + (form_data.get('member_izafa', 0) | int) - (form_data.get('member_kami', 0) | int) }}
+                              {% endif %}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -271,33 +408,48 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="youth-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
-                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" value="{{ form_data.get('youth_nazm_areas', '') }}" {% if form_data.get('youth_nazm_areas', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" required value="{{ form_data.get('youth_nazm_areas', '') }}" placeholder="0" {% if form_data.get('youth_nazm_areas', '') != '' %}disabled{% endif %}>
                     </div>
                     <div class="form-group">
                         <label for="youth-karkunan">کارکنان کی تعداد:</label>
-                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" value="{{ form_data.get('youth_karkunan', '') }}" {% if form_data.get('youth_karkunan', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" required value="{{ form_data.get('youth_karkunan', '') }}" placeholder="0" {% if form_data.get('youth_karkunan', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="youth-programat-count">پروگرامات کی تعداد:</label>
-                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" value="{{ form_data.get('youth_programat_count', '') }}" {% if form_data.get('youth_programat_count', '') != '' %}disabled{% endif %} oninput="renderProgramatFields()">
+                        <label for="youth_programat_count">پروگرامات کی تعداد:</label>
+                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" required value="{{ form_data.get('youth_programat_count', '') }}" placeholder="0" {% if form_data.get('youth_programat_count', '') != '' %}disabled{% endif %} oninput="renderProgramatFields()">
                     </div>
                 </div>
                 <div id="programat-fields-container">
-                    {% if form_data.get('youth_programat_count', '') and form_data.get('youth_programat_count', 0)|int > 0 %}
-                        {% for i in range(form_data.get('youth_programat_count', 0)|int) %}
+                    {% if programat_list %}
+                        {% for item in programat_list %}
                         <div class="form-row programat-row">
                             <div class="form-group">
-                                <label for="programat_{{i+1}}">پروگرامات {{i+1}}</label>
-                                <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" value="{{ form_data.get('programat_' ~ (i+1), '') }}" {% if form_data.get('programat_' ~ (i+1), '') != '' %}disabled{% endif %}>
+                                <label>پروگرام کا نام</label>
+                                <input type="text" value="{{ item.name }}" disabled required placeholder="0">
                             </div>
                             <div class="form-group">
-                                <label for="programat_count_{{i+1}}">تعداد</label>
-                                <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" value="{{ form_data.get('programat_count_' ~ (i+1), '') }}" {% if form_data.get('programat_count_' ~ (i+1), '') != '' %}disabled{% endif %}>
+                                <label>تعداد</label>
+                                <input type="number" value="{{ item.count }}" disabled required placeholder="0">
                             </div>
                         </div>
                         {% endfor %}
+                    {% else %}
+                        {% if form_data.get('youth_programat_count', '') and form_data.get('youth_programat_count', 0)|int > 0 %}
+                            {% for i in range(form_data.get('youth_programat_count', 0)|int) %}
+                            <div class="form-row programat-row">
+                                <div class="form-group">
+                                    <label for="programat_{{i+1}}">پروگرامات {{i+1}}</label>
+                                    <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" required value="{{ form_data.get('programat_' ~ (i+1), '') }}" placeholder="0" {% if form_data.get('programat_' ~ (i+1), '') != '' %}disabled{% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="programat_count_{{i+1}}">تعداد</label>
+                                    <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" required value="{{ form_data.get('programat_count_' ~ (i+1), '') }}" placeholder="0" {% if form_data.get('programat_count_' ~ (i+1), '') != '' %}disabled{% endif %}>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
                 </div>
                 <script>
@@ -320,27 +472,31 @@
                         var group1 = document.createElement('div');
                         group1.className = 'form-group';
                         var label1 = document.createElement('label');
-                        label1.setAttribute('for', 'nauiyat_' + i);
-                        label1.textContent = 'نوعیت ' + i;
+                        label1.setAttribute('for', 'programat_' + i);
+                        label1.textContent = 'نوعیت';
                         var input1 = document.createElement('input');
                         input1.type = 'text';
-                        input1.id = 'nauiyat_' + i;
-                        input1.name = 'nauiyat_' + i;
-                        input1.className = 'nauiyat-input';
+                        input1.id = 'programat_' + i;
+                        input1.name = 'programat_' + i;
+                        input1.className = 'programat-input';
+                        input1.required = true;
+                        input1.placeholder = 'پروگرام کی نوعیت لکھیں';
                         group1.appendChild(label1);
                         group1.appendChild(input1);
                         // تعداد input
                         var group2 = document.createElement('div');
                         group2.className = 'form-group';
                         var label2 = document.createElement('label');
-                        label2.setAttribute('for', 'nauiyat_count_' + i);
+                        label2.setAttribute('for', 'programat_count_' + i);
                         label2.textContent = 'تعداد';
                         var input2 = document.createElement('input');
                         input2.type = 'number';
                         input2.min = '0';
-                        input2.id = 'nauiyat_count_' + i;
-                        input2.name = 'nauiyat_count_' + i;
-                        input2.className = 'nauiyat-count-input';
+                        input2.id = 'programat_count_' + i;
+                        input2.name = 'programat_count_' + i;
+                        input2.className = 'programat-count-input';
+                        input2.required = true;
+                        input2.placeholder = '0';
                         group2.appendChild(label2);
                         group2.appendChild(input2);
                         // Append groups to row
@@ -351,12 +507,11 @@
                 }
                 // On page load, render fields if value exists and not disabled
                 document.addEventListener('DOMContentLoaded', function() {
-                    var countInput = document.getElementById('youth_nauiyat_count');
+                    var countInput = document.getElementById('youth_programat_count');
                     if (countInput && !countInput.disabled && countInput.value) {
-                        renderNauiyatFields();
+                        renderProgramatFields();
                     }
                 });
-                </script>
                 </script>
 
 
@@ -379,33 +534,33 @@
                     <tbody>
                         <tr>
                             <td>اجلاس ضلعی شوریٰ</td>
-                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('zilai_shura_planned', '') }}" {% if form_data.get('zilai_shura_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0" placeholder="ہوئے" value="{{ form_data.get('zilai_shura_held', '') }}" {% if form_data.get('zilai_shura_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('zilai_shura_attendance', '') }}" {% if form_data.get('zilai_shura_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0" required placeholder="0" value="{{ form_data.get('zilai_shura_planned', '') }}" {% if form_data.get('zilai_shura_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0" required placeholder="0" value="{{ form_data.get('zilai_shura_held', '') }}" {% if form_data.get('zilai_shura_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0" required placeholder="0" value="{{ form_data.get('zilai_shura_attendance', '') }}" {% if form_data.get('zilai_shura_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس نظم ضلع</td>                            
-                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('nazm_zila_planned', '') }}" {% if form_data.get('nazm_zila_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0" placeholder="ہوئے" value="{{ form_data.get('nazm_zila_held', '') }}" {% if form_data.get('nazm_zila_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('nazm_zila_attendance', '') }}" {% if form_data.get('nazm_zila_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0" required placeholder="0" value="{{ form_data.get('nazm_zila_planned', '') }}" {% if form_data.get('nazm_zila_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0" required placeholder="0" value="{{ form_data.get('nazm_zila_held', '') }}" {% if form_data.get('nazm_zila_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0" required placeholder="0" value="{{ form_data.get('nazm_zila_attendance', '') }}" {% if form_data.get('nazm_zila_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس ناظمین علاقہ جات</td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('nazimin_alaqajat_planned', '') }}" {% if form_data.get('nazimin_alaqajat_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0" placeholder="ہوئے" value="{{ form_data.get('nazimin_alaqajat_held', '') }}" {% if form_data.get('nazimin_alaqajat_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('nazimin_alaqajat_attendance', '') }}" {% if form_data.get('nazimin_alaqajat_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0" required placeholder="0" value="{{ form_data.get('nazimin_alaqajat_planned', '') }}" {% if form_data.get('nazimin_alaqajat_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0" required placeholder="0" value="{{ form_data.get('nazimin_alaqajat_held', '') }}" {% if form_data.get('nazimin_alaqajat_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0" required placeholder="0" value="{{ form_data.get('nazimin_alaqajat_attendance', '') }}" {% if form_data.get('nazimin_alaqajat_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع ارکان</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') }}" {% if form_data.get('zilai_ijtima_arkaan_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0" placeholder="ہوئے" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') }}" {% if form_data.get('zilai_ijtima_arkaan_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') }}" {% if form_data.get('zilai_ijtima_arkaan_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') }}" {% if form_data.get('zilai_ijtima_arkaan_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') }}" {% if form_data.get('zilai_ijtima_arkaan_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') }}" {% if form_data.get('zilai_ijtima_arkaan_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع امیدواران</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0" placeholder="ہوئے" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0" required placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') }}" {% if form_data.get('zilai_ijtima_umeedwaran_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -427,33 +582,33 @@
                     <tbody>
                         <tr>
                             <td>اجتماع ارکان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0" placeholder="ہوئے" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0" required placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0" required placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0" required placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') }}" {% if form_data.get('ijtima_arkaan_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع اُمیدواران (علاقہ )</td>                            
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0" placeholder="ہوئے" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0" required placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0" required placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0" required placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') }}" {% if form_data.get('ijtima_umeedwaran_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0" placeholder="ہوئے" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') }}" {% if form_data.get('ijtima_karkunaan_alaqah_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0" placeholder="ہوئے" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0" required placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') }}" {% if form_data.get('ijtima_karkunaan_halqajat_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع ناظمین (حلقہ جات)</td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0" placeholder="ہوئے" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0" required placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0" required placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0" required placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') }}" {% if form_data.get('ijtima_nazimin_halqajat_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -475,27 +630,27 @@
                     <tbody>
                         <tr>
                             <td>درس قرآن (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('dars_quran_planned', '') }}" {% if form_data.get('dars_quran_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0" placeholder="ہوئے" value="{{ form_data.get('dars_quran_held', '') }}" {% if form_data.get('dars_quran_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('dars_quran_attendance', '') }}" {% if form_data.get('dars_quran_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0" required placeholder="0" value="{{ form_data.get('dars_quran_planned', '') }}" {% if form_data.get('dars_quran_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0" required placeholder="0" value="{{ form_data.get('dars_quran_held', '') }}" {% if form_data.get('dars_quran_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0" required placeholder="0" value="{{ form_data.get('dars_quran_attendance', '') }}" {% if form_data.get('dars_quran_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>دعوتی کیمپ مستقل و فود</td>                            
-                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('dawati_camp_planned', '') }}" {% if form_data.get('dawati_camp_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0" placeholder="ہوئے" value="{{ form_data.get('dawati_camp_held', '') }}" {% if form_data.get('dawati_camp_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('dawati_camp_attendance', '') }}" {% if form_data.get('dawati_camp_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0" required placeholder="0" value="{{ form_data.get('dawati_camp_planned', '') }}" {% if form_data.get('dawati_camp_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0" required placeholder="0" value="{{ form_data.get('dawati_camp_held', '') }}" {% if form_data.get('dawati_camp_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0" required placeholder="0" value="{{ form_data.get('dawati_camp_attendance', '') }}" {% if form_data.get('dawati_camp_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>گھروں تک دعوت</td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('gharon_tak_dawat_planned', '') }}" {% if form_data.get('gharon_tak_dawat_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0" placeholder="ہوئے" value="{{ form_data.get('gharon_tak_dawat_held', '') }}" {% if form_data.get('gharon_tak_dawat_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('gharon_tak_dawat_attendance', '') }}" {% if form_data.get('gharon_tak_dawat_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0" required placeholder="0" value="{{ form_data.get('gharon_tak_dawat_planned', '') }}" {% if form_data.get('gharon_tak_dawat_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0" required placeholder="0" value="{{ form_data.get('gharon_tak_dawat_held', '') }}" {% if form_data.get('gharon_tak_dawat_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0" required placeholder="0" value="{{ form_data.get('gharon_tak_dawat_attendance', '') }}" {% if form_data.get('gharon_tak_dawat_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>تقسیم دعوتی لٹریچر</td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0" placeholder="طے شدہ" value="{{ form_data.get('taqseem_literature_planned', '') }}" {% if form_data.get('taqseem_literature_planned', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0" placeholder="ہوئے" value="{{ form_data.get('taqseem_literature_held', '') }}" {% if form_data.get('taqseem_literature_held', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0" placeholder="حاضری" value="{{ form_data.get('taqseem_literature_attendance', '') }}" {% if form_data.get('taqseem_literature_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0" required placeholder="0" value="{{ form_data.get('taqseem_literature_planned', '') }}" {% if form_data.get('taqseem_literature_planned', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0" required placeholder="0" value="{{ form_data.get('taqseem_literature_held', '') }}" {% if form_data.get('taqseem_literature_held', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0" required placeholder="0" value="{{ form_data.get('taqseem_literature_attendance', '') }}" {% if form_data.get('taqseem_literature_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -519,21 +674,21 @@
                     <tbody>
                         <tr>
                             <td>اسٹڈی سرکل ڈسکشن</td>
-                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('study_circle_maqamat', '') }}" {% if form_data.get('study_circle_maqamat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('study_circle_daurajat', '') }}" {% if form_data.get('study_circle_daurajat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0" placeholder="حاضری اوسطاً" value="{{ form_data.get('study_circle_attendance', '') }}" {% if form_data.get('study_circle_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0" required placeholder="0" value="{{ form_data.get('study_circle_maqamat', '') }}" {% if form_data.get('study_circle_maqamat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0" required placeholder="0" value="{{ form_data.get('study_circle_daurajat', '') }}" {% if form_data.get('study_circle_daurajat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0" required placeholder="0" value="{{ form_data.get('study_circle_attendance', '') }}" {% if form_data.get('study_circle_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>تعلیمات قرآن کورس</td>
-                            <td><input type="number" class="input-field" id="quran-course-maqamat" name="quran_course_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('quran_course_maqamat', '') }}" {% if form_data.get('quran_course_maqamat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="quran-course-daurajat" name="quran_course_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('quran_course_daurajat', '') }}" {% if form_data.get('quran_course_daurajat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="quran-course-attendance" name="quran_course_attendance" min="0" placeholder="حاضری اوسطاً" value="{{ form_data.get('quran_course_attendance', '') }}" {% if form_data.get('quran_course_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="quran-course-maqamat" name="quran_course_maqamat" min="0" required placeholder="0" value="{{ form_data.get('quran_course_maqamat', '') }}" {% if form_data.get('quran_course_maqamat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="quran-course-daurajat" name="quran_course_daurajat" min="0" required placeholder="0" value="{{ form_data.get('quran_course_daurajat', '') }}" {% if form_data.get('quran_course_daurajat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="quran-course-attendance" name="quran_course_attendance" min="0" required placeholder="0" value="{{ form_data.get('quran_course_attendance', '') }}" {% if form_data.get('quran_course_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>تربیتی اجتماع/ریٹریٹ</td>
-                            <td><input type="number" class="input-field" id="retreat-maqamat" name="retreat_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('retreat_maqamat', '') }}" {% if form_data.get('retreat_maqamat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="retreat-daurajat" name="retreat_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('retreat_daurajat', '') }}" {% if form_data.get('retreat_daurajat', '') != '' %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="retreat-attendance" name="retreat_attendance" min="0" placeholder="حاضری اوسطاً" value="{{ form_data.get('retreat_attendance', '') }}" {% if form_data.get('retreat_attendance', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="retreat-maqamat" name="retreat_maqamat" min="0" required placeholder="0" value="{{ form_data.get('retreat_maqamat', '') }}" {% if form_data.get('retreat_maqamat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="retreat-daurajat" name="retreat_daurajat" min="0" required placeholder="0" value="{{ form_data.get('retreat_daurajat', '') }}" {% if form_data.get('retreat_daurajat', '') != '' %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="retreat-attendance" name="retreat_attendance" min="0" required placeholder="0" value="{{ form_data.get('retreat_attendance', '') }}" {% if form_data.get('retreat_attendance', '') != '' %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -543,35 +698,35 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="quran-courses">کورسز</label>
-                        <input type="number" id="quran-courses" name="quran_courses" min="0" required value="{{ form_data.get('quran_courses', '') }}" {% if form_data.get('quran_courses', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="quran-courses" name="quran_courses" min="0" required value="{{ form_data.get('quran_courses', '') }}" placeholder="0" {% if form_data.get('quran_courses', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="quran-classes">کلاس</label>
-                        <input type="number" id="quran-classes" name="quran_classes" min="0" required value="{{ form_data.get('quran_classes', '') }}" {% if form_data.get('quran_classes', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="quran-classes" name="quran_classes" min="0" required value="{{ form_data.get('quran_classes', '') }}" placeholder="0" {% if form_data.get('quran_classes', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="quran-participants">شرکاء</label>
-                        <input type="number" id="quran-participants" name="quran_participants" min="0" required value="{{ form_data.get('quran_participants', '') }}" {% if form_data.get('quran_participants', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="quran-participants" name="quran_participants" min="0" required value="{{ form_data.get('quran_participants', '') }}" placeholder="0" {% if form_data.get('quran_participants', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="fahem-quran-attendance">فہم القرآن پروگرام (حاضری)</label>
-                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0" required value="{{ form_data.get('fahem_quran_attendance', '') }}" {% if form_data.get('fahem_quran_attendance', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0" required value="{{ form_data.get('fahem_quran_attendance', '') }}" placeholder="0" {% if form_data.get('fahem_quran_attendance', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="quran-distributed">تقسیم ترجمه قرآن</label>
-                        <input type="number" id="quran-distributed" name="quran_distributed" min="0" required value="{{ form_data.get('quran_distributed', '') }}" {% if form_data.get('quran_distributed', '') != '' %}disabled{% endif %}>
+                        <input type="number" id="quran-distributed" name="quran_distributed" min="0" required value="{{ form_data.get('quran_distributed', '') }}" placeholder="0" {% if form_data.get('quran_distributed', '') != '' %}disabled{% endif %}>
                     </div>
                 </div>
             </div>
@@ -582,22 +737,22 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="central-training-target">مرکزی تربیت گاہ (حاضری کا ہدف)</label>
-                    <input type="number" id="central_training_target" name="central_training_target" min="0" required value="{{ form_data.get('central_training_target', '') }}" {% if form_data.get('central_training_target', '') != '' %}disabled{% endif %}>
+                    <input type="number" id="central_training_target" name="central_training_target" min="0" required value="{{ form_data.get('central_training_target', '') }}" placeholder="0" {% if form_data.get('central_training_target', '') != '' %}disabled{% endif %}>
                 </div>
                 <div class="form-group">
                     <label for="central-training-actual">شرکت</label>
-                    <input type="number" id="central_training_actual" name="central_training_actual" min="0" required value="{{ form_data.get('central_training_actual', '') }}" {% if form_data.get('central_training_actual', '') != '' %}disabled{% endif %}>
+                    <input type="number" id="central_training_actual" name="central_training_actual" min="0" required value="{{ form_data.get('central_training_actual', '') }}" placeholder="0" {% if form_data.get('central_training_actual', '') != '' %}disabled{% endif %}>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="other-trainings">دیگر تربیتی اجتماعات (ضلعی تربیت گاہ، شب بیداریاں وغیرہ)</label>
-                    <input type="text" id="other_trainings" name="other_trainings" required {% if form_data.get('other_trainings', '') != '' %}disabled value="{{ form_data.get('other_trainings', '') }}"{% endif %}>
+                    <input type="text" id="other_trainings" name="other_trainings" required placeholder="" {% if form_data.get('other_trainings', '') != '' %}disabled value="{{ form_data.get('other_trainings', '') }}"{% endif %}>
                 </div>
                 <div class="form-group">
                     <label for="atifal-programs">حاضری</label>
-                    <input type="number" id="atifal_programs" name="atifal_programs" min="0" required {% if form_data.get('atifal_programs', '') != '' %}disabled value="{{ form_data.get('atifal_programs', '') }}"{% endif %}>
+                    <input type="number" id="atifal_programs" name="atifal_programs" min="0" required placeholder="0" {% if form_data.get('atifal_programs', '') != '' %}disabled value="{{ form_data.get('atifal_programs', '') }}"{% endif %}>
                 </div>
             </div>
         </div>
@@ -617,21 +772,21 @@
                 <tbody>
                     <tr>
                         <td>امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('amir_zila_maqamat', '') }}" {% if form_data.get('amir_zila_maqamat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('amir_zila_daurajat', '') }}" {% if form_data.get('amir_zila_daurajat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0" placeholder="انفرادی ملاقاتیں" value="{{ form_data.get('amir_zila_mulaqat', '') }}" {% if form_data.get('amir_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0" required placeholder="0" value="{{ form_data.get('amir_zila_maqamat', '') }}" {% if form_data.get('amir_zila_maqamat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0" required placeholder="0" value="{{ form_data.get('amir_zila_daurajat', '') }}" {% if form_data.get('amir_zila_daurajat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0" required placeholder="0" value="{{ form_data.get('amir_zila_mulaqat', '') }}" {% if form_data.get('amir_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
                     </tr>
                     <tr>
                         <td>قیم ضلع</td>                            
-                        <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('qaim_zila_maqamat', '') }}" {% if form_data.get('qaim_zila_maqamat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('qaim_zila_daurajat', '') }}" {% if form_data.get('qaim_zila_daurajat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0" placeholder="انفرادی ملاقاتیں" value="{{ form_data.get('qaim_zila_mulaqat', '') }}" {% if form_data.get('qaim_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0" required placeholder="0" value="{{ form_data.get('qaim_zila_maqamat', '') }}" {% if form_data.get('qaim_zila_maqamat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0" required placeholder="0" value="{{ form_data.get('qaim_zila_daurajat', '') }}" {% if form_data.get('qaim_zila_daurajat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0" required placeholder="0" value="{{ form_data.get('qaim_zila_mulaqat', '') }}" {% if form_data.get('qaim_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
                     </tr>
                     <tr>
                         <td>نائب امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0" placeholder="مقامات" value="{{ form_data.get('naib_amir_zila_maqamat', '') }}" {% if form_data.get('naib_amir_zila_maqamat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0" placeholder="دورہ جات" value="{{ form_data.get('naib_amir_zila_daurajat', '') }}" {% if form_data.get('naib_amir_zila_daurajat', '') != '' %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0" placeholder="انفرادی ملاقاتیں" value="{{ form_data.get('naib_amir_zila_mulaqat', '') }}" {% if form_data.get('naib_amir_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0" required placeholder="0" value="{{ form_data.get('naib_amir_zila_maqamat', '') }}" {% if form_data.get('naib_amir_zila_maqamat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0" required placeholder="0" value="{{ form_data.get('naib_amir_zila_daurajat', '') }}" {% if form_data.get('naib_amir_zila_daurajat', '') != '' %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0" required placeholder="0" value="{{ form_data.get('naib_amir_zila_mulaqat', '') }}" {% if form_data.get('naib_amir_zila_mulaqat', '') != '' %}disabled{% endif %}></td>
                     </tr>
                 </tbody>
             </table>
@@ -647,9 +802,10 @@
                             <textarea 
                                 id="koi-or-bat" 
                                 name="koi_or_bat" 
-                                placeholder="یہاں اپنی اضافی رائے، تجاویز یا کوئی اور بات لکھیں..."
+                                placeholder="کوئی اور بات"
                                 oninput="updateCharCounter(this, 'char-counter-koi')"
                                 maxlength="5000"
+                                required
                                 {% if form_data.get('koi_or_bat', '') != '' %}disabled{% endif %}
                             >{{ form_data.get('koi_or_bat', '') }}</textarea>
                             <div class="char-counter" id="char-counter-koi">0 / 5000</div>
@@ -659,13 +815,15 @@
             </div>
 
         <!-- فارم بٹن -->
-        {% set all_filled = form_data and (form_data.values() | reject('equalto', '') | list | length == form_data|length) %}
-        {% if not report_exists %}
+        {% if can_submit %}
         <div class="form-actions">
-            <button type="submit" class="submit-btn">رپورٹ جمع کروائیں</button>
+            <button type="submit" class="submit-btn" onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
+        </div>
+        {% else %}
+        <div class="form-actions">
+            <div class="alert alert-info">تمام فیلڈز مکمل ہیں۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
         </div>
         {% endif %}
-        
         <a href="{{ url_for('logout') }}" class="reset-btn" style="text-decoration:none;display:inline-block;text-align:center;">لاگ آؤٹ</a>
         </form> <!-- Close the form -->
         </div> <!-- Close the container -->
@@ -693,6 +851,8 @@
                     diffElement.textContent = '0';
                 }
             }
+
+
 
             // Init difference calculations
             document.addEventListener('DOMContentLoaded', function () {
