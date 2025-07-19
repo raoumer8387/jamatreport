@@ -5,27 +5,48 @@ import os
 import json
 from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
+import logging
+
+
+
 
 app = Flask(__name__)
 app.secret_key = 'jamat-report987654'
+application = app
 
-# Google Sheets Configuration
-SCOPES = [
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
-]
+# Use absolute path for DB file
+DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'zila_data.db')
 
-# You'll need to replace these with your actual Google Sheets IDs
-USERS_SHEET_ID = '1NTpUUA1pomN2X5-HVgxzdIBjE5XMY6bT8pWTr0AnmhI'  # Replace with your users sheet ID
-REPORTS_SHEET_ID = '1neLmPxMe-NKeuH0gVwzE9FjdpvPgNIUWql6Ez7aYh8Q'  # Replace with your reports sheet ID
+# Set up logging to a file
+logging.basicConfig(filename='error.log', level=logging.ERROR, format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
+def force_update_database_schema():
+    """Force update database schema to ensure all new columns exist"""
+    # First, ensure karkunan columns exist
+    karkunan_columns = [
+        'karkunan_start', 'karkunan_end', 'karkunan_target',
+        'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam'
+    ]
     
-# Service account credentials file path
-CREDENTIALS_FILE = 'service_account_credentials.json'
-
-DB_FILE = 'zila_data.db'
-
-def ensure_monthly_reports_columns():
-    # List of all columns your code expects in monthly_reports
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    
+    # Get existing columns
+    c.execute('PRAGMA table_info(monthly_reports)')
+    existing_cols = [row[1] for row in c.fetchall()]
+    
+    # Add karkunan columns first
+    for col in karkunan_columns:
+        if col not in existing_cols:
+            try:
+                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
+                print(f"Added karkunan column: {col}")
+            except Exception as e:
+                print(f"Error adding karkunan column {col}: {e}")
+    
+    conn.commit()
+    conn.close()
+    
     required_columns = [
         'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
         'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
@@ -58,13 +79,15 @@ def ensure_monthly_reports_columns():
         'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
         'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
         'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+        'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+        'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
         'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
         'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
         'quran_courses', 'quran_classes', 'quran_participants',
         'fahem_quran_attendance', 'quran_target', 'quran_distributed',
         'central_training_target', 'central_training_actual', 'other_trainings',
         'atifal_programs', 'awaami_committees', 'awaami_committees_count',
-        'koi_or_bat',
+        'koi_or_bat', 'haq_do_karachi',
         # Hangami/other workers
         'hangami_start', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam', 'hangami_end',
         # Members
@@ -73,6 +96,82 @@ def ensure_monthly_reports_columns():
         'nizam_e_fajar_start',  'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
         # Awaami Committee
         'awaami_committee_start',  'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+        # جماعتِ اسلامی شعبہ اطفال
+        'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+    ]
+    
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    
+    # Get existing columns
+    c.execute('PRAGMA table_info(monthly_reports)')
+    existing_cols = [row[1] for row in c.fetchall()]
+    
+    # Add missing columns
+    for col in required_columns:
+        if col not in existing_cols:
+            try:
+                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
+                print(f"Added column: {col}")
+            except Exception as e:
+                print(f"Error adding column {col}: {e}")
+    
+    conn.commit()
+    conn.close()
+    print("Database schema update completed!")
+
+def ensure_monthly_reports_columns():
+    required_columns = [
+        'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+        'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+        'alaqajat_start', 'alaqajat_end', 'alaqajat_target','alaqajat_izafa','alaqajat_kami','alaqajat_ikhtitaam',
+        'halqajat_start', 'halqajat_end', 'halqajat_target','halqajat_izafa','halqajat_kami','halqajat_ikhtitaam',
+        'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target','halqajat_ward_izafa','halqajat_ward_kami','halqajat_ward_ikhtitaam',
+        'block_code_start', 'block_code_end', 'block_code_target','block_code_izafa','block_code_kami','block_code_ikhtitaam',
+        'arkaan_start', 'arkaan_end', 'arkaan_target','arkaan_izafa','arkaan_kami','arkaan_ikhtitaam',
+        'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target','umeedwaran_izafa','umeedwaran_kami','umeedwaran_ikhtitaam',
+        'hangami_start', 'hangami_end', 'hangami_target','hangami_izafa','hangami_kami','hangami_ikhtitaam',
+        'muawanin_start', 'muawanin_end', 'muawanin_target','muawanin_izafa','muawanin_kami','muawanin_ikhtitaam',
+        'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target','mutayyin_afrad_izafa','mutayyin_afrad_kami','mutayyin_afrad_ikhtitaam',
+        'member_start', 'member_end', 'member_target','member_izafa','member_kami','member_ikhtitaam',
+        'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programat_name',
+        'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
+        'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
+        'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
+        'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
+        'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
+        'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
+        'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
+        'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
+        'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
+        'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
+        'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
+        'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
+        'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
+        'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
+        'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
+        'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
+        'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
+        'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+        'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+        'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+        'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
+        'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
+        'quran_courses', 'quran_classes', 'quran_participants',
+        'fahem_quran_attendance', 'quran_target', 'quran_distributed',
+        'central_training_target', 'central_training_actual', 'other_trainings',
+        'atifal_programs', 'awaami_committees', 'awaami_committees_count',
+        'koi_or_bat', 'haq_do_karachi',
+        # Hangami/other workers
+        'hangami_start', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam', 'hangami_end',
+        # Members
+        'member_start', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam', 'member_end',
+        # Nizam e Fajar
+        'nizam_e_fajar_start',  'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
+        # Awaami Committee
+        'awaami_committee_start',  'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+        # جماعتِ اسلامی شعبہ اطفال
+        'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
     ]
     # Types for each column (default to INTEGER, TEXT for *_activities)
     text_columns = {'youth_activities'}
@@ -85,9 +184,8 @@ def ensure_monthly_reports_columns():
             col_type = 'TEXT' if col in text_columns else 'INTEGER'
             try:
                 c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} {col_type}')
-                print(f"Added column {col} to monthly_reports")
             except Exception as e:
-                print(f"Error adding column {col}: {e}")
+                pass
     conn.commit()
     conn.close()
 
@@ -112,6 +210,7 @@ def init_db():
             month TEXT NOT NULL,
             timestamp TEXT NOT NULL,
             submitted_by TEXT NOT NULL,
+            last_submitted_by TEXT,
             union_committee_count INTEGER,
             wards_count INTEGER,
             block_code_count INTEGER,
@@ -119,16 +218,14 @@ def init_db():
             nazm_qaim_union INTEGER,
             nazm_qaim_wards INTEGER,
             nazm_qaim_blockcode INTEGER,
-            nazm_qaim_cantonment INTEGER
+            nazm_qaim_cantonment INTEGER,
+            UNIQUE(zila)
             -- Add all other fields here, matching the Google Sheets columns
         )
     ''')
     conn.commit()
     conn.close()
     ensure_monthly_reports_columns()
-
-# Call this at the start of the app
-init_db()
 
 def load_users_from_db():
     conn = sqlite3.connect(DB_FILE)
@@ -151,8 +248,7 @@ def load_users_from_db():
         conn.close()
         return df
     else:
-        import pandas as pd
-        return pd.DataFrame(rows, columns=['username', 'password', 'zila', 'role'])
+        return pd.DataFrame(rows, columns=pd.Index(['username', 'password', 'zila', 'role']))
 
 def create_default_users():
     """Create default users DataFrame"""
@@ -172,7 +268,7 @@ def create_default_users():
         'zila': [
             'کراچی مرکز',
             'ایئرپورٹ', 'گڈاپ', 'غربی', 'وسطی', 'گلبرگ وسطی',
-            'جنوبی', 'کیماڑی', 'کورنگی', 'ملیر', 'قائد اعظم',
+            'جنوبی', 'کیماڑی', 'کورنگی', 'ملیر', 'قائدین',
             'شرقی', 'شمالی', 'سائٹ غربی'
         ],
         'role': [
@@ -191,31 +287,54 @@ def load_reports_from_db():
     rows = c.fetchall()
     columns = [desc[0] for desc in c.description]
     conn.close()
-    import pandas as pd
-    return pd.DataFrame(rows, columns=columns)
+    return pd.DataFrame(rows, columns=pd.Index(columns))
 
 def save_report_to_db(new_entry):
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    # Only insert columns that exist in the table
-    keys = list(new_entry.keys())
-    values = [new_entry[k] for k in keys]
-    placeholders = ','.join(['?'] * len(keys))
-    sql = f"INSERT INTO monthly_reports ({','.join(keys)}) VALUES ({placeholders})"
-    c.execute(sql, values)
-    conn.commit()
-    conn.close()
+    import logging
+    try:
+        logging.info(f"Attempting to save report: {new_entry}")
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        # Get actual columns in the table
+        c.execute('PRAGMA table_info(monthly_reports)')
+        table_columns = [row[1] for row in c.fetchall()]
+        # Only keep keys that are real columns and filter out dynamic fields
+        filtered_entry = {}
+        for k, v in new_entry.items():
+            if k in table_columns and not k.startswith('atifal_programat_') and not k.startswith('programat_'):
+                filtered_entry[k] = v
+        
+        keys = list(filtered_entry.keys())
+        values = [filtered_entry[k] for k in keys]
+        placeholders = ','.join(['?'] * len(keys))
+        sql = f"INSERT OR REPLACE INTO monthly_reports ({','.join(keys)}) VALUES ({placeholders})"
+        c.execute(sql, values)
+        conn.commit()
+        c.execute('SELECT * FROM monthly_reports WHERE zila=? AND month=?', (filtered_entry['zila'], filtered_entry['month']))
+        conn.close()
+        logging.info("Report saved successfully.")
+    except Exception as e:
+        logging.error(f"Error in save_report_to_db: {e}", exc_info=True)
+        raise
 
 def update_report_in_db(zila, month, new_entry):
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    set_clause = ', '.join([f'{k}=?' for k in new_entry.keys()])
-    values = list(new_entry.values())
-    values.extend([zila, month])
-    sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
-    c.execute(sql, values)
-    conn.commit()
-    conn.close()
+    import logging
+    try:
+        logging.info(f"Attempting to update report for zila={zila}: {new_entry}")
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        set_clause = ', '.join([f'{k}=?' for k in new_entry.keys()])
+        values = list(new_entry.values())
+        values.append(zila)
+        sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=?"
+        c.execute(sql, values)
+        conn.commit()
+        c.execute('SELECT * FROM monthly_reports WHERE zila=?', (zila,))
+        conn.close()
+        logging.info("Report updated successfully.")
+    except Exception as e:
+        logging.error(f"Error in update_report_in_db: {e}", exc_info=True)
+        raise
 
 # Load initial data
 users_df = load_users_from_db()
@@ -227,71 +346,46 @@ def get_form_data(zila, current_month):
         # Reload data from DB
         global report_df
         report_df = load_reports_from_db()
-        # Calculate previous month
-        current_date = datetime.strptime(current_month, '%Y-%m')
-        prev_month = (current_date - timedelta(days=1)).strftime('%Y-%m')
-        print(f"Looking for data for zila: {zila}")
-        print(f"Current month: {current_month}")
-        print(f"Previous month: {prev_month}")
-        # Get previous month data
-        prev_data = report_df[(report_df['zila'] == zila) & (report_df['month'] == prev_month)]
-        print(f"Previous month data found: {len(prev_data)} rows")
-        # Get current month data
-        current_data = report_df[(report_df['zila'] == zila) & (report_df['month'] == current_month)]
-        print(f"Current month data found: {len(current_data)} rows")
+        # Get data for this zila (only one entry per zila)
+        zila_data = report_df[report_df['zila'] == zila]
         form_data = {}
-        # Default values for آغاز and ہدف
-        default_values = {
-            'alaqajat_start': 150, 'alaqajat_target': 200,
-            'halqajat_start': 300, 'halqajat_target': 400,
-            'halqajat_ward_start': 250, 'halqajat_ward_target': 300,
-            'block_code_start': 100, 'block_code_target': 150,
-            'nizam_e_fajar_start': 100, 'nizam_e_fajar_target': 150,
-            'awaami_committee_start': 100, 'awaami_committee_target': 150,
-            'arkaan_start': 150, 'arkaan_target': 200,
-            'umeedwaran_start': 300, 'umeedwaran_target': 400,
-            'hangami_start': 100, 'hangami_target': 150,
-            'member_start': 250, 'member_target': 300,
-            'muawanin_start': 100, 'muawanin_target': 150,
-            'mutayyin_afrad_start': 100, 'mutayyin_afrad_target': 150,
-        }
-        # If we have current month data, use it
-        if not current_data.empty:
-            first_row = current_data.iloc[0]
+        # If we have data for this zila, use it
+        if not zila_data.empty:
+            first_row = zila_data.iloc[0]
             form_data = first_row.to_dict()
             # Convert NaN to empty string for all fields
             form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
-        # If we have previous month data, use it for آغاز values
-        elif not prev_data.empty:
-            first_row = prev_data.iloc[0]
-            form_data['alaqajat_start'] = int(first_row.get('alaqajat_ikhtitaam', 0))
-            form_data['halqajat_start'] = int(first_row.get('halqajat_ikhtitaam', 0))
-            form_data['halqajat_ward_start'] = int(first_row.get('halqajat_ward_ikhtitaam', 0))
-            form_data['block_code_start'] = int(first_row.get('block_code_ikhtitaam', 0))
-            form_data['arkaan_start'] = int(first_row.get('arkaan_ikhtitaam', 0))
-            form_data['umeedwaran_start'] = int(first_row.get('umeedwaran_ikhtitaam', 0))
-            form_data['hangami_start'] = int(first_row.get('hangami_ikhtitaam', 0))
-            form_data['muawanin_start'] = int(first_row.get('muawanin_ikhtitaam', 0))
-            form_data['mutayyin_afrad_start'] = int(first_row.get('mutayyin_afrad_ikhtitaam', 0))
-            form_data['member_start'] = int(first_row.get('member_ikhtitaam', 0))
-            # ... (set other fields as needed)
+            # Ensure youth_programat_count is present and string type
+            if 'youth_programat_count' in form_data:
+                form_data['youth_programat_count'] = str(form_data['youth_programat_count']) if form_data['youth_programat_count'] is not None else ''
+            # Ensure atifal_programat_count is present and string type
+            if 'atifal_programat_count' in form_data:
+                form_data['atifal_programat_count'] = str(form_data['atifal_programat_count']) if form_data['atifal_programat_count'] is not None else ''
         else:
-            # No data found, use default values
-            print(f"No previous data found for {zila}, using default values")
-            form_data.update({
-                'union_committee_count': 0, 'wards_count': 0, 'block_code_count': 0, 'cantonment_board_count': 0,
-                **default_values
-            })
+            # No data exists for this zila, start with empty form
+            form_data = {}
+            # Four basic info fields as empty string
+            form_data['union_committee_count'] = ''
+            form_data['wards_count'] = ''
+            form_data['block_code_count'] = ''
+            form_data['cantonment_board_count'] = ''
+            # Also leave *_start and *_target fields empty
+            for key in [
+                'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee',
+                'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
+            ]:
+                form_data[f'{key}_start'] = ''
+                form_data[f'{key}_target'] = ''
         return form_data
     except Exception as e:
-        print(f"Error getting form data: {e}")
+        import logging
+        logging.error(f"Error getting form data: {e}", exc_info=True)
         return {}
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         users_df = load_users_from_db()
-        print(users_df)
         username = request.form['username']
         password = request.form['password']
         user = users_df[(users_df['username'] == username) & (users_df['password'] == password)]
@@ -300,7 +394,11 @@ def login():
             session['username'] = username
             session['zila'] = user.iloc[0]['zila']
             session['role'] = user.iloc[0]['role']
-            return redirect(url_for('report'))
+            # Redirect admin to dashboard, others to report
+            if user.iloc[0]['role'] == 'admin':
+                return redirect(url_for('dashboard'))
+            else:
+                return redirect(url_for('report'))
         else:
             flash("غلط یوزر نیم یا پاس ورڈ", "error")
 
@@ -308,278 +406,759 @@ def login():
 
 @app.route('/report', methods=['GET', 'POST'])
 def report():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    
-    zila = session['zila']
-    current_month = datetime.today().strftime('%Y-%m')
-    current_month_urdu = datetime.today().strftime('%B %Y')
-
-    # Reload report data from DB
-    global report_df
-    report_df = load_reports_from_db()
-    
-    # Check if current month report already exists for this zila
-    existing_report = report_df[(report_df['zila'] == zila) & (report_df['month'] == current_month)]
-    report_exists = not existing_report.empty
-
-    # Get form data (reuse get_form_data, but update it to use DB)
-    form_data = get_form_data(zila, current_month)
-
-    if request.method == 'POST':
-        try:
-            print(f"=== FORM SUBMISSION DEBUG ===")
-            print(f"User: {session['username']}")
-            print(f"Zila: {zila}")
-            print(f"Current month: {current_month}")
-            print(f"Report exists: {report_exists}")
-            
-            # Add locked_fields logic: lock fields that have a value in the DB for the current month/zila
-            locked_fields = {}
-            if report_exists:
-                for key, value in form_data.items():
-                    # Lock if value is not None and not empty string
-                    locked_fields[key] = value not in [None, '']
-            else:
-                for key in form_data.keys():
-                    locked_fields[key] = False
-
-            # Check if there is at least one editable (empty) field
-            editable_exists = False
-            for field, locked in locked_fields.items():
-                if not locked:
-                    submitted_value = request.form.get(field, '')
-                    if submitted_value == '' or submitted_value is None:
-                        editable_exists = True
-                        break
-            if not editable_exists:
-                flash("تمام فیلڈز پہلے سے موجود ہیں، کوئی خالی فیلڈ نہیں ہے۔ فارم جمع نہیں ہو سکتا۔", "error")
-                return render_template("report.html", 
-                                     zila=zila, 
-                                     form_data=form_data,
-                                     report_exists=report_exists,
-                                     current_month=current_month_urdu,
-                                     programat_list=programat_list,
-                                     locked_fields=locked_fields)
-            
-            # Create comprehensive data entry from form
-            # Only update fields that are empty in the DB for the current month
-            new_entry = {
-                'zila': zila,
-                'month': current_month,
-                'timestamp': datetime.now(),
-                'submitted_by': session['username'],
-            }
-            for field in request.form:
-                # Use the DB value if it exists, otherwise use the submitted value
-                db_value = form_data.get(field, '')
-                submitted_value = request.form.get(field, '')
-                # For numbers, treat empty string as missing
-                if db_value == '' or db_value is None:
-                    new_entry[field] = submitted_value
-                else:
-                    new_entry[field] = db_value
-            
-            # Also add any fields that are not in the form but are in form_data (to preserve them)
-            for field in form_data:
-                if field not in new_entry:
-                    new_entry[field] = form_data[field]
-
-            # Calculate and save ikhtitaam values (do this LAST, right before saving)
-            def get_int(form, key):
+    atifal_programs_list = []  # Always define this to avoid UnboundLocalError
+    try:
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        zila = session['zila']
+        current_month = datetime.today().strftime('%Y-%m')
+        current_month_urdu = datetime.today().strftime('%B %Y')
+        global report_df
+        report_df = load_reports_from_db()
+        existing_report = report_df[report_df['zila'] == zila]
+        report_exists = not existing_report.empty
+        form_data = get_form_data(zila, current_month)
+        programat_list = []
+        programat_json = form_data.get('youth_programs_json', '')
+        if programat_json:
+            try:
+                programat_list = json.loads(programat_json)
+            except Exception:
+                programat_list = []
+        visible_fields = [
+            # ابتدائی معلومات
+            'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+            'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+            # تنظیمی ہیٔت
+            'alaqajat_target', 'alaqajat_start', 'alaqajat_izafa', 'alaqajat_kami', 'alaqajat_ikhtitaam',
+            'halqajat_target', 'halqajat_start', 'halqajat_izafa', 'halqajat_kami', 'halqajat_ikhtitaam',
+            'halqajat_ward_target', 'halqajat_ward_start', 'halqajat_ward_izafa', 'halqajat_ward_kami', 'halqajat_ward_ikhtitaam',
+            'block_code_target', 'block_code_start', 'block_code_izafa', 'block_code_kami', 'block_code_ikhtitaam',
+            'nizam_e_fajar_target', 'nizam_e_fajar_start', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
+            'awaami_committee_target', 'awaami_committee_start', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+            # افرادی قوت
+            'arkaan_target', 'arkaan_start', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
+            'umeedwaran_target', 'umeedwaran_start', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
+            'karkunan_target', 'karkunan_start', 'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam',
+            'hangami_target', 'hangami_start', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
+            'muawanin_target', 'muawanin_start', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
+            'mutayyin_afrad_target', 'mutayyin_afrad_start', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
+            'member_target', 'member_start', 'member_izafa', 'member_kami', 'member_ikhtitaam',
+            # جماعت اسلامی یوتھ
+            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programs_json',
+            # ضلعی تنظیمی اجتماعات
+            'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
+            'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
+            'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
+            'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
+            'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
+            # تنظیمی اجتماعات
+            'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
+            'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
+            'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
+            'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
+            'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
+            # دعوتی اجتماعات
+            'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
+            'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
+            'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
+            'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
+            # تربیتی اجتماعات
+            'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+            'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
+            'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
+            # مرکز قرآن و سنہ
+            'quran_courses', 'quran_classes', 'quran_participants',
+            'fahem_quran_attendance', 'quran_distributed',
+            # تنظیمی و دیگر سرگرمیاں
+            'central_training_target', 'central_training_actual', 'other_trainings',
+            'atifal_programs',
+            # ذمہ داران
+            'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
+            'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
+            'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
+            # کوئی اور بات
+            'koi_or_bat', 'haq_do_karachi',
+            # جماعتِ اسلامی شعبہ اطفال
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+        ]
+        # --- NEW LOGIC: lock only filled fields, keep empty fields editable ---
+        if request.method == 'POST':
+            new_entry = dict(request.form)
+            # Prevent admins from submitting atifal fields
+            if session.get('role') == 'admin':
+                for key in list(new_entry.keys()):
+                    if key.startswith('atifal_'):
+                        del new_entry[key]
+            # Always set atifal_programat_count for both insert and update (like youth_programat_count)
+            if 'atifal_programat_count' in new_entry:
                 try:
-                    return int(form.get(key, 0))
+                    new_entry['atifal_programat_count'] = str(int(new_entry['atifal_programat_count']))
                 except Exception:
-                    return 0
-            # Debug prints for ikhtitaam calculation inputs
-            print('alaqajat_start:', request.form.get('alaqajat_start', 0))
-            print('alaqajat_izafa:', request.form.get('alaqajat_izafa', 0))
-            print('alaqajat_kami:', request.form.get('alaqajat_kami', 0))
-            print('halqajat_start:', request.form.get('halqajat_start', 0))
-            print('halqajat_izafa:', request.form.get('halqajat_izafa', 0))
-            print('halqajat_kami:', request.form.get('halqajat_kami', 0))
-            print('halqajat_ward_start:', request.form.get('halqajat_ward_start', 0))
-            print('halqajat_ward_izafa:', request.form.get('halqajat_ward_izafa', 0))
-            print('halqajat_ward_kami:', request.form.get('halqajat_ward_kami', 0))
-            print('block_code_start:', request.form.get('block_code_start', 0))
-            print('block_code_izafa:', request.form.get('block_code_izafa', 0))
-            print('block_code_kami:', request.form.get('block_code_kami', 0))
-            print('arkaan_start:', request.form.get('arkaan_start', 0))
-            print('arkaan_izafa:', request.form.get('arkaan_izafa', 0))
-            print('arkaan_kami:', request.form.get('arkaan_kami', 0))
-            print('umeedwaran_start:', request.form.get('umeedwaran_start', 0))
-            print('umeedwaran_izafa:', request.form.get('umeedwaran_izafa', 0))
-            print('umeedwaran_kami:', request.form.get('umeedwaran_kami', 0))
-            print('hangami_start:', request.form.get('hangami_start', 0))
-            print('hangami_izafa:', request.form.get('hangami_izafa', 0))
-            print('hangami_kami:', request.form.get('hangami_kami', 0))
-            print('muawanin_start:', request.form.get('muawanin_start', 0))
-            print('muawanin_izafa:', request.form.get('muawanin_izafa', 0))
-            print('muawanin_kami:', request.form.get('muawanin_kami', 0))
-            print('mutayyin_afrad_start:', request.form.get('mutayyin_afrad_start', 0))
-            print('mutayyin_afrad_izafa:', request.form.get('mutayyin_afrad_izafa', 0))
-            print('mutayyin_afrad_kami:', request.form.get('mutayyin_afrad_kami', 0))
-            print('member_start:', request.form.get('member_start', 0))
-            print('member_izafa:', request.form.get('member_izafa', 0))
-            print('member_kami:', request.form.get('member_kami', 0))
-            new_entry['alaqajat_ikhtitaam'] = get_int(request.form, 'alaqajat_start') + get_int(request.form, 'alaqajat_izafa') - get_int(request.form, 'alaqajat_kami')
-            new_entry['halqajat_ikhtitaam'] = get_int(request.form, 'halqajat_start') + get_int(request.form, 'halqajat_izafa') - get_int(request.form, 'halqajat_kami')
-            new_entry['halqajat_ward_ikhtitaam'] = get_int(request.form, 'halqajat_ward_start') + get_int(request.form, 'halqajat_ward_izafa') - get_int(request.form, 'halqajat_ward_kami')
-            new_entry['block_code_ikhtitaam'] = get_int(request.form, 'block_code_start') + get_int(request.form, 'block_code_izafa') - get_int(request.form, 'block_code_kami')
-            new_entry['arkaan_ikhtitaam'] = get_int(request.form, 'arkaan_start') + get_int(request.form, 'arkaan_izafa') - get_int(request.form, 'arkaan_kami')
-            new_entry['umeedwaran_ikhtitaam'] = get_int(request.form, 'umeedwaran_start') + get_int(request.form, 'umeedwaran_izafa') - get_int(request.form, 'umeedwaran_kami')
-            new_entry['hangami_ikhtitaam'] = get_int(request.form, 'hangami_start') + get_int(request.form, 'hangami_izafa') - get_int(request.form, 'hangami_kami')
-            new_entry['muawanin_ikhtitaam'] = get_int(request.form, 'muawanin_start') + get_int(request.form, 'muawanin_izafa') - get_int(request.form, 'muawanin_kami')
-            new_entry['mutayyin_afrad_ikhtitaam'] = get_int(request.form, 'mutayyin_afrad_start') + get_int(request.form, 'mutayyin_afrad_izafa') - get_int(request.form, 'mutayyin_afrad_kami')
-            new_entry['member_ikhtitaam'] = get_int(request.form, 'member_start') + get_int(request.form, 'member_izafa') - get_int(request.form, 'member_kami')
-
-            # Assign *_end columns from *_ikhtitaam values
-            new_entry['alaqajat_end'] = new_entry['alaqajat_ikhtitaam']
-            new_entry['halqajat_end'] = new_entry['halqajat_ikhtitaam']
-            new_entry['halqajat_ward_end'] = new_entry['halqajat_ward_ikhtitaam']
-            new_entry['block_code_end'] = new_entry['block_code_ikhtitaam']
-            new_entry['arkaan_end'] = new_entry['arkaan_ikhtitaam']
-            new_entry['umeedwaran_end'] = new_entry['umeedwaran_ikhtitaam']
-            new_entry['hangami_end'] = new_entry['hangami_ikhtitaam']
-            new_entry['muawanin_end'] = new_entry['muawanin_ikhtitaam']
-            new_entry['mutayyin_afrad_end'] = new_entry['mutayyin_afrad_ikhtitaam']
-            new_entry['member_end'] = new_entry['member_ikhtitaam']
-
-            # Calculate and save nizam_e_fajar_ikhtitaam and awaami_committee_ikhtitaam
-            new_entry['nizam_e_fajar_ikhtitaam'] = get_int(request.form, 'nizam_e_fajar_start') + get_int(request.form, 'nizam_e_fajar_izafa') - get_int(request.form, 'nizam_e_fajar_kami')
-            new_entry['awaami_committee_ikhtitaam'] = get_int(request.form, 'awaami_committee_start') + get_int(request.form, 'awaami_committee_izafa') - get_int(request.form, 'awaami_committee_kami')
-            new_entry['nizam_e_fajar_end'] = new_entry['nizam_e_fajar_ikhtitaam']
-            new_entry['awaami_committee_end'] = new_entry['awaami_committee_ikhtitaam']
-
-            print("Saving these ikhtitaam values:", {k: v for k, v in new_entry.items() if 'ikhtitaam' in k})
-            
-            # Collect dynamic youth program fields
+                    new_entry['atifal_programat_count'] = '0'
+            # Collect all youth program fields from the form
             youth_programs = []
-
-            # Collect server-rendered fields (programat_*)
-            count = int(request.form.get('youth_programat_count', 0))
-            for i in range(1, count + 1):
-                name = request.form.get(f'programat_{i}', '').strip()
-                num = request.form.get(f'programat_count_{i}', '').strip()
-                if name or num:
-                    youth_programs.append({'name': name, 'count': num})
-
-            # Collect dynamically added fields (nauiyat_*)
-            for key in request.form:
-                if key.startswith('nauiyat_') and not key.startswith('nauiyat_count_'):
-                    idx = key.split('_')[1]
-                    name = request.form.get(f'nauiyat_{idx}', '').strip()
-                    count_val = request.form.get(f'nauiyat_count_{idx}', '').strip()
-                    if name or count_val:
-                        youth_programs.append({'name': name, 'count': count_val})
-
-            # Store as JSON
+            i = 1
+            while True:
+                name = new_entry.get(f'programat_{i}')
+                count = new_entry.get(f'programat_count_{i}')
+                if name is None and count is None:
+                    break
+                if name or count:
+                    youth_programs.append({'name': name or '', 'count': count or ''})
+                i += 1
             new_entry['youth_programs_json'] = json.dumps(youth_programs, ensure_ascii=False)
-
-            # Remove all nauiyat_* and nauiyat_count_* keys from new_entry
+            # Remove the dynamic youth fields from new_entry
             for key in list(new_entry.keys()):
-                if key.startswith('nauiyat_') or key.startswith('programat_'):
+                if key.startswith('programat_'):
                     del new_entry[key]
-            
-            # Save to DB
+            # Collect dynamic atifal fields and store as JSON
+            atifal_programs = []
+            i = 1
+            while True:
+                nauiyat = new_entry.get(f'atifal_nauyiat_{i}')
+                hazri = new_entry.get(f'atifal_programat_count_{i}')
+                if nauiyat is None and hazri is None:
+                    break
+                if nauiyat or hazri:
+                    atifal_programs.append({'nauiyat': nauiyat or '', 'hazri': hazri or ''})
+                i += 1
+            new_entry['atifal_programs_json'] = json.dumps(atifal_programs, ensure_ascii=False)
+            # remove temporary keys
+            for key in list(new_entry.keys()):
+                if key.startswith('atifal_nauyiat_') or (key.startswith('atifal_programat_count_') and key != 'atifal_programat_count'):
+                    del new_entry[key]
+            new_entry['zila'] = zila
+            new_entry['month'] = current_month
+            new_entry['timestamp'] = datetime.now().isoformat()
+            new_entry['submitted_by'] = session['username']
+            new_entry['last_submitted_by'] = session.get('role', 'user')
+            update_fields = {}
             if report_exists:
-                success = update_report_in_db(zila, current_month, new_entry)
-                print(f"[DEBUG] update_report_in_db returned: {success}")
-                if success is None:
-                    flash("رپورٹ کامیابی سے اپ ڈیٹ ہو گئی ہے!", "success")
+                row = existing_report.iloc[0]
+                # Admin can always update pre-value fields
+                if session.get('role') == 'admin':
+                    admin_editable_fields = [
+                        # Basic info
+                        'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+                        # تنظیمی ہیٔت (target/start)
+                        'alaqajat_target', 'alaqajat_start',
+                        'halqajat_target', 'halqajat_start',
+                        'halqajat_ward_target', 'halqajat_ward_start',
+                        'block_code_target', 'block_code_start',
+                        'nizam_e_fajar_target', 'nizam_e_fajar_start',
+                        'awaami_committee_target', 'awaami_committee_start',
+                        # افرادی قوت (target/start)
+                        'arkaan_target', 'arkaan_start',
+                        'umeedwaran_target', 'umeedwaran_start',
+                        'hangami_target', 'hangami_start',
+                        'muawanin_target', 'muawanin_start',
+                        'mutayyin_afrad_target', 'mutayyin_afrad_start',
+                        'member_target', 'member_start'
+                    ]
+                    for key in admin_editable_fields:
+                        if key in new_entry:
+                            update_fields[key] = new_entry[key]
+                            # User logic: only update fields that are empty in DB and non-empty in form
+            for key in visible_fields:
+                if session.get('role') != 'admin':
+                    form_value = new_entry.get(key, '').strip() if isinstance(new_entry.get(key, ''), str) else new_entry.get(key, '')
+                    # Ensure row is defined before using it
+                    if 'row' in locals() and row is not None:
+                        db_value = str(row.get(key, '')).strip() if row.get(key, '') is not None else ''
+                    else:
+                        db_value = ''
+                    if db_value in ['', 'nan', 'None'] and form_value not in ['', 'nan', 'None']:
+                        # For start fields, convert empty string to 0 for database storage
+                        if key.endswith('_start') and form_value == '':
+                            update_fields[key] = '0'
+                        else:
+                            update_fields[key] = form_value
+                # Always update youth_programat_count for users if present
+                if session.get('role') != 'admin' and 'youth_programat_count' in new_entry:
+                    try:
+                        update_fields['youth_programat_count'] = str(int(new_entry['youth_programat_count']))
+                    except Exception:
+                        update_fields['youth_programat_count'] = '0'
+                # Always update atifal_programat_count for users if present (like youth_programat_count)
+                if session.get('role') != 'admin' and 'atifal_programat_count' in new_entry:
+                    try:
+                        update_fields['atifal_programat_count'] = str(int(new_entry['atifal_programat_count']))
+                    except Exception:
+                        update_fields['atifal_programat_count'] = '0'
+                # Always update *_ikhtitaam fields if present
+                ikhtitaam_fields = [
+                    'alaqajat_ikhtitaam', 'halqajat_ikhtitaam', 'halqajat_ward_ikhtitaam', 'block_code_ikhtitaam',
+                    'nizam_e_fajar_ikhtitaam', 'awaami_committee_ikhtitaam',
+                    'arkaan_ikhtitaam', 'umeedwaran_ikhtitaam', 'hangami_ikhtitaam', 'muawanin_ikhtitaam',
+                    'mutayyin_afrad_ikhtitaam', 'member_ikhtitaam'
+                ]
+                for key in ikhtitaam_fields:
+                    if key in new_entry:
+                        update_fields[key] = new_entry[key]
+                update_fields['timestamp'] = new_entry['timestamp']
+                update_fields['submitted_by'] = new_entry['submitted_by']
+                update_fields['last_submitted_by'] = new_entry['last_submitted_by']
+                if update_fields:
+                    update_report_in_db(zila, current_month, update_fields)
+                    flash("Updated successfully!", "success")
                 else:
-                    flash("رپورٹ اپ ڈیٹ کرنے میں خرابی", "error")
+                    flash("No new fields to update.", "info")
             else:
-                print("[DEBUG] Saving new report to DB...")
-                save_report_to_db(new_entry)
-                print("[DEBUG] New report saved to DB.")
-                flash("رپورٹ کامیابی سے جمع ہو گئی ہے!", "success")
-
-            # After saving/updating the report, redirect to the report page (GET)
+                # Always ensure atifal_programat_count is included if present
+                if 'atifal_programat_count' in new_entry:
+                    try:
+                        new_entry['atifal_programat_count'] = str(int(new_entry['atifal_programat_count']))
+                    except Exception:
+                        new_entry['atifal_programat_count'] = '0'
+                # Convert empty start fields to 0 for database storage
+                for key in list(new_entry.keys()):
+                    if key.endswith('_start') and new_entry[key] == '':
+                        new_entry[key] = '0'
+                # Check if report already exists for this zila
+                existing_report = report_df[report_df['zila'] == zila]
+                if not existing_report.empty:
+                    # Update existing report
+                    update_report_in_db(zila, current_month, new_entry)
+                    flash("Report updated successfully!", "success")
+                else:
+                    # Create new report
+                    save_report_to_db(new_entry)
+                    flash("Report submitted!", "success")
             return redirect(url_for('report'))
-            
-        except Exception as e:
-            flash(f"رپورٹ جمع کرنے میں خرابی: {str(e)}", "error")
-            print(f"Error saving report: {e}")
-            import traceback
-            traceback.print_exc()
-
-    programat_list = []
-    programat_json = form_data.get('youth_programs_json', '')
-    if programat_json:
-        try:
-            programat_list = json.loads(programat_json)
-        except Exception:
-            programat_list = []
-
-    # Define the list of fields that are actually visible/editable in the form
-    visible_fields = [
-        'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
-        'alaqajat_izafa', 'alaqajat_kami', 'halqajat_izafa', 'halqajat_kami',
-        'halqajat_ward_izafa', 'halqajat_ward_kami', 'block_code_izafa', 'block_code_kami',
-        'arkaan_izafa', 'arkaan_kami', 'umeedwaran_izafa', 'umeedwaran_kami',
-        'hangami_izafa', 'hangami_kami', 'muawanin_izafa', 'muawanin_kami',
-        'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'member_izafa', 'member_kami',
-        'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'awaami_committee_izafa', 'awaami_committee_kami',
-        'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'koi_or_bat',
-        # Add any other fields that are visible in your form
-    ]
-
-    # Only consider visible fields for locked_fields and can_submit
-    locked_fields = {}
-    if report_exists:
-        for key in visible_fields:
-            value = form_data.get(key, '')
-            locked_fields[key] = value not in [None, '']
-    else:
-        for key in visible_fields:
-            locked_fields[key] = False
-
-    can_submit = any(not locked for locked in locked_fields.values())
-
-    # Debug prints to help diagnose why the submit button is showing
-    print("Locked fields (visible only):", locked_fields)
-    print("Can submit:", can_submit)
-    print("Form data (visible only):", {k: form_data.get(k, '') for k in visible_fields})
-
-    return render_template("report.html", 
-                         zila=zila, 
-                         form_data=form_data,
-                         report_exists=report_exists,
-                         current_month=current_month_urdu,
-                         programat_list=programat_list,
-                         locked_fields=locked_fields,
-                         can_submit=can_submit)
+        # For GET: lock fields that are non-empty in DB, keep empty fields editable
+        locked_fields = {}
+        can_submit = True  # Always set a default value
+        if report_exists:
+            row = existing_report.iloc[0]
+            # Ensure atifal_programat_count is in visible_fields
+            if 'atifal_programat_count' not in visible_fields:
+                visible_fields.append('atifal_programat_count')
+            # Locking logic for all visible fields
+            for key in visible_fields:
+                locked_fields[key] = str(row.get(key, '')).strip() not in ['', 'nan', 'None']
+            # Explicitly ensure atifal_programat_count is locked if filled
+            value = row.get('atifal_programat_count', '')
+            locked_fields['atifal_programat_count'] = value not in ['', 'nan', 'None', None]
+            # --- Handle dynamic youth program fields for locking ---
+        form_data = get_form_data(zila, current_month)
+        programat_list = []
+        programat_json = form_data.get('youth_programs_json', '')
+        if programat_json:
+            try:
+                programat_list = json.loads(programat_json)
+            except Exception:
+                programat_list = []
+            for idx, prog in enumerate(programat_list):
+                locked_fields[f'programat_{idx+1}'] = bool(prog.get('name', '').strip())
+                locked_fields[f'programat_count_{idx+1}'] = bool(str(prog.get('count', '')).strip())
+            for idx, prog in enumerate(programat_list):
+                form_data[f'programat_{idx+1}'] = prog.get('name', '')
+                form_data[f'programat_count_{idx+1}'] = prog.get('count', '')
+            # --- Handle dynamic atifal program fields for locking ---
+            atifal_programs_list = []
+            atifal_programs_json = form_data.get('atifal_programs_json', '')
+            if atifal_programs_json:
+                try:
+                    atifal_programs_list = json.loads(atifal_programs_json)
+                except Exception:
+                    atifal_programs_list = []
+            for idx, prog in enumerate(atifal_programs_list):
+                locked_fields[f'atifal_nauyiat_{idx+1}'] = bool(prog.get('nauiyat', '').strip())
+                locked_fields[f'atifal_programat_count_{idx+1}'] = bool(str(prog.get('hazri', '')).strip())
+            for idx, prog in enumerate(atifal_programs_list):
+                form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
+                form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
+            can_submit = any(not locked_fields.get(k, False) for k in visible_fields) or any(
+                not locked_fields.get(f'programat_{i+1}', False) or not locked_fields.get(f'programat_count_{i+1}', False)
+                for i in range(len(programat_list))
+            ) or any(
+                not locked_fields.get(f'atifal_nauyiat_{i+1}', False) or not locked_fields.get(f'atifal_programat_count_{i+1}', False)
+                for i in range(len(atifal_programs_list))
+            )
+        else:
+            for key in visible_fields:
+                locked_fields[key] = False
+            can_submit = True
+        # All assignments to form_data are done above
+        # Now populate atifal fields for template compatibility
+        atifal_programs_list = []
+        atifal_programs_json = form_data.get('atifal_programs_json', '')
+        if atifal_programs_json:
+            try:
+                atifal_programs_list = json.loads(atifal_programs_json)
+            except Exception:
+                atifal_programs_list = []
+        # Populate form_data with atifal program fields for template compatibility
+        for idx, prog in enumerate(atifal_programs_list):
+            form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
+            form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
+            # Lock fields if they have data
+            if prog.get('nauiyat', '').strip() or prog.get('hazri', '').strip():
+                locked_fields[f'atifal_nauyiat_{idx+1}'] = True
+                locked_fields[f'atifal_programat_count_{idx+1}'] = True
+        return render_template("report.html", 
+                             zila=zila, 
+                             form_data=form_data,
+                             report_exists=report_exists,
+                             current_month=current_month_urdu,
+                             programat_list=programat_list,
+                             locked_fields=locked_fields,
+                             can_submit=can_submit)
+    except Exception as e:
+        import logging
+        logging.error("Exception in /report route", exc_info=True)
+        return "Internal Server Error. Please check error.log for details.", 500
 
 @app.route('/dashboard')
 def dashboard():
-    if 'username' not in session:
+    try:
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        if session.get('role') != 'admin':
+            flash("آپ کو ڈیش بورڈ دیکھنے کی اجازت نہیں ہے", "error")
+            return redirect(url_for('report'))
+        global report_df, users_df
+        report_df = load_reports_from_db()
+        users_df = load_users_from_db()
+        current_month = datetime.today().strftime('%Y-%m')
+        current_reports = report_df[report_df['month'] == current_month]
+        all_zilas = list(pd.Series(users_df[users_df['role'] == 'user']['zila']).drop_duplicates())
+        zila_status = []
+        org_keys = [
+            'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee'
+        ]
+        manpower_keys = [
+            'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
+        ]
+        visible_fields = [
+            'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+            'alaqajat_izafa', 'alaqajat_kami', 'halqajat_izafa', 'halqajat_kami',
+            'halqajat_ward_izafa', 'halqajat_ward_kami', 'block_code_izafa', 'block_code_kami',
+            'arkaan_izafa', 'arkaan_kami', 'umeedwaran_izafa', 'umeedwaran_kami',
+            'karkunan_izafa', 'karkunan_kami',
+            'hangami_izafa', 'hangami_kami', 'muawanin_izafa', 'muawanin_kami',
+            'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'member_izafa', 'member_kami',
+            'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'awaami_committee_izafa', 'awaami_committee_kami',
+            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'koi_or_bat', 'haq_do_karachi',
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count',
+            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+        ]
+        for zila in all_zilas:
+            report_row = pd.DataFrame(current_reports[current_reports['zila'] == zila])
+            zila_dict = {
+                'zila': zila,
+                'union_committee_count': '',
+                'wards_count': '',
+                'block_code_count': '',
+                'cantonment_board_count': '',
+            }
+            for key in org_keys:
+                zila_dict[f'{key}_target'] = ''
+                zila_dict[f'{key}_start'] = ''
+            for key in manpower_keys:
+                zila_dict[f'{key}_target'] = ''
+                zila_dict[f'{key}_start'] = ''
+            if not report_row.empty:
+                row = report_row.iloc[0]
+                zila_dict['union_committee_count'] = row.get('union_committee_count', '')
+                zila_dict['wards_count'] = row.get('wards_count', '')
+                zila_dict['block_code_count'] = row.get('block_code_count', '')
+                zila_dict['cantonment_board_count'] = row.get('cantonment_board_count', '')
+                for key in org_keys:
+                    zila_dict[f'{key}_target'] = row.get(f'{key}_target', '')
+                    zila_dict[f'{key}_start'] = row.get(f'{key}_start', '')
+                for key in manpower_keys:
+                    zila_dict[f'{key}_target'] = row.get(f'{key}_target', '')
+                    zila_dict[f'{key}_start'] = row.get(f'{key}_start', '')
+                # Check completeness of required fields
+                total_fields = len(visible_fields)
+                filled_fields = sum(1 for field in visible_fields if str(row.get(field, '')).strip() not in ['', 'nan', 'None'])
+                if filled_fields == 0:
+                    zila_dict['status'] = 'not_started'
+                elif filled_fields == total_fields:
+                    zila_dict['status'] = 'submitted'
+                else:
+                    zila_dict['status'] = 'partial'
+                zila_dict['has_report'] = True
+            else:
+                zila_dict['status'] = 'not_started'
+                zila_dict['has_report'] = False
+            zila_status.append(zila_dict)
+        summary = {
+            'total_zilas': len(all_zilas),
+            'total_submitted_reports': 0,
+            'total_not_submitted_reports': 0,
+            'total_arkaan': 0,
+            'total_members': 0,
+            'total_collections': 0,
+        }
+        reports_list = []
+        return render_template("dashboard.html", 
+                             summary=summary, 
+                             reports=reports_list,
+                             zila_status=zila_status,
+                             current_month=current_month)
+    except Exception as e:
+        import logging
+        logging.error("Exception in /dashboard route", exc_info=True)
+        return "Internal Server Error. Please check error.log for details.", 500
+
+@app.route('/update_zila_info', methods=['POST'])
+def update_zila_info():
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash('صرف ایڈمن اس صفحہ تک رسائی حاصل کر سکتا ہے۔')
+            return redirect(url_for('dashboard'))
+        from datetime import datetime
+        current_month = datetime.today().strftime('%Y-%m')
+        # Get all zila keys from the form
+        zila_keys = [k for k in request.form.keys() if k.startswith('zila_')]
+        for key in zila_keys:
+            idx = key.split('_')[1]
+            zila = request.form.get(f'zila_{idx}')
+            ibtidai_maloomat_tadad = request.form.get(f'ibtidai_maloomat_tadad_{idx}') or None
+            tanzeemi_hayat = request.form.get(f'tanzeemi_hayat_{idx}') or None
+            afradi_quwat = request.form.get(f'afradi_quwat_{idx}') or None
+            # Only update if at least one value is provided
+            update_fields = {}
+            if ibtidai_maloomat_tadad is not None:
+                update_fields['ibtidai_maloomat_tadad'] = ibtidai_maloomat_tadad
+            if tanzeemi_hayat is not None:
+                update_fields['tanzeemi_hayat'] = tanzeemi_hayat
+            if afradi_quwat is not None:
+                update_fields['afradi_quwat'] = afradi_quwat
+            if update_fields:
+                # Check if report exists for this zila and month
+                conn = sqlite3.connect(DB_FILE)
+                c = conn.cursor()
+                c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+                row = c.fetchone()
+                if row:
+                    # Update existing
+                    set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
+                    values = list(update_fields.values())
+                    values.extend([zila, current_month])
+                    sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+                    c.execute(sql, values)
+                else:
+                    # Insert new
+                    sql = "INSERT INTO monthly_reports (zila, month, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, timestamp, submitted_by) VALUES (?, ?, ?, ?, ?, datetime('now'), ?)"
+                    c.execute(sql, (zila, current_month, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, session.get('username', 'admin')))
+                conn.commit()
+                conn.close()
+        flash('معلومات کامیابی سے محفوظ ہو گئیں۔')
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        import logging
+        logging.error("Exception in /update_zila_info route", exc_info=True)
+        flash('محفوظ کرنے میں خرابی۔')
+        return redirect(url_for('dashboard'))
+
+@app.route('/update_basic_info', methods=['POST'])
+def update_basic_info():
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash('صرف ایڈمن اس صفحہ تک رسائی حاصل کر سکتا ہے۔')
+            return redirect(url_for('dashboard'))
+        from datetime import datetime
+        current_month = datetime.today().strftime('%Y-%m')
+        zila_keys = [k for k in request.form.keys() if k.startswith('zila_')]
+        for key in zila_keys:
+            idx = key.split('_')[1]
+            zila = request.form.get(f'zila_{idx}')
+            union_committee_count = request.form.get(f'union_committee_count_{idx}') or None
+            wards_count = request.form.get(f'wards_count_{idx}') or None
+            block_code_count = request.form.get(f'block_code_count_{idx}') or None
+            cantonment_board_count = request.form.get(f'cantonment_board_count_{idx}') or None
+            update_fields = {
+                'union_committee_count': union_committee_count,
+                'wards_count': wards_count,
+                'block_code_count': block_code_count,
+                'cantonment_board_count': cantonment_board_count
+            }
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+            row = c.fetchone()
+            if row:
+                set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
+                values = list(update_fields.values())
+                values.extend([zila, current_month])
+                sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+                c.execute(sql, values)
+            else:
+                sql = "INSERT INTO monthly_reports (zila, month, union_committee_count, wards_count, block_code_count, cantonment_board_count, timestamp, submitted_by) VALUES (?, ?, ?, ?, ?, ?, datetime('now'), ?)"
+                c.execute(sql, (zila, current_month, union_committee_count, wards_count, block_code_count, cantonment_board_count, session.get('username', 'admin')))
+            conn.commit()
+            conn.close()
+        flash('ابتدائی معلومات کامیابی سے محفوظ ہو گئیں۔')
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        import logging
+        logging.error("Exception in /update_basic_info route", exc_info=True)
+        flash('محفوظ کرنے میں خرابی۔')
+        return redirect(url_for('dashboard'))
+
+@app.route('/update_org_structure', methods=['POST'])
+def update_org_structure():
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash('صرف ایڈمن اس صفحہ تک رسائی حاصل کر سکتا ہے۔')
+            return redirect(url_for('dashboard'))
+        from datetime import datetime
+        current_month = datetime.today().strftime('%Y-%m')
+        zila = request.form.get('zila')
+        org_keys = [
+            'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee'
+        ]
+        update_fields = {}
+        for key in org_keys:
+            update_fields[f'{key}_target'] = request.form.get(f'{key}_target') or None
+            update_fields[f'{key}_start'] = request.form.get(f'{key}_start') or None
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+        row = c.fetchone()
+        if row:
+            set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
+            values = list(update_fields.values())
+            values.extend([zila, current_month])
+            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+            c.execute(sql, values)
+        else:
+            sql = f"INSERT INTO monthly_reports (zila, month, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, ?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
+            c.execute(sql, (zila, current_month, *update_fields.values(), session.get('username', 'admin')))
+        conn.commit()
+        conn.close()
+        flash('تنظیمی ہیٔت کامیابی سے محفوظ ہو گئیں۔')
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        import logging
+        logging.error("Exception in /update_org_structure route", exc_info=True)
+        flash('محفوظ کرنے میں خرابی۔')
+        return redirect(url_for('dashboard'))
+
+@app.route('/update_manpower', methods=['POST'])
+def update_manpower():
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash('صرف ایڈمن اس صفحہ تک رسائی حاصل کر سکتا ہے۔')
+            return redirect(url_for('dashboard'))
+        from datetime import datetime
+        current_month = datetime.today().strftime('%Y-%m')
+        zila = request.form.get('zila')
+        manpower_keys = [
+            'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
+        ]
+        update_fields = {}
+        for key in manpower_keys:
+            update_fields[f'{key}_target'] = request.form.get(f'{key}_target') or None
+            update_fields[f'{key}_start'] = request.form.get(f'{key}_start') or None
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+        row = c.fetchone()
+        if row:
+            set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
+            values = list(update_fields.values())
+            values.extend([zila, current_month])
+            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+            c.execute(sql, values)
+        else:
+            sql = f"INSERT INTO monthly_reports (zila, month, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, ?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
+            c.execute(sql, (zila, current_month, *update_fields.values(), session.get('username', 'admin')))
+        conn.commit()
+        conn.close()
+        flash('افرادی قوت کامیابی سے محفوظ ہو گئیں۔')
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        import logging
+        logging.error("Exception in /update_manpower route", exc_info=True)
+        flash('محفوظ کرنے میں خرابی۔')
+        return redirect(url_for('dashboard'))
+
+@app.route('/view_report/<zila>/<month>')
+def view_report(zila, month):
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            return redirect(url_for('login'))
+        global report_df
+        report_df = load_reports_from_db()
+        report_row = report_df[(report_df['zila'] == zila) & (report_df['month'] == month)]
+        if report_row.empty:
+            flash("اس ضلع کی رپورٹ موجود نہیں ہے۔", "error")
+            return redirect(url_for('dashboard'))
+        form_data = report_row.iloc[0].to_dict()
+        # Convert NaN to empty string
+        form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
+        # For display, get month in Urdu
+        current_month_urdu = datetime.strptime(month, '%Y-%m').strftime('%B %Y')
+        # All fields locked (read-only)
+        locked_fields = {k: True for k in form_data.keys()}
+        programat_list = []
+        programat_json = form_data.get('youth_programs_json', '')
+        if programat_json:
+            try:
+                programat_list = json.loads(programat_json)
+            except Exception:
+                programat_list = []
+        # Load atifal programs list from JSON
+        atifal_programs_list = []
+        atifal_programs_json = form_data.get('atifal_programs_json', '')
+        if atifal_programs_json:
+            try:
+                atifal_programs_list = json.loads(atifal_programs_json)
+            except Exception:
+                atifal_programs_list = []
+        # Populate form_data fields for template compatibility
+        for idx, prog in enumerate(atifal_programs_list):
+            form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
+            form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
+        return render_template("report.html", 
+                             zila=zila, 
+                             form_data=form_data,
+                             report_exists=True,
+                             current_month=current_month_urdu,
+                             programat_list=programat_list,
+                             atifal_programs_list=atifal_programs_list,
+                             locked_fields=locked_fields,
+                             can_submit=False)
+    except Exception as e:
+        import logging
+        logging.error("Exception in /view_report route", exc_info=True)
+        flash("رپورٹ دیکھنے میں خرابی۔", "error")
+        return redirect(url_for('dashboard'))
+
+@app.route('/set_zila_and_redirect', methods=['POST'])
+def set_zila_and_redirect():
+    if 'username' not in session or session.get('role') != 'admin':
         return redirect(url_for('login'))
-    
-    if session.get('role') != 'admin':
-        flash("آپ کو ڈیش بورڈ دیکھنے کی اجازت نہیں ہے", "error")
-        return redirect(url_for('report'))
-    
-    # Reload report data from DB
-    global report_df
-    report_df = load_reports_from_db()
-    
-    # Get summary statistics
-    current_month = datetime.today().strftime('%Y-%m')
-    current_reports = report_df[report_df['month'] == current_month]
-    
-    summary = {
-        'total_zilas': len(current_reports),
-        'total_arkaan': int(current_reports['halqajat_end'].sum()) if not current_reports.empty and 'halqajat_end' in current_reports.columns else 0,
-        'total_members': int(current_reports['members_end'].sum()) if not current_reports.empty and 'members_end' in current_reports.columns else 0,
-        'total_umeedwaran': int(current_reports['umeedwaran_end'].sum()) if not current_reports.empty and 'umeedwaran_end' in current_reports.columns else 0,
-        'total_alaqajat': int(current_reports['alaqajat_end'].sum()) if not current_reports.empty and 'alaqajat_end' in current_reports.columns else 0,
-        'total_halqajat': int(current_reports['halqajat_end'].sum()) if not current_reports.empty and 'halqajat_end' in current_reports.columns else 0,
-    }
-    
-    return render_template("dashboard.html", 
-                         summary=summary, 
-                         reports=current_reports.to_dict())
+    zila = request.form.get('zila')
+    if zila:
+        session['zila'] = zila
+    return redirect(url_for('report'))
+
+@app.route('/update_schema')
+def update_schema():
+    """Route to manually update database schema"""
+    try:
+        force_update_database_schema()
+        return "Database schema updated successfully!", 200
+    except Exception as e:
+        return f"Error updating schema: {str(e)}", 500
+
+@app.route('/fix_karkunan_columns')
+def fix_karkunan_columns():
+    """Route to specifically fix karkunan columns"""
+    try:
+        karkunan_columns = [
+            'karkunan_start', 'karkunan_end', 'karkunan_target',
+            'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam'
+        ]
+        
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Get existing columns
+        c.execute('PRAGMA table_info(monthly_reports)')
+        existing_cols = [row[1] for row in c.fetchall()]
+        
+        # Add missing karkunan columns
+        added_columns = []
+        for col in karkunan_columns:
+            if col not in existing_cols:
+                try:
+                    c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
+                    added_columns.append(col)
+                except Exception as e:
+                    return f"Error adding column {col}: {str(e)}", 500
+        
+        conn.commit()
+        conn.close()
+        
+        if added_columns:
+            return f"Successfully added karkunan columns: {', '.join(added_columns)}", 200
+        else:
+            return "All karkunan columns already exist!", 200
+            
+    except Exception as e:
+        return f"Error fixing karkunan columns: {str(e)}", 500
+
+@app.route('/fix_youth_atifal_columns')
+def fix_youth_atifal_columns():
+    """Route to specifically fix youth and atifal program columns"""
+    try:
+        missing_columns = [
+            'youth_programs_json', 'atifal_programs_json'
+        ]
+        
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Get existing columns
+        c.execute('PRAGMA table_info(monthly_reports)')
+        existing_cols = [row[1] for row in c.fetchall()]
+        
+        # Add missing columns
+        added_columns = []
+        for col in missing_columns:
+            if col not in existing_cols:
+                try:
+                    c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} TEXT')
+                    added_columns.append(col)
+                except Exception as e:
+                    return f"Error adding column {col}: {str(e)}", 500
+        
+        conn.commit()
+        conn.close()
+        
+        if added_columns:
+            return f"Successfully added youth/atifal columns: {', '.join(added_columns)}", 200
+        else:
+            return "All youth/atifal columns already exist!", 200
+            
+    except Exception as e:
+        return f"Error fixing youth/atifal columns: {str(e)}", 500
+
+@app.route('/cleanup_duplicates')
+def cleanup_duplicates():
+    """Route to clean up duplicate entries in the database"""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Find duplicates by zila only
+        c.execute('''
+            SELECT zila, COUNT(*) as count
+            FROM monthly_reports 
+            GROUP BY zila 
+            HAVING COUNT(*) > 1
+        ''')
+        duplicates = c.fetchall()
+        
+        cleaned_count = 0
+        for zila, count in duplicates:
+            # Keep the most recent entry (highest id) and delete others
+            c.execute('''
+                DELETE FROM monthly_reports 
+                WHERE zila = ? AND id NOT IN (
+                    SELECT MAX(id) FROM monthly_reports 
+                    WHERE zila = ?
+                )
+            ''', (zila, zila))
+            cleaned_count += count - 1
+        
+        conn.commit()
+        conn.close()
+        
+        return f"Cleaned up {cleaned_count} duplicate entries!", 200
+            
+    except Exception as e:
+        return f"Error cleaning up duplicates: {str(e)}", 500
 
 @app.route('/logout')
 def logout():
@@ -587,5 +1166,65 @@ def logout():
     flash("آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں", "info")
     return redirect(url_for('login'))
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+@app.route('/print_schema')
+def print_schema():
+    import sqlite3
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute('PRAGMA table_info(monthly_reports)')
+    columns = c.fetchall()
+    conn.close()
+    return '<br>'.join([str(col) for col in columns])
+
+@app.route('/fix_atifal_column')
+def fix_atifal_column():
+    import sqlite3
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute("PRAGMA table_info(monthly_reports)")
+        columns = [row[1] for row in c.fetchall()]
+        if 'atifal_programat_count' not in columns:
+            c.execute("ALTER TABLE monthly_reports ADD COLUMN atifal_programat_count INTEGER")
+            conn.commit()
+            msg = 'Column atifal_programat_count added.'
+        else:
+            msg = 'Column atifal_programat_count already exists.'
+        conn.close()
+        return msg
+    except Exception as e:
+        return f'Error: {e}'
+
+@app.route('/debug_atifal_data')
+def debug_atifal_data():
+    """Route to debug atifal data in the database"""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Get all atifal data
+        c.execute('SELECT zila, atifal_programat_count, atifal_programs_json FROM monthly_reports WHERE atifal_programs_json IS NOT NULL AND atifal_programs_json != ""')
+        rows = c.fetchall()
+        
+        debug_info = []
+        for zila, count, json_data in rows:
+            try:
+                programs = json.loads(json_data) if json_data else []
+                debug_info.append(f"Zila: {zila}, Count: {count}, Programs: {programs}")
+            except Exception as e:
+                debug_info.append(f"Zila: {zila}, Count: {count}, JSON Error: {e}")
+        
+        conn.close()
+        
+        if debug_info:
+            return "<br>".join(debug_info)
+        else:
+            return "No atifal data found in database"
+            
+    except Exception as e:
+        return f"Error debugging atifal data: {str(e)}"
+
+if __name__ == "__main__":
+    init_db()
+    force_update_database_schema()  # Force update schema to ensure all new columns exist
+    app.run(debug=True, host='0.0.0.0', port=5001)
