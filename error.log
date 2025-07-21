@@ -850,3 +850,541 @@ sqlite3.OperationalError: no such column: karkunan_izafa
 2025-07-19 18:58:27,998 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [19/Jul/2025 18:58:27] "[32mPOST /report HTTP/1.1[0m" 302 -
 2025-07-19 18:58:28,148 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [19/Jul/2025 18:58:28] "GET /report HTTP/1.1" 200 -
 2025-07-19 18:58:28,483 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [19/Jul/2025 18:58:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:19:04,478 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.18.11:5001
+2025-07-21 11:19:04,478 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2025-07-21 11:19:04,478 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 11:19:05,394 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 11:19:05,400 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 11:19:30,045 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:30] "GET / HTTP/1.1" 200 -
+2025-07-21 11:19:30,360 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:19:30,910 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:30] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:19:31,011 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:19:33,477 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:33] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:19:33,515 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:19:36,748 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:36] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:19:37,043 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:19:57,344 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:57] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:19:57,477 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:57] "GET / HTTP/1.1" 200 -
+2025-07-21 11:19:57,595 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:19:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:03,471 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:03] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:20:03,809 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:03] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:20:04,159 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:04] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:12,785 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:12] "GET /view_report/\u0645\u0644\u06cc\u0631/2025-07 HTTP/1.1" 200 -
+2025-07-21 11:20:13,084 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:17,842 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:17] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:20:17,878 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:19,154 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:19] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:20:19,460 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:19] "GET / HTTP/1.1" 200 -
+2025-07-21 11:20:19,821 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:25,482 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:25] "POST / HTTP/1.1" 200 -
+2025-07-21 11:20:25,811 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:20:31,910 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:31] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:20:31,935 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:31] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:20:32,160 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:20:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:23:02,187 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:23:02,206 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:23:06,353 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:06] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:23:06,641 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:06] "GET /static/style.css HTTP/1.1" 200 -
+2025-07-21 11:23:41,603 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:41] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:23:41,620 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:23:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:24:02,839 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:24:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:24:03,135 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:24:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:24:55,650 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:24:55] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:24:55,672 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:24:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:25:53,175 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:25:53] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:25:53,315 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:25:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:26:03,044 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:03] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:26:03,059 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:26:34,714 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:34] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:26:34,866 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:26:37,082 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:37] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:26:37,115 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:26:49,647 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:49] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:26:49,948 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:26:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:27:41,912 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:27:41] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:27:41,928 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:27:41] "GET /static/style.css HTTP/1.1" 200 -
+2025-07-21 11:27:57,552 INFO werkzeug Thread-50 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:27:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:27:57,884 INFO werkzeug Thread-51 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:27:57] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-21 11:28:17,277 INFO werkzeug Thread-52 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:17] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:28:17,596 INFO werkzeug Thread-53 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:17] "GET / HTTP/1.1" 200 -
+2025-07-21 11:28:17,643 INFO werkzeug Thread-54 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:17] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-07-21 11:28:17,862 INFO werkzeug Thread-55 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:28:25,130 INFO werkzeug Thread-56 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:25] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:28:25,161 INFO werkzeug Thread-57 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:25] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:28:25,399 INFO werkzeug Thread-58 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:28:28,510 INFO werkzeug Thread-59 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:28] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 11:28:28,527 INFO werkzeug Thread-60 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:28] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:28:28,764 INFO werkzeug Thread-61 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:28:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:29:23,232 INFO werkzeug Thread-62 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:29:23] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:29:23,268 INFO werkzeug Thread-63 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:29:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:34:41,929 INFO werkzeug Thread-65 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:34:41] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:34:41,978 INFO werkzeug Thread-66 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:34:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:36:10,796 INFO werkzeug Thread-68 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:36:10] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:36:10,844 INFO werkzeug Thread-69 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:36:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:42:41,667 INFO werkzeug Thread-71 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:42:41] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:42:41,694 INFO werkzeug Thread-72 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:42:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:44:35,748 INFO werkzeug Thread-74 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:44:35] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:44:35,765 INFO werkzeug Thread-75 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:44:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:49:28,883 INFO werkzeug Thread-77 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:49:28] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:49:28,908 INFO werkzeug Thread-78 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:49:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:13,253 INFO werkzeug Thread-79 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:13] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 11:50:13,387 INFO werkzeug Thread-80 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:13] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:50:13,723 INFO werkzeug Thread-81 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:26,672 INFO werkzeug Thread-82 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:26] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:50:26,971 INFO werkzeug Thread-83 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:30,326 INFO werkzeug Thread-84 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:30] "GET /view_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679/2025-07 HTTP/1.1" 200 -
+2025-07-21 11:50:30,436 INFO werkzeug Thread-85 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:34,157 INFO werkzeug Thread-86 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:34] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:50:34,454 INFO werkzeug Thread-87 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:49,121 INFO werkzeug Thread-88 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:49] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:50:49,237 INFO werkzeug Thread-89 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:49] "GET / HTTP/1.1" 200 -
+2025-07-21 11:50:49,373 INFO werkzeug Thread-90 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:50:55,092 INFO werkzeug Thread-91 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:55] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:50:55,419 INFO werkzeug Thread-92 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:55] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:50:55,759 INFO werkzeug Thread-93 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:50:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:52:48,411 INFO werkzeug Thread-95 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:48] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:52:48,434 INFO werkzeug Thread-96 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:52:51,469 INFO werkzeug Thread-97 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:51] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:52:51,774 INFO werkzeug Thread-98 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:51] "GET / HTTP/1.1" 200 -
+2025-07-21 11:52:52,110 INFO werkzeug Thread-99 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:52:56,679 INFO werkzeug Thread-100 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:56] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:52:56,983 INFO werkzeug Thread-101 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:56] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 11:52:57,337 INFO werkzeug Thread-102 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:52:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:53:01,214 INFO werkzeug Thread-103 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:01] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 11:53:01,565 INFO werkzeug Thread-104 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:01] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:53:01,595 INFO werkzeug Thread-105 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:53:07,263 INFO werkzeug Thread-106 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:07] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 11:53:07,581 INFO werkzeug Thread-107 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:07] "GET / HTTP/1.1" 200 -
+2025-07-21 11:53:07,604 INFO werkzeug Thread-108 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:53:12,826 INFO werkzeug Thread-109 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:12] "POST / HTTP/1.1" 200 -
+2025-07-21 11:53:13,152 INFO werkzeug Thread-110 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:53:19,799 INFO werkzeug Thread-111 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:19] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 11:53:19,831 INFO werkzeug Thread-112 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:19] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:53:20,050 INFO werkzeug Thread-113 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:53:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:54:29,730 INFO werkzeug Thread-114 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:54:29] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:54:29,759 INFO werkzeug Thread-115 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:54:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:55:40,497 INFO werkzeug Thread-117 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:55:40] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:55:40,549 INFO werkzeug Thread-118 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:55:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:56:48,129 INFO werkzeug Thread-120 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:56:48] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:56:48,170 INFO werkzeug Thread-121 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:56:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:57:05,324 INFO werkzeug Thread-122 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:57:05] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:57:05,608 INFO werkzeug Thread-123 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:57:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 11:59:33,152 INFO werkzeug Thread-124 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:59:33] "GET /report HTTP/1.1" 200 -
+2025-07-21 11:59:33,198 INFO werkzeug Thread-125 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 11:59:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:00:13,366 INFO werkzeug Thread-126 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:13] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:00:13,655 INFO werkzeug Thread-127 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:00:42,110 INFO werkzeug Thread-129 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:42] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:00:42,161 INFO werkzeug Thread-128 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:00:51,377 INFO werkzeug Thread-130 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:51] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 12:00:51,692 INFO werkzeug Thread-131 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:51] "GET / HTTP/1.1" 200 -
+2025-07-21 12:00:51,724 INFO werkzeug Thread-132 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:00:55,894 INFO werkzeug Thread-133 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:55] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 12:00:56,234 INFO werkzeug Thread-134 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:56] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:00:56,571 INFO werkzeug Thread-135 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:00:58,800 INFO werkzeug Thread-136 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:58] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:00:59,166 INFO werkzeug Thread-137 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:59] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:00:59,186 INFO werkzeug Thread-138 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:00:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:01:12,333 INFO werkzeug Thread-139 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:12] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:01:12,640 INFO werkzeug Thread-140 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:01:14,302 INFO werkzeug Thread-141 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:14] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 12:01:14,433 INFO werkzeug Thread-142 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:14] "GET / HTTP/1.1" 200 -
+2025-07-21 12:01:14,549 INFO werkzeug Thread-143 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:01:19,537 INFO werkzeug Thread-144 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:19] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 12:01:19,869 INFO werkzeug Thread-145 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:19] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:01:20,204 INFO werkzeug Thread-146 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:01:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:03:40,145 INFO werkzeug Thread-148 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:03:40] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:03:40,179 INFO werkzeug Thread-149 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:03:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:04:05,415 INFO werkzeug Thread-150 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:04:05] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:04:05,712 INFO werkzeug Thread-151 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:04:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:05:27,696 INFO werkzeug Thread-152 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:05:27] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:05:27,734 INFO werkzeug Thread-153 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:05:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:07:26,655 INFO werkzeug Thread-155 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:07:26] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:07:26,695 INFO werkzeug Thread-156 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:07:26] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:07:26,716 INFO werkzeug Thread-157 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:07:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:09:03,495 INFO werkzeug Thread-158 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:09:03] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:09:03,514 INFO werkzeug Thread-159 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:09:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:09:13,635 INFO werkzeug Thread-160 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:09:13] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:09:13,919 INFO werkzeug Thread-161 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:09:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:11:48,865 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:11:49,134 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:11:50,282 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:11:50,288 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:11:58,675 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:11:58] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:11:58,773 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:11:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:13:57,344 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:13:57] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:13:57,466 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:13:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:15:26,458 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:15:26] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:15:26,476 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:15:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:19:01,099 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:01] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:19:01,118 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:19:02,805 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:19:03,105 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:19:10,989 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:10] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 12:19:11,107 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:11] "GET / HTTP/1.1" 200 -
+2025-07-21 12:19:11,251 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:19:15,801 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:15] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 12:19:16,117 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:16] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:19:16,472 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:19:19,575 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:19] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:19:19,895 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:19] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:19:19,917 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:19:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:21:54,395 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:21:54] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:21:54,429 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:21:54] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:21:54,496 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:21:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:29:46,181 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:46] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:29:46,223 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:46] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:29:50,184 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:50] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:29:50,480 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:29:52,280 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:52] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:29:52,414 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:29:53,902 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:53] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:29:54,264 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:54] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:29:54,600 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:29:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:31:56,793 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:31:56] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:31:56,826 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:31:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:32:03,295 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:32:03] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:32:03,596 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:32:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:32:21,359 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:32:21] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:32:21,383 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:32:21] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:32:21,479 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:32:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:36:18,019 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:18] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:36:18,039 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:36:20,135 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:20] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:36:20,418 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:36:28,435 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:28] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:36:28,464 INFO werkzeug Thread-50 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:36:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:38:55,697 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:38:55,798 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:38:57,154 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:38:57,156 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:39:02,708 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:39:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:39:02,814 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:39:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:39:11,922 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:39:12,000 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:39:13,963 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:39:13,963 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:39:37,329 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:39:37] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:39:37,437 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:39:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:40:10,859 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:40:10,991 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:40:34,806 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.18.11:5001
+2025-07-21 12:40:34,806 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2025-07-21 12:40:34,808 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:40:35,720 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:40:35,731 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:40:36,194 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:40:36] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:40:36,290 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:40:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:40:40,110 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:40:40] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:40:40,410 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:40:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:41:24,542 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:24] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:41:24,627 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:41:26,309 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:26] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 12:41:26,589 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:26] "GET / HTTP/1.1" 200 -
+2025-07-21 12:41:26,928 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:41:31,105 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:31] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 12:41:31,437 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:31] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:41:31,761 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:41:34,238 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:34] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:41:34,558 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:34] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:41:34,894 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:41:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:42:41,278 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:42:41] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:42:41,295 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:42:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:43:36,721 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:43:36] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:43:37,005 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:43:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:44:32,837 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:44:32] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:44:32,867 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:44:32] "GET /static/style.css HTTP/1.1" 200 -
+2025-07-21 12:44:33,227 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:44:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-07-21 12:46:33,216 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:33] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:46:33,240 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:33] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:46:35,455 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:35] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:46:35,751 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:46:36,249 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:36] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:46:36,269 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:46:37,339 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:37] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:46:37,634 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:46:39,222 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:39] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:46:39,282 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:39] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:46:39,486 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:46:50,299 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:50] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:46:50,333 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:50] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:46:50,555 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:46:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:47:02,699 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:02] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:47:02,732 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:47:02,949 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:47:18,048 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:18] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:47:18,066 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:18] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:47:18,254 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:18] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:47:42,316 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:42] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:47:42,353 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:42] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:47:42,571 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:47:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:48:50,778 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:48:50] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:48:50,900 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:48:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:49:00,379 INFO werkzeug Thread-50 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:00] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:49:00,745 INFO werkzeug Thread-51 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:00] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:49:01,097 INFO werkzeug Thread-52 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:49:39,661 INFO werkzeug Thread-53 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:39] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:49:39,943 INFO werkzeug Thread-54 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:49:50,277 INFO werkzeug Thread-55 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:50] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:49:50,311 INFO werkzeug Thread-56 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:50] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:49:50,513 INFO werkzeug Thread-57 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:49:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:50:59,010 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:50:59,114 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:51:00,067 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:51:00,072 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:51:15,540 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:51:15,703 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:51:16,918 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:51:16,924 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 12:51:28,307 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:51:28] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:51:28,424 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:51:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:51:46,941 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:51:46] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:51:47,263 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:51:47] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:51:47,592 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:51:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:52:53,429 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:52:53] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:52:53,465 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:52:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:53:11,299 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:11] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:53:11,429 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:53:37,821 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:37] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:53:37,854 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:37] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:53:38,039 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:38] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:53:43,422 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:43] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:53:43,487 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:53:48,137 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:48] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 12:53:48,476 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:48] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:53:48,805 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:53:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:12,885 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:12] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:54:13,185 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:29,352 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:29] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:54:29,376 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:29] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:54:29,591 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:42,768 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:42] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:54:42,804 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:42] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:54:43,022 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:48,704 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:48] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 12:54:48,786 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:52,182 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:52] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 12:54:52,531 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:52] "GET / HTTP/1.1" 200 -
+2025-07-21 12:54:52,562 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:54:57,916 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:57] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 12:54:58,252 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:58] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:54:58,590 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:54:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:56:24,582 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:56:24] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:56:24,636 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:56:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:56:58,620 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:56:58] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 12:56:58,643 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:56:58] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:56:58,966 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:56:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:58:22,957 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:58:22] "GET /report HTTP/1.1" 200 -
+2025-07-21 12:58:22,964 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 12:58:22] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 12:59:58,127 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 12:59:58,206 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 12:59:59,168 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 12:59:59,176 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:00:08,251 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:08] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:00:08,341 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:00:30,434 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:30] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:00:30,468 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:30] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:00:30,793 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:00:39,241 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:39] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:00:39,324 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:39] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:00:39,658 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:00:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:02:14,447 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:14] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:02:14,466 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:02:37,758 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:37] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:02:38,071 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:38] "GET / HTTP/1.1" 200 -
+2025-07-21 13:02:38,404 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:38] "GET /static/style.css HTTP/1.1" 200 -
+2025-07-21 13:02:42,383 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:42] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:02:42,738 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:42] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:02:43,073 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:02:45,946 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:45] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 13:02:46,287 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:46] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:02:46,321 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:46] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:02:56,341 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:56] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:02:56,656 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:56] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:02:56,989 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:02:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:03:08,873 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:08] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:03:09,168 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:03:24,860 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:24] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:03:24,869 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:03:39,469 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:39] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:03:39,785 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:39] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:03:40,119 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:03:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:04:14,228 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:04:14] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:04:14,517 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:04:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:04:27,800 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:04:27] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:04:27,819 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:04:27] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:04:27,945 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:04:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:07:32,352 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:32] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:07:32,375 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:32] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:07:32,577 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:07:37,149 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:37] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:07:37,200 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:07:38,955 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:38] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:07:39,269 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:39] "GET / HTTP/1.1" 200 -
+2025-07-21 13:07:39,293 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:07:44,789 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:44] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:07:45,114 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:45] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:07:45,445 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:07:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:08:28,149 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:28] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:08:28,175 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:28] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:08:28,498 INFO werkzeug Thread-50 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:08:43,543 INFO werkzeug Thread-51 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:43] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:08:43,595 INFO werkzeug Thread-52 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:43] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:08:43,920 INFO werkzeug Thread-53 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:08:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:26:37,320 INFO werkzeug Thread-55 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:26:37] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:26:37,364 INFO werkzeug Thread-56 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:26:37] "GET / HTTP/1.1" 200 -
+2025-07-21 13:26:37,578 INFO werkzeug Thread-57 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:26:37] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:26:44,843 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\cleanup_monthly_reports.py', reloading
+2025-07-21 13:26:44,978 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:26:46,240 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:26:46,258 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:28:06,241 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:06] "GET / HTTP/1.1" 200 -
+2025-07-21 13:28:06,356 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:28:18,877 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:18] "GET / HTTP/1.1" 200 -
+2025-07-21 13:28:19,189 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:19] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:28:44,689 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:44] "GET / HTTP/1.1" 200 -
+2025-07-21 13:28:44,707 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:28:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:31:14,302 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\cleanup_monthly_reports.py', reloading
+2025-07-21 13:31:14,384 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:31:15,326 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:31:15,330 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:32:13,505 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:13] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:32:13,516 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:13] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:32:13,832 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:13] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:32:17,010 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:17] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 13:32:17,231 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:17] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:32:17,253 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:32:52,820 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:52] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:32:52,848 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:52] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:32:53,047 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:32:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:33:15,847 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:15] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:33:15,876 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:15] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:33:16,082 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:33:20,729 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:20] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:33:20,781 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:33:23,115 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:23] "GET /view_report/\u06af\u0688\u0627\u067e/2025-07 HTTP/1.1" 200 -
+2025-07-21 13:33:23,420 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:33:34,900 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:34] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:33:34,948 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:33:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:37:23,523 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:37:23] "[32mPOST /set_zila_and_redirect HTTP/1.1[0m" 302 -
+2025-07-21 13:37:23,745 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:37:23] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:37:23,779 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:37:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:37:53,656 ERROR root Thread-24 (process_request_thread) : Error in update_report_in_db: no such column: month
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:37:53,671 ERROR root Thread-24 (process_request_thread) : Exception in /report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 556, in report
+    update_report_in_db(zila, current_month, update_fields)
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:37:53,672 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:37:53] "[35m[1mPOST /report HTTP/1.1[0m" 500 -
+2025-07-21 13:39:45,437 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:39:45,595 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:39:47,109 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:39:47,122 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:39:55,474 ERROR root Thread-2 (process_request_thread) : Error in update_report_in_db: no such column: month
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:39:55,475 ERROR root Thread-2 (process_request_thread) : Exception in /report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 555, in report
+    update_report_in_db(zila, update_fields)
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:39:55,476 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:39:55] "[35m[1mPOST /report HTTP/1.1[0m" 500 -
+2025-07-21 13:40:03,550 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:40:03,637 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:40:04,592 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:40:04,598 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:40:20,453 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:40:20,656 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:40:22,077 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:40:22,082 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:40:40,684 ERROR root Thread-2 (process_request_thread) : Error in update_report_in_db: no such column: month
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:40:40,684 ERROR root Thread-2 (process_request_thread) : Exception in /report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 555, in report
+    update_report_in_db(zila, update_fields)
+  File "D:\Office\jamatreport\app.py", line 330, in update_report_in_db
+    c.execute(sql, values)
+sqlite3.OperationalError: no such column: month
+2025-07-21 13:40:40,684 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:40:40] "[35m[1mPOST /report HTTP/1.1[0m" 500 -
+2025-07-21 13:41:48,538 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:41:48,671 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:41:49,787 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:41:49,789 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:42:30,125 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:30] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:42:30,320 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:30] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:42:30,455 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:42:56,329 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:56] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:42:56,362 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:56] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:42:56,579 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:42:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:44:26,052 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:44:26] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:44:26,068 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:44:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:45:50,809 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:50] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:45:50,824 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:45:55,174 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:55] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:45:55,474 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:45:56,843 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:56] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:45:56,921 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:56] "GET / HTTP/1.1" 200 -
+2025-07-21 13:45:57,094 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:45:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:46:04,848 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:04] "POST / HTTP/1.1" 200 -
+2025-07-21 13:46:05,157 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:46:15,893 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:15] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:46:15,915 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:15] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:46:16,143 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:16] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:46:31,789 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:31] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:46:31,823 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:31] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:46:31,841 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:46:35,790 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:35] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:46:35,856 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:35] "GET / HTTP/1.1" 200 -
+2025-07-21 13:46:36,023 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:46:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:47:02,089 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:47:02] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:47:02,458 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:47:02] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:47:05,849 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:47:05] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:47:05,855 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:47:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:48:00,296 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:48:00,395 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:48:01,574 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:48:01,574 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:48:24,064 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:24] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:48:24,169 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:48:29,952 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:29] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:48:30,086 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:30] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:48:30,406 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:48:38,986 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:38] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:48:39,085 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:39] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:48:39,423 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:48:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:49:00,057 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:49:00] "[32mPOST /report HTTP/1.1[0m" 302 -
+2025-07-21 13:49:00,158 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:49:00] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:49:00,487 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:49:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:49:09,598 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:49:09] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:49:09,884 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:49:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:50:03,477 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:50:03] "GET /report HTTP/1.1" 200 -
+2025-07-21 13:50:03,498 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:50:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:51:29,565 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 13:51:29,648 INFO werkzeug MainThread :  * Restarting with stat
+2025-07-21 13:51:30,733 WARNING werkzeug MainThread :  * Debugger is active!
+2025-07-21 13:51:30,738 INFO werkzeug MainThread :  * Debugger PIN: 602-451-570
+2025-07-21 13:51:32,001 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:32] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-07-21 13:51:32,108 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:32] "GET / HTTP/1.1" 200 -
+2025-07-21 13:51:32,406 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 13:51:36,264 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-07-21 13:51:36,591 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 13:51:36,933 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

@@ -1721,3 +1721,25 @@ body {
     min-width: 120px;
 }
       
+.single-column-row {
+    grid-template-columns: 1fr !important;
+}
+      
+.atifal-section .single-column-row {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+}
+      
+.locked-field {
+    background-color: #ffeeba !important;
+    border: 2px solid #f0ad4e !important;
+    color: #333 !important;
+    font-weight: bold;
+}
+.lock-icon {
+    margin-right: 4px;
+    color: #f0ad4e;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+      

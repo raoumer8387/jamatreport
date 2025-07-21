@@ -34,7 +34,7 @@
                 'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
                 'alaqajat_target', 'alaqajat_start', 'halqajat_target', 'halqajat_start', 'halqajat_ward_target', 'halqajat_ward_start',
                 'block_code_target', 'block_code_start', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'awaami_committee_target', 'awaami_committee_start',
-                'arkaan_target', 'arkaan_start', 'umeedwaran_target', 'umeedwaran_start', 'hangami_target', 'hangami_start',
+                'arkaan_target', 'arkaan_start', 'umeedwaran_target', 'umeedwaran_start', 'karkunan_target', 'karkunan_start', 'hangami_target', 'hangami_start',
                 'muawanin_target', 'muawanin_start', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'member_target', 'member_start'
             ] %}
             <!-- ابتدائی معلومات -->
@@ -44,7 +44,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد یونین کمیٹی </label>
-                        {% if session['role'] == 'admin' %}
+                        {% if session['role'] == 'admin' and 'union_committee_count' in admin_editable %}
                         <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) }}">
                         {% else %}
                         <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) }}" disabled>
@@ -52,18 +52,14 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-union">نظم قائم </label>
-                        {% if session['role'] == 'admin' %}
-                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0"   value="{{ form_data.get('nazm_qaim_union', '') }}" placeholder="0" disabled>
-                        {% else %}
-                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0"   value="{{ form_data.get('nazm_qaim_union', '') }}" placeholder="0" {% if locked_fields.get('nazm_qaim_union', False) %}disabled{% endif %}>
-                        {% endif %}
+                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0" value="{{ form_data.get('nazm_qaim_union', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_union', False) %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد وارڈز </label>
-                        {% if session['role'] == 'admin' %}
+                        {% if session['role'] == 'admin' and 'wards_count' in admin_editable %}
                         <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) }}">
                         {% else %}
                         <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) }}" disabled>
@@ -71,18 +67,14 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-wards">نظم قائم </label>
-                        {% if session['role'] == 'admin' %}
-                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0"   value="{{ form_data.get('nazm_qaim_wards', '') }}" placeholder="0" disabled>
-                        {% else %}
-                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0"   value="{{ form_data.get('nazm_qaim_wards', '') }}" placeholder="0" {% if locked_fields.get('nazm_qaim_wards', False) %}disabled{% endif %}>
-                        {% endif %}
+                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0" value="{{ form_data.get('nazm_qaim_wards', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_wards', False) %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد بلاک کوڈ </label>
-                        {% if session['role'] == 'admin' %}
+                        {% if session['role'] == 'admin' and 'block_code_count' in admin_editable %}
                         <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) }}">
                         {% else %}
                         <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) }}" disabled>
@@ -90,18 +82,14 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-blockcode">نظم قائم </label>
-                        {% if session['role'] == 'admin' %}
-                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0"   value="{{ form_data.get('nazm_qaim_blockcode', '') }}" placeholder="0" disabled>
-                        {% else %}
-                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0"   value="{{ form_data.get('nazm_qaim_blockcode', '') }}" placeholder="0" {% if locked_fields.get('nazm_qaim_blockcode', False) %}disabled{% endif %}>
-                        {% endif %}
+                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0" value="{{ form_data.get('nazm_qaim_blockcode', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_blockcode', False) %}disabled{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد کنٹونمنٹ بورڈ </label>
-                        {% if session['role'] == 'admin' %}
+                        {% if session['role'] == 'admin' and 'cantonment_board_count' in admin_editable %}
                         <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) }}">
                         {% else %}
                         <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) }}" disabled>
@@ -109,11 +97,7 @@
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-cantonment">نظم قائم </label>
-                        {% if session['role'] == 'admin' %}
-                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0"   value="{{ form_data.get('nazm_qaim_cantonment', '') }}" placeholder="0" disabled>
-                        {% else %}
-                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0"   value="{{ form_data.get('nazm_qaim_cantonment', '') }}" placeholder="0" {% if locked_fields.get('nazm_qaim_cantonment', False) %}disabled{% endif %}>
-                        {% endif %}
+                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0" value="{{ form_data.get('nazm_qaim_cantonment', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_cantonment', False) %}disabled{% endif %}>
                     </div>
                 </div>
             </div>
@@ -180,15 +164,15 @@
                         <tr>
                             <td>{{ key[1] }}</td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}">
+                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
                                     <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" disabled>
                                 {% endif %}
                             </td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}">
+                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
                                     <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" disabled>
                                 {% endif %}
@@ -239,24 +223,24 @@
                         <tr>
                             <td>{{ key[1] }}</td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}">
+                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
                                     <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" disabled>
                                 {% endif %}
                             </td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}">
+                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
                                     <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" disabled>
                                 {% endif %}
                             </td>
                             <td>
-                                    <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_izafa', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_izafa', False) %}disabled{% endif %}>
                             </td>
                             <td>
-                                    <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_kami', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_kami', False) %}disabled{% endif %}>
                             </td>
                             <td class="calculated-value" id="{{ key[0] }}-ikhtitaam">
                               <input type="number"
@@ -275,26 +259,24 @@
             <!-- جماعت اسلامی یوتھ -->
             <div class="form-section">
                 <h3 class="section-title">جماعت اسلامی یوتھ</h3>
-                
                 <div class="form-row">
                     <div class="form-group">
                         <label for="youth-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
-                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('youth_nazm_areas', '') }}" {% if locked_fields.get('youth_nazm_areas', False) %}readonly{% endif %}>
+                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('youth_nazm_areas', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_nazm_areas', False) %}readonly{% endif %}>
                     </div>
                     <div class="form-group">
                         <label for="youth-karkunan">کارکنان کی تعداد:</label>
-                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" placeholder="0" value="{{ form_data.get('youth_karkunan', '') }}" {% if locked_fields.get('youth_karkunan', False) %}readonly{% endif %}>
+                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" placeholder="0" value="{{ form_data.get('youth_karkunan', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_karkunan', False) %}readonly{% endif %}>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="youth_programat_count">پروگرامات کی تعداد:</label>
-                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" value="{{ form_data.get('youth_programat_count', '') }}" placeholder="0" oninput="renderProgramatFields()" {% if locked_fields.get('youth_programat_count', False) %}readonly{% endif %}>
+                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" value="{{ form_data.get('youth_programat_count', '') }}" placeholder="0" oninput="renderProgramatFields()" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_programat_count', False) %}readonly{% endif %}>
                     </div>
                 </div>
                 <div id="programat-fields-container">
                     {% if not can_submit and programat_list %}
-                        {# After submission: show all submitted programs in read-only fields for both user and admin #}
                         {% for item in programat_list %}
                         <div class="form-row programat-row">
                             <div class="form-group">
@@ -308,17 +290,16 @@
                         </div>
                         {% endfor %}
                     {% else %}
-                        {# Before submission: show editable fields for user, or read-only for admin or after submission #}
                         {% if form_data.get('youth_programat_count', '') and form_data.get('youth_programat_count', 0)|int > 0 %}
                             {% for i in range(form_data.get('youth_programat_count', 0)|int) %}
                             <div class="form-row programat-row">
                                 <div class="form-group">
                                     <label for="programat_{{i+1}}">نوعیت {{i+1}}</label>
-                                    <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" value="{{ form_data.get('programat_' ~ (i+1), '') }}" placeholder="نوعیت" {% if locked_fields.get('programat_' ~ (i+1), False) %}readonly{% endif %}>
+                                    <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" value="{{ form_data.get('programat_' ~ (i+1), '') }}" placeholder="نوعیت" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('programat_' ~ (i+1), False) %}readonly{% endif %}>
                                 </div>
                                 <div class="form-group">
                                     <label for="programat_count_{{i+1}}">حاضری</label>
-                                    <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" value="{{ form_data.get('programat_count_' ~ (i+1), '') }}" placeholder="0" {% if locked_fields.get('programat_count_' ~ (i+1), False) %}readonly{% endif %}>
+                                    <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" value="{{ form_data.get('programat_count_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('programat_count_' ~ (i+1), False) %}readonly{% endif %}>
                                 </div>
                             </div>
                             {% endfor %}
@@ -414,10 +395,10 @@
 <div class="form-section atifal-section">
     <h3 class="section-title">جماعتِ اسلامی شعبہ اطفال</h3>
 
-    <div class="form-row">
+    <div class="form-row single-column-row">
         <div class="form-group">
             <label for="atifal-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
-            <input type="number" id="atifal-nazm-areas" name="atifal_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('atifal_nazm_areas', '') }}" {% if locked_fields.get('atifal_nazm_areas', False) %}readonly{% endif %}>
+            <input type="number" id="atifal-nazm-areas" name="atifal_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('atifal_nazm_areas', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('atifal_nazm_areas', False) %}readonly{% endif %}>
         </div>
         <!--
         <div class="form-group">
@@ -427,10 +408,10 @@
         -->
     </div>
 
-    <div class="form-row">
+    <div class="form-row single-column-row">
         <div class="form-group">
             <label for="atifal_programat_count">پروگرامات کی تعداد:</label>
-            <input type="number" id="atifal_programat_count" name="atifal_programat_count" min="0" max="50" value="{{ form_data.get('atifal_programat_count', '') }}" placeholder="0" oninput="renderAtifalProgramatFields()" {% if locked_fields.get('atifal_programat_count', False) %}readonly{% endif %}>
+            <input type="number" id="atifal_programat_count" name="atifal_programat_count" min="0" max="50" value="{{ form_data.get('atifal_programat_count', '') }}" placeholder="0" oninput="renderAtifalProgramatFields()" {% if session['role'] == 'admin' or locked_fields.get('atifal_programat_count', False) %}readonly{% endif %}>
         </div>
     </div>
 
@@ -454,11 +435,11 @@
                 <div class="form-row programat-row">
                     <div class="form-group">
                         <label for="atifal_nauyiat_{{i+1}}">نوعیت {{i+1}}</label>
-                        <input type="text" id="atifal_nauyiat_{{i+1}}" name="atifal_nauyiat_{{i+1}}" value="{{ form_data.get('atifal_nauyiat_' ~ (i+1), '') }}" placeholder="0" {% if locked_fields.get('atifal_nauyiat_' ~ (i+1), False) %}readonly{% endif %}>
+                        <input type="text" id="atifal_nauyiat_{{i+1}}" name="atifal_nauyiat_{{i+1}}" value="{{ form_data.get('atifal_nauyiat_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('atifal_nauyiat_' ~ (i+1), False) %}readonly{% endif %}>
                     </div>
                     <div class="form-group">
                         <label for="atifal_programat_count_{{i+1}}">حاضری</label>
-                        <input type="number" id="atifal_programat_count_{{i+1}}" name="atifal_programat_count_{{i+1}}" min="0" value="{{ form_data.get('atifal_programat_count_' ~ (i+1), '') }}" placeholder="0" {% if locked_fields.get('atifal_programat_count_' ~ (i+1), False) %}readonly{% endif %}>
+                        <input type="number" id="atifal_programat_count_{{i+1}}" name="atifal_programat_count_{{i+1}}" min="0" value="{{ form_data.get('atifal_programat_count_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('atifal_programat_count_' ~ (i+1), False) %}readonly{% endif %}>
                     </div>
                 </div>
                 {% endfor %}
@@ -566,33 +547,33 @@
                     <tbody>
                         <tr>
                             <td>اجلاس ضلعی شوریٰ</td>
-                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_planned', '') }}" {% if locked_fields.get('zilai_shura_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_held', '') }}" {% if locked_fields.get('zilai_shura_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_attendance', '') }}" {% if locked_fields.get('zilai_shura_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس نظم ضلع</td>
-                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_planned', '') }}" {% if locked_fields.get('nazm_zila_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_held', '') }}" {% if locked_fields.get('nazm_zila_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_attendance', '') }}" {% if locked_fields.get('nazm_zila_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس ناظمین علاقہ جات</td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_planned', '') }}" {% if locked_fields.get('nazimin_alaqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_held', '') }}" {% if locked_fields.get('nazimin_alaqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_attendance', '') }}" {% if locked_fields.get('nazimin_alaqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع ارکان</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') }}" {% if locked_fields.get('zilai_ijtima_arkaan_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') }}" {% if locked_fields.get('zilai_ijtima_arkaan_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') }}" {% if locked_fields.get('zilai_ijtima_arkaan_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع امیدواران</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -613,33 +594,33 @@
                     <tbody>
                         <tr>
                             <td>اجتماع ارکان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') }}" {% if locked_fields.get('ijtima_arkaan_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') }}" {% if locked_fields.get('ijtima_arkaan_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') }}" {% if locked_fields.get('ijtima_arkaan_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع اُمیدواران (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع ناظمین (حلقہ جات)</td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') }}" {% if locked_fields.get('ijtima_nazimin_halqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') }}" {% if locked_fields.get('ijtima_nazimin_halqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') }}" {% if locked_fields.get('ijtima_nazimin_halqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -660,27 +641,27 @@
                     <tbody>
                         <tr>
                             <td>درس قرآن (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_planned', '') }}" {% if locked_fields.get('dars_quran_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_held', '') }}" {% if locked_fields.get('dars_quran_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_attendance', '') }}" {% if locked_fields.get('dars_quran_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>دعوتی کیمپ / مستقل و فود</td>
-                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_planned', '') }}" {% if locked_fields.get('dawati_camp_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_held', '') }}" {% if locked_fields.get('dawati_camp_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_attendance', '') }}" {% if locked_fields.get('dawati_camp_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>گھروں تک دعوت</td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_planned', '') }}" {% if locked_fields.get('gharon_tak_dawat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_held', '') }}" {% if locked_fields.get('gharon_tak_dawat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_attendance', '') }}" {% if locked_fields.get('gharon_tak_dawat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>تقسیم دعوتی لٹریچر</td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_planned', '') }}" {% if locked_fields.get('taqseem_literature_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_held', '') }}" {% if locked_fields.get('taqseem_literature_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_attendance', '') }}" {% if locked_fields.get('taqseem_literature_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_planned', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_held', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -703,28 +684,28 @@
                     <tbody>
                         <tr>
                             <td>اسٹڈی سرکل/ ڈسکشن</td>
-                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_maqamat', '') }}" {% if locked_fields.get('study_circle_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_daurajat', '') }}" {% if locked_fields.get('study_circle_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0"   placeholder="0" value="{{ form_data.get('study_circle_attendance', '') }}" {% if locked_fields.get('study_circle_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_maqamat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_daurajat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0"   placeholder="0" value="{{ form_data.get('study_circle_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماعی طعام</td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-maqamat" name="ijtimai_tuaam_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_maqamat', '') }}" {% if locked_fields.get('ijtimai_tuaam_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-daurajat" name="ijtimai_tuaam_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_daurajat', '') }}" {% if locked_fields.get('ijtimai_tuaam_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-attendance" name="ijtimai_tuaam_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_attendance', '') }}" {% if locked_fields.get('ijtimai_tuaam_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-maqamat" name="ijtimai_tuaam_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_maqamat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-daurajat" name="ijtimai_tuaam_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_daurajat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-attendance" name="ijtimai_tuaam_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماعی اہل خانہ</td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-maqamat" name="ijtimai_ahle_khana_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_maqamat', '') }}" {% if locked_fields.get('ijtimai_ahle_khana_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-daurajat" name="ijtimai_ahle_khana_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_daurajat', '') }}" {% if locked_fields.get('ijtimai_ahle_khana_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-attendance" name="ijtimai_ahle_khana_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_attendance', '') }}" {% if locked_fields.get('ijtimai_ahle_khana_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-maqamat" name="ijtimai_ahle_khana_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_maqamat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-daurajat" name="ijtimai_ahle_khana_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_daurajat', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-attendance" name="ijtimai_ahle_khana_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_attendance', False) %}disabled{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="form-section">
                 <h3 class="section-title">مرکز قرآن و سنہ</h3>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="quran-courses">کورسز</label>
                         {% if session['role'] == 'admin' %}
@@ -734,7 +715,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="quran-classes">کلاس</label>
                         {% if session['role'] == 'admin' %}
@@ -744,7 +725,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="quran-participants">شرکاء</label>
                         {% if session['role'] == 'admin' %}
@@ -754,7 +735,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="fahem-quran-attendance">فہم القرآن پروگرام (حاضری)</label>
                         {% if session['role'] == 'admin' %}
@@ -764,7 +745,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="quran-distributed">تقسیم ترجمه قرآن</label>
                         {% if session['role'] == 'admin' %}
@@ -832,21 +813,21 @@
                 <tbody>
                     <tr>
                         <td>امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_maqamat', '') }}" {% if locked_fields.get('amir_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_daurajat', '') }}" {% if locked_fields.get('amir_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_mulaqat', '') }}" {% if locked_fields.get('amir_zila_mulaqat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_maqamat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_daurajat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_mulaqat', False) %}disabled{% endif %}></td>
                     </tr>
                     <tr>
                         <td>قیم ضلع</td>
-                        <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_maqamat', '') }}" {% if locked_fields.get('qaim_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_daurajat', '') }}" {% if locked_fields.get('qaim_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_mulaqat', '') }}" {% if locked_fields.get('qaim_zila_mulaqat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_maqamat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_daurajat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_mulaqat', False) %}disabled{% endif %}></td>
                     </tr>
                     <tr>
                         <td>نائب امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_maqamat', '') }}" {% if locked_fields.get('naib_amir_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_daurajat', '') }}" {% if locked_fields.get('naib_amir_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_mulaqat', '') }}" {% if locked_fields.get('naib_amir_zila_mulaqat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_maqamat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_daurajat', False) %}disabled{% endif %}></td>
+                        <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_mulaqat', False) %}disabled{% endif %}></td>
                     </tr>
                 </tbody>
             </table>
@@ -855,7 +836,7 @@
             <!--حق دو کراچی تحریک-->
             <div class="form-section haq-do-karachi-section">
                 <h3 class="section-title">حق دو کراچی تحریک</h3>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="haq-do-karachi">حق دو کراچی تحریک (عوامی مسائل پر سرگرمیاں) تفصیلات</label>
                         <div class="textarea-container">
@@ -865,8 +846,7 @@
                                 placeholder="حق دو کراچی تحریک"
                                 oninput="updateCharCounter(this, 'char-counter-haq')"
                                 maxlength="5000"
-                                 
-                                {% if locked_fields.get('haq_do_karachi', False) %}disabled{% endif %}
+                                {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('haq_do_karachi', False) %}disabled{% endif %}
                             >{{ form_data.get('haq_do_karachi', '') }}</textarea>
                             <div class="char-counter" id="char-counter-haq">0 / 5000</div>
                         </div>
@@ -877,7 +857,7 @@
             <!--کوئی اور بات-->
             <div class="form-section koi-or-bat-section">
                 <h3 class="section-title">کوئی اور بات</h3>
-                <div class="form-row">
+                <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="koi-or-bat">آپ کی اضافی رائے یا تجاویز</label>
                         <div class="textarea-container">
@@ -887,8 +867,7 @@
                                 placeholder="کوئی اور بات"
                                 oninput="updateCharCounter(this, 'char-counter-koi')"
                                 maxlength="5000"
-                                 
-                                {% if locked_fields.get('koi_or_bat', False) %}disabled{% endif %}
+                                {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('koi_or_bat', False) %}disabled{% endif %}
                             >{{ form_data.get('koi_or_bat', '') }}</textarea>
                             <div class="char-counter" id="char-counter-koi">0 / 5000</div>
                         </div>
@@ -897,9 +876,16 @@
             </div>
 
         <!-- فارم بٹن -->
-        {% if can_submit %}
+        {% if session['role'] == 'admin' %}
         <div class="form-actions">
-            <button type="submit" class="submit-btn" onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
+            <button type="submit" class="submit-btn">رپورٹ جمع کروائیں</button>
+        </div>
+        {% elif can_submit %}
+        <div class="form-actions">
+            <button type="submit" class="submit-btn" {% if session['role'] != 'admin' and not can_submit %}disabled{% endif %} onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
+            {% if session['role'] != 'admin' and not can_submit %}
+                <div class="alert alert-info">تمام فیلڈز مکمل ہیں۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
+            {% endif %}
         </div>
         {% else %}
         <div class="form-actions">
@@ -1003,6 +989,32 @@
                     }
                 }
             });
+        </script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.querySelector('.report-form');
+            if (form) {
+                form.addEventListener('submit', function () {
+                    // For each ikhtitaam field, recalculate and set value
+                    var prefixes = [
+                        'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee',
+                        'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
+                    ];
+                    prefixes.forEach(function(prefix) {
+                        var aghaazInput = document.querySelector('[name="' + prefix + '_start"]');
+                        var izafaInput = document.querySelector('[name="' + prefix + '_izafa"]');
+                        var kamiInput = document.querySelector('[name="' + prefix + '_kami"]');
+                        var ikhtitaamInput = document.querySelector('[name="' + prefix + '_ikhtitaam"]');
+                        var aghaaz = aghaazInput && aghaazInput.value !== '' ? parseInt(aghaazInput.value) : 0;
+                        var izafa = izafaInput && izafaInput.value !== '' ? parseInt(izafaInput.value) : 0;
+                        var kami = kamiInput && kamiInput.value !== '' ? parseInt(kamiInput.value) : 0;
+                        if (ikhtitaamInput) {
+                            ikhtitaamInput.value = aghaaz + izafa - kami;
+                        }
+                    });
+                });
+            }
+        });
         </script>
  </body>
 </html>

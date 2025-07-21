@@ -317,12 +317,15 @@ def save_report_to_db(new_entry):
         logging.error(f"Error in save_report_to_db: {e}", exc_info=True)
         raise
 
-def update_report_in_db(zila, month, new_entry):
+def update_report_in_db(zila, new_entry):
     import logging
     try:
         logging.info(f"Attempting to update report for zila={zila}: {new_entry}")
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
+        # Remove month from SET clause if present
+        if 'month' in new_entry:
+            del new_entry['month']
         set_clause = ', '.join([f'{k}=?' for k in new_entry.keys()])
         values = list(new_entry.values())
         values.append(zila)
@@ -412,7 +415,6 @@ def report():
             return redirect(url_for('login'))
         zila = session['zila']
         current_month = datetime.today().strftime('%Y-%m')
-        current_month_urdu = datetime.today().strftime('%B %Y')
         global report_df
         report_df = load_reports_from_db()
         existing_report = report_df[report_df['zila'] == zila]
@@ -531,47 +533,42 @@ def report():
                 if key.startswith('atifal_nauyiat_') or (key.startswith('atifal_programat_count_') and key != 'atifal_programat_count'):
                     del new_entry[key]
             new_entry['zila'] = zila
-            new_entry['month'] = current_month
             new_entry['timestamp'] = datetime.now().isoformat()
             new_entry['submitted_by'] = session['username']
             new_entry['last_submitted_by'] = session.get('role', 'user')
             update_fields = {}
-            if report_exists:
-                row = existing_report.iloc[0]
-                # Admin can always update pre-value fields
-                if session.get('role') == 'admin':
-                    admin_editable_fields = [
-                        # Basic info
-                        'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
-                        # تنظیمی ہیٔت (target/start)
-                        'alaqajat_target', 'alaqajat_start',
-                        'halqajat_target', 'halqajat_start',
-                        'halqajat_ward_target', 'halqajat_ward_start',
-                        'block_code_target', 'block_code_start',
-                        'nizam_e_fajar_target', 'nizam_e_fajar_start',
-                        'awaami_committee_target', 'awaami_committee_start',
-                        # افرادی قوت (target/start)
-                        'arkaan_target', 'arkaan_start',
-                        'umeedwaran_target', 'umeedwaran_start',
-                        'hangami_target', 'hangami_start',
-                        'muawanin_target', 'muawanin_start',
-                        'mutayyin_afrad_target', 'mutayyin_afrad_start',
-                        'member_target', 'member_start'
-                    ]
-                    for key in admin_editable_fields:
-                        if key in new_entry:
-                            update_fields[key] = new_entry[key]
-                            # User logic: only update fields that are empty in DB and non-empty in form
+            if session.get('role') == 'admin':
+                admin_editable_fields = [
+                    'alaqajat_target', 'alaqajat_start', 'halqajat_target', 'halqajat_start', 'halqajat_ward_target', 'halqajat_ward_start',
+                    'block_code_target', 'block_code_start', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'awaami_committee_target', 'awaami_committee_start',
+                    'arkaan_target', 'arkaan_start', 'umeedwaran_target', 'umeedwaran_start', 'karkunan_target', 'karkunan_start', 'hangami_target', 'hangami_start',
+                    'muawanin_target', 'muawanin_start', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'member_target', 'member_start',
+                    'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count'
+                ]
+                for key in admin_editable_fields:
+                    if key in new_entry:
+                        update_fields[key] = new_entry[key]
+                update_fields['zila'] = zila
+                update_fields['timestamp'] = new_entry['timestamp']
+                update_fields['submitted_by'] = new_entry['submitted_by']
+                update_fields['last_submitted_by'] = new_entry['last_submitted_by']
+                if report_exists:
+                    update_report_in_db(zila, update_fields)
+                    flash("Updated successfully!", "success")
+                else:
+                    save_report_to_db(update_fields)
+                    flash("Report submitted!", "success")
+                return redirect(url_for('report'))
+            # ... rest of user logic ...
             for key in visible_fields:
                 if session.get('role') != 'admin':
                     form_value = new_entry.get(key, '').strip() if isinstance(new_entry.get(key, ''), str) else new_entry.get(key, '')
-                    # Ensure row is defined before using it
-                    if 'row' in locals() and row is not None:
+                    if report_exists:
+                        row = existing_report.iloc[0]
                         db_value = str(row.get(key, '')).strip() if row.get(key, '') is not None else ''
                     else:
                         db_value = ''
                     if db_value in ['', 'nan', 'None'] and form_value not in ['', 'nan', 'None']:
-                        # For start fields, convert empty string to 0 for database storage
                         if key.endswith('_start') and form_value == '':
                             update_fields[key] = '0'
                         else:
@@ -602,7 +599,7 @@ def report():
                 update_fields['submitted_by'] = new_entry['submitted_by']
                 update_fields['last_submitted_by'] = new_entry['last_submitted_by']
                 if update_fields:
-                    update_report_in_db(zila, current_month, update_fields)
+                    update_report_in_db(zila, update_fields)
                     flash("Updated successfully!", "success")
                 else:
                     flash("No new fields to update.", "info")
@@ -621,7 +618,7 @@ def report():
                 existing_report = report_df[report_df['zila'] == zila]
                 if not existing_report.empty:
                     # Update existing report
-                    update_report_in_db(zila, current_month, new_entry)
+                    update_report_in_db(zila, new_entry)
                     flash("Report updated successfully!", "success")
                 else:
                     # Create new report
@@ -630,7 +627,6 @@ def report():
             return redirect(url_for('report'))
         # For GET: lock fields that are non-empty in DB, keep empty fields editable
         locked_fields = {}
-        can_submit = True  # Always set a default value
         if report_exists:
             row = existing_report.iloc[0]
             # Ensure atifal_programat_count is in visible_fields
@@ -671,13 +667,8 @@ def report():
             for idx, prog in enumerate(atifal_programs_list):
                 form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
                 form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
-            can_submit = any(not locked_fields.get(k, False) for k in visible_fields) or any(
-                not locked_fields.get(f'programat_{i+1}', False) or not locked_fields.get(f'programat_count_{i+1}', False)
-                for i in range(len(programat_list))
-            ) or any(
-                not locked_fields.get(f'atifal_nauyiat_{i+1}', False) or not locked_fields.get(f'atifal_programat_count_{i+1}', False)
-                for i in range(len(atifal_programs_list))
-            )
+            # Set can_submit to True if any field is not locked, else False
+            can_submit = any(not locked for locked in locked_fields.values())
         else:
             for key in visible_fields:
                 locked_fields[key] = False
@@ -703,7 +694,6 @@ def report():
                              zila=zila, 
                              form_data=form_data,
                              report_exists=report_exists,
-                             current_month=current_month_urdu,
                              programat_list=programat_list,
                              locked_fields=locked_fields,
                              can_submit=can_submit)
@@ -723,8 +713,7 @@ def dashboard():
         global report_df, users_df
         report_df = load_reports_from_db()
         users_df = load_users_from_db()
-        current_month = datetime.today().strftime('%Y-%m')
-        current_reports = report_df[report_df['month'] == current_month]
+        current_reports = report_df  # No month filtering
         all_zilas = list(pd.Series(users_df[users_df['role'] == 'user']['zila']).drop_duplicates())
         zila_status = []
         org_keys = [
@@ -800,8 +789,7 @@ def dashboard():
         return render_template("dashboard.html", 
                              summary=summary, 
                              reports=reports_list,
-                             zila_status=zila_status,
-                             current_month=current_month)
+                             zila_status=zila_status)
     except Exception as e:
         import logging
         logging.error("Exception in /dashboard route", exc_info=True)
@@ -981,22 +969,20 @@ def update_manpower():
         flash('محفوظ کرنے میں خرابی۔')
         return redirect(url_for('dashboard'))
 
-@app.route('/view_report/<zila>/<month>')
-def view_report(zila, month):
+@app.route('/view_report/<zila>')
+def view_report(zila):
     try:
         if 'username' not in session or session.get('role') != 'admin':
             return redirect(url_for('login'))
         global report_df
         report_df = load_reports_from_db()
-        report_row = report_df[(report_df['zila'] == zila) & (report_df['month'] == month)]
+        report_row = report_df[report_df['zila'] == zila]
         if report_row.empty:
             flash("اس ضلع کی رپورٹ موجود نہیں ہے۔", "error")
             return redirect(url_for('dashboard'))
         form_data = report_row.iloc[0].to_dict()
         # Convert NaN to empty string
         form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
-        # For display, get month in Urdu
-        current_month_urdu = datetime.strptime(month, '%Y-%m').strftime('%B %Y')
         # All fields locked (read-only)
         locked_fields = {k: True for k in form_data.keys()}
         programat_list = []
@@ -1022,7 +1008,6 @@ def view_report(zila, month):
                              zila=zila, 
                              form_data=form_data,
                              report_exists=True,
-                             current_month=current_month_urdu,
                              programat_list=programat_list,
                              atifal_programs_list=atifal_programs_list,
                              locked_fields=locked_fields,

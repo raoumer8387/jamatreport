@@ -12,13 +12,11 @@
 <body class="login-body">
     <div class="login-container">
         <div class="login-header">
-            <h1>Jammat e Islami</h1>
-            <h2> ضلعی رپورٹ سسٹم</h2>
+            <h1>جماعت اسلامی</h1>
+            <h2> رپورٹ سسٹم</h2>
         </div>
         
-        <div class="login-form-container">
-            <h3>ضلعی امیروں کے لیے لاگ ان</h3>
-            
+        <div class="login-form-container">            
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ category }}">{{ message }}</div>
