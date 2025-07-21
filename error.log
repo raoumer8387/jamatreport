@@ -1388,3 +1388,7 @@ sqlite3.OperationalError: no such column: month
 2025-07-21 13:51:36,264 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "[32mPOST / HTTP/1.1[0m" 302 -
 2025-07-21 13:51:36,591 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "GET /dashboard HTTP/1.1" 200 -
 2025-07-21 13:51:36,933 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 13:51:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 14:19:09,763 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 14:19:09] "GET /dashboard HTTP/1.1" 200 -
+2025-07-21 14:19:09,778 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [21/Jul/2025 14:19:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-07-21 14:46:08,234 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-07-21 14:46:08,363 INFO werkzeug MainThread :  * Restarting with stat

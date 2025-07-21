@@ -40,9 +40,8 @@ def force_update_database_schema():
         if col not in existing_cols:
             try:
                 c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
-                print(f"Added karkunan column: {col}")
             except Exception as e:
-                print(f"Error adding karkunan column {col}: {e}")
+                pass
     
     conn.commit()
     conn.close()
@@ -112,13 +111,11 @@ def force_update_database_schema():
         if col not in existing_cols:
             try:
                 c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
-                print(f"Added column: {col}")
             except Exception as e:
-                print(f"Error adding column {col}: {e}")
+                pass
     
     conn.commit()
     conn.close()
-    print("Database schema update completed!")
 
 def ensure_monthly_reports_columns():
     required_columns = [
@@ -207,7 +204,6 @@ def init_db():
         CREATE TABLE IF NOT EXISTS monthly_reports (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             zila TEXT NOT NULL,
-            month TEXT NOT NULL,
             timestamp TEXT NOT NULL,
             submitted_by TEXT NOT NULL,
             last_submitted_by TEXT,
@@ -310,7 +306,7 @@ def save_report_to_db(new_entry):
         sql = f"INSERT OR REPLACE INTO monthly_reports ({','.join(keys)}) VALUES ({placeholders})"
         c.execute(sql, values)
         conn.commit()
-        c.execute('SELECT * FROM monthly_reports WHERE zila=? AND month=?', (filtered_entry['zila'], filtered_entry['month']))
+        c.execute('SELECT * FROM monthly_reports WHERE zila=?', (filtered_entry['zila'],))
         conn.close()
         logging.info("Report saved successfully.")
     except Exception as e:
@@ -323,9 +319,6 @@ def update_report_in_db(zila, new_entry):
         logging.info(f"Attempting to update report for zila={zila}: {new_entry}")
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        # Remove month from SET clause if present
-        if 'month' in new_entry:
-            del new_entry['month']
         set_clause = ', '.join([f'{k}=?' for k in new_entry.keys()])
         values = list(new_entry.values())
         values.append(zila)
@@ -343,7 +336,7 @@ def update_report_in_db(zila, new_entry):
 users_df = load_users_from_db()
 report_df = load_reports_from_db()
 
-def get_form_data(zila, current_month):
+def get_form_data(zila):
     """Get data for form fields from SQLite DB"""
     try:
         # Reload data from DB
@@ -414,12 +407,11 @@ def report():
         if 'username' not in session:
             return redirect(url_for('login'))
         zila = session['zila']
-        current_month = datetime.today().strftime('%Y-%m')
         global report_df
         report_df = load_reports_from_db()
         existing_report = report_df[report_df['zila'] == zila]
         report_exists = not existing_report.empty
-        form_data = get_form_data(zila, current_month)
+        form_data = get_form_data(zila)
         programat_list = []
         programat_json = form_data.get('youth_programs_json', '')
         if programat_json:
@@ -639,7 +631,7 @@ def report():
             value = row.get('atifal_programat_count', '')
             locked_fields['atifal_programat_count'] = value not in ['', 'nan', 'None', None]
             # --- Handle dynamic youth program fields for locking ---
-        form_data = get_form_data(zila, current_month)
+        form_data = get_form_data(zila)
         programat_list = []
         programat_json = form_data.get('youth_programs_json', '')
         if programat_json:
@@ -823,19 +815,18 @@ def update_zila_info():
                 # Check if report exists for this zila and month
                 conn = sqlite3.connect(DB_FILE)
                 c = conn.cursor()
-                c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+                c.execute('SELECT id FROM monthly_reports WHERE zila=?', (zila,))
                 row = c.fetchone()
                 if row:
                     # Update existing
                     set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
                     values = list(update_fields.values())
-                    values.extend([zila, current_month])
-                    sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+                    sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=?"
                     c.execute(sql, values)
                 else:
                     # Insert new
-                    sql = "INSERT INTO monthly_reports (zila, month, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, timestamp, submitted_by) VALUES (?, ?, ?, ?, ?, datetime('now'), ?)"
-                    c.execute(sql, (zila, current_month, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, session.get('username', 'admin')))
+                    sql = "INSERT INTO monthly_reports (zila, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, timestamp, submitted_by) VALUES (?, ?, ?, ?, datetime('now'), ?)"
+                    c.execute(sql, (zila, ibtidai_maloomat_tadad, tanzeemi_hayat, afradi_quwat, session.get('username', 'admin')))
                 conn.commit()
                 conn.close()
         flash('معلومات کامیابی سے محفوظ ہو گئیں۔')
@@ -870,17 +861,16 @@ def update_basic_info():
             }
             conn = sqlite3.connect(DB_FILE)
             c = conn.cursor()
-            c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+            c.execute('SELECT id FROM monthly_reports WHERE zila=?', (zila,))
             row = c.fetchone()
             if row:
                 set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
                 values = list(update_fields.values())
-                values.extend([zila, current_month])
-                sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+                sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=?"
                 c.execute(sql, values)
             else:
-                sql = "INSERT INTO monthly_reports (zila, month, union_committee_count, wards_count, block_code_count, cantonment_board_count, timestamp, submitted_by) VALUES (?, ?, ?, ?, ?, ?, datetime('now'), ?)"
-                c.execute(sql, (zila, current_month, union_committee_count, wards_count, block_code_count, cantonment_board_count, session.get('username', 'admin')))
+                sql = "INSERT INTO monthly_reports (zila, union_committee_count, wards_count, block_code_count, cantonment_board_count, timestamp, submitted_by) VALUES (?, ?, ?, ?, ?, ?, datetime('now'), ?)"
+                c.execute(sql, (zila, union_committee_count, wards_count, block_code_count, cantonment_board_count, session.get('username', 'admin')))
             conn.commit()
             conn.close()
         flash('ابتدائی معلومات کامیابی سے محفوظ ہو گئیں۔')
@@ -909,17 +899,16 @@ def update_org_structure():
             update_fields[f'{key}_start'] = request.form.get(f'{key}_start') or None
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+        c.execute('SELECT id FROM monthly_reports WHERE zila=?', (zila,))
         row = c.fetchone()
         if row:
             set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
             values = list(update_fields.values())
-            values.extend([zila, current_month])
-            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=?"
             c.execute(sql, values)
         else:
-            sql = f"INSERT INTO monthly_reports (zila, month, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, ?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
-            c.execute(sql, (zila, current_month, *update_fields.values(), session.get('username', 'admin')))
+            sql = f"INSERT INTO monthly_reports (zila, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
+            c.execute(sql, (zila, *update_fields.values(), session.get('username', 'admin')))
         conn.commit()
         conn.close()
         flash('تنظیمی ہیٔت کامیابی سے محفوظ ہو گئیں۔')
@@ -948,17 +937,16 @@ def update_manpower():
             update_fields[f'{key}_start'] = request.form.get(f'{key}_start') or None
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        c.execute('SELECT id FROM monthly_reports WHERE zila=? AND month=?', (zila, current_month))
+        c.execute('SELECT id FROM monthly_reports WHERE zila=?', (zila,))
         row = c.fetchone()
         if row:
             set_clause = ', '.join([f'{k}=?' for k in update_fields.keys()])
             values = list(update_fields.values())
-            values.extend([zila, current_month])
-            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=? AND month=?"
+            sql = f"UPDATE monthly_reports SET {set_clause} WHERE zila=?"
             c.execute(sql, values)
         else:
-            sql = f"INSERT INTO monthly_reports (zila, month, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, ?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
-            c.execute(sql, (zila, current_month, *update_fields.values(), session.get('username', 'admin')))
+            sql = f"INSERT INTO monthly_reports (zila, {', '.join(update_fields.keys())}, timestamp, submitted_by) VALUES (?, {', '.join(['?']*len(update_fields))}, datetime('now'), ?)"
+            c.execute(sql, (zila, *update_fields.values(), session.get('username', 'admin')))
         conn.commit()
         conn.close()
         flash('افرادی قوت کامیابی سے محفوظ ہو گئیں۔')
@@ -1209,7 +1197,3 @@ def debug_atifal_data():
     except Exception as e:
         return f"Error debugging atifal data: {str(e)}"
 
-if __name__ == "__main__":
-    init_db()
-    force_update_database_schema()  # Force update schema to ensure all new columns exist
-    app.run(debug=True, host='0.0.0.0', port=5001)
