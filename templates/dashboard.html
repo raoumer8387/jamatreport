@@ -22,6 +22,30 @@
             </div>
         </header>
         
+        <!-- Summary Statistics -->
+        <div class="summary-section">
+            <h2>مجموعی جائزہ</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>کل اضلاع</h3>
+                    <p class="summary-number">{{ summary.total_zilas }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>مکمل رپورٹیں</h3>
+                    <p class="summary-number success">{{ summary.total_submitted_reports }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>جزوی رپورٹیں</h3>
+                    <p class="summary-number warning">{{ summary.total_partial_reports }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>شروع نہیں ہوئی</h3>
+                    <p class="summary-number danger">{{ summary.total_not_submitted_reports }}</p>
+                </div>
+            </div>
+        
+        </div>
+        
         <!-- Zila Status Table -->
         <div class="hadaf-darj-section">
             <h2>اضلاع کی رپورٹ کی حیثیت</h2>
@@ -31,7 +55,9 @@
                         <tr>
                             <th>ضلع</th>
                             <th>اسٹیٹس</th>
-                            <th>ہدف</th>
+                            {% if session['role'] == 'admin' %}
+                                <th>ہدف</th>
+                            {% endif %}
                             <th>رپورٹ دیکھیں</th>
                         </tr>
                     </thead>
@@ -50,22 +76,20 @@
                                     <span class="status-badge">{{ zila.status }}</span>
                                 {% endif %}
                             </td>
+                            {% if session['role'] == 'admin' %}
+                                <td>
+                                    <a href="{{ url_for('admin_target_setting', zila=zila.zila) }}" class="save-btn" style="text-decoration: none; display: inline-block; padding: 8px 16px; background: #3498db; color: white; border-radius: 5px; font-size: 14px;">ہدف درج کریں</a>
+                                </td>
+                            {% endif %}
                             <td>
-                                {% if session['role'] == 'admin' %}
-                                    <form method="post" action="{{ url_for('set_zila_and_redirect') }}" style="display:inline;">
-                                        <input type="hidden" name="zila" value="{{ zila.zila }}">
-                                        <button type="submit" class="save-btn">ہدف درج کریں</button>
-                                    </form>
-                                {% else %}
-                                    {% if zila.union_committee_count in ['', 'nan', None] %}
-                                        —
+                                <div class="action-buttons">
+                                    {% if session['role'] == 'admin' %}
+                                        <a href="{{ url_for('view_combined_report', zila=zila.zila) }}" class="view-btn">رپورٹ دیکھیں</a>
+                                        <a href="{{ url_for('print_report', zila=zila.zila) }}" class="print-btn">پی ڈی ایف ڈاؤن لوڈ</a>
                                     {% else %}
-                                        {{ zila.union_committee_count }}
+                                        <a href="{{ url_for('view_report', zila=zila.zila) }}" class="view-btn">رپورٹ دیکھیں</a>
                                     {% endif %}
-                                {% endif %}
-                            </td>
-                            <td>
-                                <a href="{{ url_for('view_report', zila=zila.zila, month=current_month) }}" class="view-btn">دیکھیں</a>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

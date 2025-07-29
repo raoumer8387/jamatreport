@@ -3,39 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> رپورٹ - {{ zila }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>ضلعی رپورٹ - {{ zila }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ time }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
+        {% if not hide_header %}
         <header class="report-header">
             <div class="header-content">
-                <h1>جماعتِ اسلامی</h1>
-                <h2>ضلع کارکردگی رپورٹ {{zila}}</h2>
+                <h1>جماعت اسلامی ضلعی رپورٹنگ سسٹم</h1>
+                <h2>{{ zila }} - ضلعی رپورٹ</h2>
+            </div>
+            <div class="header-actions">
+                {% if session['role'] in ['admin', 'admin2'] %}
+                    <a href="{{ url_for('dashboard') }}" class="back-btn">ڈیش بورڈ پر واپس جائیں</a>
+                {% endif %}
+                <a href="{{ url_for('logout') }}" class="logout-btn">لاگ آؤٹ</a>
             </div>
         </header>
-        {% if session['role'] != 'admin' %}
-        <div style="margin-bottom: 10px; text-align: left;">
-            <a href="{{ url_for('logout') }}" class="logout-btn" style="padding: 8px 18px; background: #d32f2f; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">لاگ آؤٹ</a>
-        </div>
         {% endif %}
 
 
-        <div class="alert alert-warning" style="margin-bottom: 20px;">
-            <strong>نوٹ:</strong> براہ کرم کوئی بھی فیلڈ خالی نہ چھوڑیں۔
+        
+        {% if is_view_mode %}
+        <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+            آپ اس وقت ویو موڈ میں ہیں۔ تمام فیلڈز لاک ہیں۔
         </div>
+        {% elif is_admin_target_setting %}
+        <div style="background: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+            آپ اس وقت ایڈمن ہدف درج کرنے کے موڈ میں ہیں۔ صرف مخصوص فیلڈز قابل تدوین ہیں۔
+        </div>
+        {% endif %}
 
-        <form method="POST" class="report-form">
+        <form method="POST" class="report-form" action="{% if is_admin_target_setting %}{{ url_for('admin_target_setting', zila=zila) }}{% elif not is_view_mode %}{{ url_for('report') }}{% else %}#{% endif %}" id="reportForm">
             <div id="can-submit-flag" data-can-submit="{{ 'true' if can_submit else 'false' }}"></div>
             {% set admin_editable = [
                 'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
-                'alaqajat_target', 'alaqajat_start', 'halqajat_target', 'halqajat_start', 'halqajat_ward_target', 'halqajat_ward_start',
-                'block_code_target', 'block_code_start', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'awaami_committee_target', 'awaami_committee_start',
-                'arkaan_target', 'arkaan_start', 'umeedwaran_target', 'umeedwaran_start', 'karkunan_target', 'karkunan_start', 'hangami_target', 'hangami_start',
-                'muawanin_target', 'muawanin_start', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'member_target', 'member_start'
+                'alaqajat_target', 'alaqajat_start', 'alaqajat_ikhtitaam', 'halqajat_target', 'halqajat_start', 'halqajat_ikhtitaam', 'halqajat_ward_target', 'halqajat_ward_start', 'halqajat_ward_ikhtitaam',
+                'block_code_target', 'block_code_start', 'block_code_ikhtitaam', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'nizam_e_fajar_ikhtitaam', 'awaami_committee_target', 'awaami_committee_start', 'awaami_committee_ikhtitaam',
+                'arkaan_target', 'arkaan_start', 'arkaan_ikhtitaam', 'umeedwaran_target', 'umeedwaran_start', 'umeedwaran_ikhtitaam', 'karkunan_target', 'karkunan_start', 'karkunan_ikhtitaam', 'hangami_target', 'hangami_start', 'hangami_ikhtitaam',
+                'muawanin_target', 'muawanin_start', 'muawanin_ikhtitaam', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'mutayyin_afrad_ikhtitaam', 'member_target', 'member_start', 'member_ikhtitaam'
             ] %}
             <!-- ابتدائی معلومات -->
             <div class="form-section">
@@ -44,100 +54,64 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد یونین کمیٹی </label>
-                        {% if session['role'] == 'admin' and 'union_committee_count' in admin_editable %}
-                        <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) }}">
+                        {% if session['role'] == 'admin' and 'union_committee_count' in admin_editable and not locked_fields.get('union_committee_count', False) %}
+                        <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) | int if form_data.get('union_committee_count', 0) != '' else 0 }}">
                         {% else %}
-                        <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) }}" disabled>
+                        <input type="number" name="union_committee_count" value="{{ form_data.get('union_committee_count', 0) | int if form_data.get('union_committee_count', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                         {% endif %}
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-union">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0" value="{{ form_data.get('nazm_qaim_union', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_union', False) %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_union" name="nazm_qaim_union" min="0" value="{{ form_data.get('nazm_qaim_union', '') | int if form_data.get('nazm_qaim_union', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('nazm_qaim_union', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد وارڈز </label>
-                        {% if session['role'] == 'admin' and 'wards_count' in admin_editable %}
-                        <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) }}">
+                        {% if session['role'] == 'admin' and 'wards_count' in admin_editable and not locked_fields.get('wards_count', False) %}
+                        <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) | int if form_data.get('wards_count', 0) != '' else 0 }}">
                         {% else %}
-                        <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) }}" disabled>
+                        <input type="number" name="wards_count" value="{{ form_data.get('wards_count', 0) | int if form_data.get('wards_count', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                         {% endif %}
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-wards">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0" value="{{ form_data.get('nazm_qaim_wards', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_wards', False) %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_wards" name="nazm_qaim_wards" min="0" value="{{ form_data.get('nazm_qaim_wards', '') | int if form_data.get('nazm_qaim_wards', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('nazm_qaim_wards', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد بلاک کوڈ </label>
-                        {% if session['role'] == 'admin' and 'block_code_count' in admin_editable %}
-                        <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) }}">
+                        {% if session['role'] == 'admin' and 'block_code_count' in admin_editable and not locked_fields.get('block_code_count', False) %}
+                        <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) | int if form_data.get('block_code_count', 0) != '' else 0 }}">
                         {% else %}
-                        <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) }}" disabled>
+                        <input type="number" name="block_code_count" value="{{ form_data.get('block_code_count', 0) | int if form_data.get('block_code_count', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                         {% endif %}
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-blockcode">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0" value="{{ form_data.get('nazm_qaim_blockcode', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_blockcode', False) %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_blockcode" name="nazm_qaim_blockcode" min="0" value="{{ form_data.get('nazm_qaim_blockcode', '') | int if form_data.get('nazm_qaim_blockcode', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('nazm_qaim_blockcode', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>تعداد کنٹونمنٹ بورڈ </label>
-                        {% if session['role'] == 'admin' and 'cantonment_board_count' in admin_editable %}
-                        <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) }}">
+                        {% if session['role'] == 'admin' and 'cantonment_board_count' in admin_editable and not locked_fields.get('cantonment_board_count', False) %}
+                        <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) | int if form_data.get('cantonment_board_count', 0) != '' else 0 }}">
                         {% else %}
-                        <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) }}" disabled>
+                        <input type="number" name="cantonment_board_count" value="{{ form_data.get('cantonment_board_count', 0) | int if form_data.get('cantonment_board_count', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                         {% endif %}
                     </div>
                     <div class="form-group">
                         <label for="nazm-qaim-cantonment">نظم قائم </label>
-                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0" value="{{ form_data.get('nazm_qaim_cantonment', '') }}" placeholder="0" {% if session['role'] == 'admin' or locked_fields.get('nazm_qaim_cantonment', False) %}disabled{% endif %}>
+                        <input type="number" id="nazm_qaim_cantonment" name="nazm_qaim_cantonment" min="0" value="{{ form_data.get('nazm_qaim_cantonment', '') | int if form_data.get('nazm_qaim_cantonment', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('nazm_qaim_cantonment', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
             </div>
-            <script>
-                function updateIkhtitaam(prefix) {
-                    var aghaazInput = document.querySelector('[name="' + prefix + '_start"]');
-                    var izafaInput = document.querySelector('[name="' + prefix + '_izafa"]');
-                    var kamiInput = document.querySelector('[name="' + prefix + '_kami"]');
-                    var input = document.getElementById(prefix + '_ikhtitaam_input');
 
-                    var aghaaz = aghaazInput && aghaazInput.value !== '' ? parseInt(aghaazInput.value) : 0;
-                    var izafa = izafaInput && izafaInput.value !== '' ? parseInt(izafaInput.value) : 0;
-                    var kami = kamiInput && kamiInput.value !== '' ? parseInt(kamiInput.value) : 0;
-
-                    if (input) {
-                        var ikhtitaam = aghaaz + izafa - kami;
-                        input.value = ikhtitaam;
-                    }
-                }
-
-                function setupIkhtitaamListeners(prefix) {
-                    var aghaazInput = document.querySelector('[name="' + prefix + '_start"]');
-                    var izafaInput = document.querySelector('[name="' + prefix + '_izafa"]');
-                    var kamiInput = document.querySelector('[name="' + prefix + '_kami"]');
-                    [aghaazInput, izafaInput, kamiInput].forEach(function(input) {
-                        if (input) input.addEventListener('input', function() { updateIkhtitaam(prefix); });
-                    });
-                    updateIkhtitaam(prefix);
-                }
-
-                document.addEventListener('DOMContentLoaded', function () {
-                    var prefixes = [
-                        'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee',
-                        'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
-                    ];
-                    prefixes.forEach(setupIkhtitaamListeners);
-                    // Force update all hidden inputs on page load
-                    prefixes.forEach(updateIkhtitaam);
-                });
-            </script>
             <!-- تنظیمی ہیٔت -->
             <div class="form-section">
                 <h3 class="section-title">تنظیمی ہیٔت</h3>
@@ -164,30 +138,30 @@
                         <tr>
                             <td>{{ key[1] }}</td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
+                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable and not locked_fields.get(key[0] ~ '_target', False) %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) | int if form_data.get(key[0] ~ '_target', 0) != '' else 0 }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" disabled>
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) | int if form_data.get(key[0] ~ '_target', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                                 {% endif %}
                             </td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
+                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable and not locked_fields.get(key[0] ~ '_start', False) %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') | int if form_data.get(key[0] ~ '_start', '') != 0 and form_data.get(key[0] ~ '_start', '') != '' else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" disabled>
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') | int if form_data.get(key[0] ~ '_start', '') != 0 and form_data.get(key[0] ~ '_start', '') != '' else '' }}" disabled style="font-weight: bold;">
                                 {% endif %}
                             </td>
                             <td>
-                                <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_izafa', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') | int if form_data.get(key[0] ~ '_izafa', '') != '' and form_data.get(key[0] ~ '_izafa', '') != 'nan' else '' }}" {% if locked_fields.get(key[0] ~ '_izafa', False) %}disabled style="font-weight: bold;"{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_kami', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') | int if form_data.get(key[0] ~ '_kami', '') != '' and form_data.get(key[0] ~ '_kami', '') != 'nan' else '' }}" {% if locked_fields.get(key[0] ~ '_kami', False) %}disabled style="font-weight: bold;"{% endif %}>
                             </td>
                             <td class="calculated-value" id="{{ key[0] }}-ikhtitaam">
                               <input type="number"
                                      name="{{ key[0] }}_ikhtitaam"
                                      id="{{ key[0] }}_ikhtitaam_input"
-                                     value="{% if form_data.get(key[0] ~ '_ikhtitaam') is not none %}{{ form_data.get(key[0] ~ '_ikhtitaam') }}{% else %}{{ (form_data.get(key[0] ~ '_start', 0) | int) + (form_data.get(key[0] ~ '_izafa', 0) | int) - (form_data.get(key[0] ~ '_kami', 0) | int) }}{% endif %}"
+                                     value="{% if form_data.get(key[0] ~ '_ikhtitaam') is not none %}{{ form_data.get(key[0] ~ '_ikhtitaam') | int }}{% else %}{{ (form_data.get(key[0] ~ '_start', 0) | int) + (form_data.get(key[0] ~ '_izafa', 0) | int) - (form_data.get(key[0] ~ '_kami', 0) | int) }}{% endif %}"
                                      readonly>
                             </td>
                         </tr>
@@ -223,30 +197,30 @@
                         <tr>
                             <td>{{ key[1] }}</td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
+                                {% if session['role'] == 'admin' and (key[0] ~ '_target') in admin_editable and not locked_fields.get(key[0] ~ '_target', False) %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) | int if form_data.get(key[0] ~ '_target', 0) != '' else 0 }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) }}" disabled>
+                                    <input type="number" class="input-field" name="{{ key[0] }}_target" value="{{ form_data.get(key[0] ~ '_target', 0) | int if form_data.get(key[0] ~ '_target', 0) != '' else 0 }}" disabled style="font-weight: bold;">
                                 {% endif %}
                             </td>
                             <td class="prev-value">
-                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
+                                {% if session['role'] == 'admin' and (key[0] ~ '_start') in admin_editable and not locked_fields.get(key[0] ~ '_start', False) %}
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') | int if form_data.get(key[0] ~ '_start', '') != 0 and form_data.get(key[0] ~ '_start', '') != '' else '' }}" {% if session['role'] != 'admin' %}disabled{% endif %}>
                                 {% else %}
-                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') if form_data.get(key[0] ~ '_start', '') != 0 else '' }}" disabled>
+                                    <input type="number" class="input-field" name="{{ key[0] }}_start" value="{{ form_data.get(key[0] ~ '_start', '') | int if form_data.get(key[0] ~ '_start', '') != 0 and form_data.get(key[0] ~ '_start', '') != '' else '' }}" disabled style="font-weight: bold;">
                                 {% endif %}
                             </td>
                             <td>
-                                <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_izafa', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_izafa" value="{{ form_data.get(key[0] ~ '_izafa', '') | int if form_data.get(key[0] ~ '_izafa', '') != '' and form_data.get(key[0] ~ '_izafa', '') != 'nan' else '' }}" {% if locked_fields.get(key[0] ~ '_izafa', False) %}disabled style="font-weight: bold;"{% endif %}>
                             </td>
                             <td>
-                                <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') }}" {% if session['role'] == 'admin' or locked_fields.get(key[0] ~ '_kami', False) %}disabled{% endif %}>
+                                <input type="number" class="input-field" name="{{ key[0] }}_kami" value="{{ form_data.get(key[0] ~ '_kami', '') | int if form_data.get(key[0] ~ '_kami', '') != '' and form_data.get(key[0] ~ '_kami', '') != 'nan' else '' }}" {% if locked_fields.get(key[0] ~ '_kami', False) %}disabled style="font-weight: bold;"{% endif %}>
                             </td>
                             <td class="calculated-value" id="{{ key[0] }}-ikhtitaam">
                               <input type="number"
                                      name="{{ key[0] }}_ikhtitaam"
                                      id="{{ key[0] }}_ikhtitaam_input"
-                                     value="{% if form_data.get(key[0] ~ '_ikhtitaam') is not none %}{{ form_data.get(key[0] ~ '_ikhtitaam') }}{% else %}{{ (form_data.get(key[0] ~ '_start', 0) | int) + (form_data.get(key[0] ~ '_izafa', 0) | int) - (form_data.get(key[0] ~ '_kami', 0) | int) }}{% endif %}"
+                                     value="{% if form_data.get(key[0] ~ '_ikhtitaam') is not none %}{{ form_data.get(key[0] ~ '_ikhtitaam') | int }}{% else %}{{ (form_data.get(key[0] ~ '_start', 0) | int) + (form_data.get(key[0] ~ '_izafa', 0) | int) - (form_data.get(key[0] ~ '_kami', 0) | int) }}{% endif %}"
                                      readonly>
                             </td>
                         </tr>
@@ -255,24 +229,23 @@
                 </table>
             </div>
 
-
             <!-- جماعت اسلامی یوتھ -->
             <div class="form-section">
                 <h3 class="section-title">جماعت اسلامی یوتھ</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="youth-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
-                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('youth_nazm_areas', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_nazm_areas', False) %}readonly{% endif %}>
+                        <input type="number" id="youth-nazm-areas" name="youth_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('youth_nazm_areas', '') | int if form_data.get('youth_nazm_areas', '') != '' else '' }}" {% if locked_fields.get('youth_nazm_areas', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                     <div class="form-group">
                         <label for="youth-karkunan">کارکنان کی تعداد:</label>
-                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" placeholder="0" value="{{ form_data.get('youth_karkunan', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_karkunan', False) %}readonly{% endif %}>
+                        <input type="number" id="youth-karkunan" name="youth_karkunan" min="0" placeholder="0" value="{{ form_data.get('youth_karkunan', '') | int if form_data.get('youth_karkunan', '') != '' else '' }}" {% if locked_fields.get('youth_karkunan', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="youth_programat_count">پروگرامات کی تعداد:</label>
-                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" value="{{ form_data.get('youth_programat_count', '') }}" placeholder="0" oninput="renderProgramatFields()" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('youth_programat_count', False) %}readonly{% endif %}>
+                        <input type="number" id="youth_programat_count" name="youth_programat_count" min="0" max="50" value="{{ form_data.get('youth_programat_count', '') | int if form_data.get('youth_programat_count', '') != '' else '' }}" placeholder="0" oninput="renderProgramatFields()" {% if locked_fields.get('youth_programat_count', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
                 <div id="programat-fields-container">
@@ -295,244 +268,68 @@
                             <div class="form-row programat-row">
                                 <div class="form-group">
                                     <label for="programat_{{i+1}}">نوعیت {{i+1}}</label>
-                                    <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" value="{{ form_data.get('programat_' ~ (i+1), '') }}" placeholder="نوعیت" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('programat_' ~ (i+1), False) %}readonly{% endif %}>
+                                    <input type="text" id="programat_{{i+1}}" name="programat_{{i+1}}" value="{{ form_data.get('programat_' ~ (i+1), '') }}" placeholder="نوعیت" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('programat_' ~ (i+1), False) %}disabled style="font-weight: bold;"{% endif %}>
                                 </div>
                                 <div class="form-group">
                                     <label for="programat_count_{{i+1}}">حاضری</label>
-                                    <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" value="{{ form_data.get('programat_count_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('programat_count_' ~ (i+1), False) %}readonly{% endif %}>
+                                    <input type="number" id="programat_count_{{i+1}}" name="programat_count_{{i+1}}" min="0" value="{{ form_data.get('programat_count_' ~ (i+1), '') | int if form_data.get('programat_count_' ~ (i+1), '') != '' else '' }}" placeholder="0" {% if locked_fields.get('programat_count_' ~ (i+1), False) %}disabled style="font-weight: bold;"{% endif %}>
                                 </div>
                             </div>
                             {% endfor %}
                         {% endif %}
                     {% endif %}
                 </div>
-                <script>
-                function renderProgramatFields() {
-                    var countInput = document.getElementById('youth_programat_count');
-                    var container = document.getElementById('programat-fields-container');
-                    var count = parseInt(countInput.value) || 0;
-                    // Limit to maximum 50 boxes
-                    if (count > 50) {
-                        count = 50;
-                        countInput.value = 50;
-                    }
-                    // If admin or after submission, do not allow dynamic changes
-                    if (countInput.readOnly) return;
-
-                    // Preserve existing values
-                    var existingNames = {};
-                    var existingCounts = {};
-                    for (var i = 1; i <= 50; i++) {
-                        var nameInput = document.getElementById('programat_' + i);
-                        var countInputField = document.getElementById('programat_count_' + i);
-                        if (nameInput) existingNames[i] = nameInput.value;
-                        if (countInputField) existingCounts[i] = countInputField.value;
-                    }
-
-                    container.innerHTML = '';
-                    for (var i = 1; i <= count; i++) {
-                        var row = document.createElement('div');
-                        row.className = 'form-row programat-row';
-                        // نوعیت input
-                        var group1 = document.createElement('div');
-                        group1.className = 'form-group';
-                        var label1 = document.createElement('label');
-                        label1.setAttribute('for', 'programat_' + i);
-                        label1.textContent = 'نوعیت';
-                        var input1 = document.createElement('input');
-                        input1.type = 'text';
-                        input1.id = 'programat_' + i;
-                        input1.name = 'programat_' + i;
-                        input1.className = 'programat-input';
-                        input1.placeholder = 'پروگرام کی نوعیت لکھیں';
-                        input1.value = existingNames[i] || '';
-                        if (countInput.readOnly) {
-                            input1.readOnly = true;
-                        }
-                        group1.appendChild(label1);
-                        group1.appendChild(input1);
-                        // تعداد input
-                        var group2 = document.createElement('div');
-                        group2.className = 'form-group';
-                        var label2 = document.createElement('label');
-                        label2.setAttribute('for', 'programat_count_' + i);
-                        label2.textContent = 'حاضری';
-                        var input2 = document.createElement('input');
-                        input2.type = 'number';
-                        input2.min = '0';
-                        input2.id = 'programat_count_' + i;
-                        input2.name = 'programat_count_' + i;
-                        input2.className = 'programat-count-input';
-                        input2.placeholder = '0';
-                        input2.value = existingCounts[i] || '';
-                        if (countInput.readOnly) {
-                            input2.readOnly = true;
-                        }
-                        group2.appendChild(label2);
-                        group2.appendChild(input2);
-                        // Append groups to row
-                        row.appendChild(group1);
-                        row.appendChild(group2);
-                        container.appendChild(row);
-                    }
-                }
-                // On page load, render fields if value exists and not readonly
-                var canSubmit = document.getElementById('can-submit-flag').getAttribute('data-can-submit');
-                document.addEventListener('DOMContentLoaded', function() {
-                    if (canSubmit === "true") {
-                        var countInput = document.getElementById('youth_programat_count');
-                        if (countInput && !countInput.readOnly && countInput.value) {
-                            renderProgramatFields();
-                        }
-                    }
-                });
-                </script>
-
-
-    
             </div>
-         <!-- جماعتِ اسلامی شعبہ اطفال -->
-<div class="form-section atifal-section">
-    <h3 class="section-title">جماعتِ اسلامی شعبہ اطفال</h3>
 
-    <div class="form-row single-column-row">
-        <div class="form-group">
-            <label for="atifal-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
-            <input type="number" id="atifal-nazm-areas" name="atifal_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('atifal_nazm_areas', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('atifal_nazm_areas', False) %}readonly{% endif %}>
-        </div>
-        <!--
-        <div class="form-group">
-            <label for="atifal-members">ممبران کی تعداد:</label>
-            <input type="number" id="atifal-members" name="atifal_members" min="0" placeholder="0" value="{{ form_data.get('atifal_members', '') }}" {% if locked_fields.get('atifal_members', False) %}readonly{% endif %}>
-        </div>
-        -->
-    </div>
-
-    <div class="form-row single-column-row">
-        <div class="form-group">
-            <label for="atifal_programat_count">پروگرامات کی تعداد:</label>
-            <input type="number" id="atifal_programat_count" name="atifal_programat_count" min="0" max="50" value="{{ form_data.get('atifal_programat_count', '') }}" placeholder="0" oninput="renderAtifalProgramatFields()" {% if session['role'] == 'admin' or locked_fields.get('atifal_programat_count', False) %}readonly{% endif %}>
-        </div>
-    </div>
-
-    <div id="atifal-programat-fields-container">
-        {% if not can_submit and atifal_programs_list %}
-            {% for item in atifal_programs_list %}
-            <div class="form-row programat-row">
-                <div class="form-group">
-                    <label>پروگرام کا نام</label>
-                    <input type="text" value="{{ item.nauiyat }}" readonly placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label>حاضری</label>
-                    <input type="number" value="{{ item.hazri }}" readonly placeholder="0">
-                </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            {% if form_data.get('atifal_programat_count', '') and form_data.get('atifal_programat_count', 0)|int > 0 %}
-                {% for i in range(form_data.get('atifal_programat_count', 0)|int) %}
-                <div class="form-row programat-row">
+            <!-- جماعتِ اسلامی شعبہ اطفال -->
+            <div class="form-section atifal-section">
+                <h3 class="section-title">جماعتِ اسلامی شعبہ اطفال</h3>
+                <div class="form-row single-column-row">
                     <div class="form-group">
-                        <label for="atifal_nauyiat_{{i+1}}">نوعیت {{i+1}}</label>
-                        <input type="text" id="atifal_nauyiat_{{i+1}}" name="atifal_nauyiat_{{i+1}}" value="{{ form_data.get('atifal_nauyiat_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('atifal_nauyiat_' ~ (i+1), False) %}readonly{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="atifal_programat_count_{{i+1}}">حاضری</label>
-                        <input type="number" id="atifal_programat_count_{{i+1}}" name="atifal_programat_count_{{i+1}}" min="0" value="{{ form_data.get('atifal_programat_count_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('atifal_programat_count_' ~ (i+1), False) %}readonly{% endif %}>
+                        <label for="atifal-nazm-areas">کتنے علاقہ میں نظم قائم ہے:</label>
+                        <input type="number" id="atifal-nazm-areas" name="atifal_nazm_areas" min="0" placeholder="0" value="{{ form_data.get('atifal_nazm_areas', '') | int if form_data.get('atifal_nazm_areas', '') != '' else '' }}" {% if locked_fields.get('atifal_nazm_areas', False) %}disabled style="font-weight: bold;"{% endif %}>
                     </div>
                 </div>
-                {% endfor %}
-            {% endif %}
-        {% endif %}
-    </div>
+                <div class="form-row single-column-row">
+                    <div class="form-group">
+                        <label for="atifal_programat_count">پروگرامات کی تعداد:</label>
+                        <input type="number" id="atifal_programat_count" name="atifal_programat_count" min="0" max="50" value="{{ form_data.get('atifal_programat_count', '') | int if form_data.get('atifal_programat_count', '') != '' else '' }}" placeholder="0" oninput="renderAtifalProgramatFields()" {% if locked_fields.get('atifal_programat_count', False) %}disabled style="font-weight: bold;"{% endif %}>
+                    </div>
+                </div>
+                <div id="atifal-programat-fields-container">
+                    {% if not can_submit and atifal_programs_list %}
+                        {% for item in atifal_programs_list %}
+                        <div class="form-row programat-row">
+                            <div class="form-group">
+                                <label>پروگرام کا نام</label>
+                                <input type="text" value="{{ item.nauiyat }}" readonly placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>حاضری</label>
+                                <input type="number" value="{{ item.hazri }}" readonly placeholder="0">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        {% if form_data.get('atifal_programat_count', '') and form_data.get('atifal_programat_count', 0)|int > 0 %}
+                            {% for i in range(form_data.get('atifal_programat_count', 0)|int) %}
+                            <div class="form-row programat-row">
+                                <div class="form-group">
+                                    <label for="atifal_nauyiat_{{i+1}}">نوعیت {{i+1}}</label>
+                                    <input type="text" id="atifal_nauyiat_{{i+1}}" name="atifal_nauyiat_{{i+1}}" value="{{ form_data.get('atifal_nauyiat_' ~ (i+1), '') }}" placeholder="0" {% if session['role'] == 'admin' %}readonly{% elif locked_fields.get('atifal_nauyiat_' ~ (i+1), False) %}disabled style="font-weight: bold;"{% endif %}>
+                                </div>
+                                <div class="form-group">
+                                    <label for="atifal_programat_count_{{i+1}}">حاضری</label>
+                                    <input type="number" id="atifal_programat_count_{{i+1}}" name="atifal_programat_count_{{i+1}}" min="0" value="{{ form_data.get('atifal_programat_count_' ~ (i+1), '') | int if form_data.get('atifal_programat_count_' ~ (i+1), '') != '' else '' }}" placeholder="0" {% if locked_fields.get('atifal_programat_count_' ~ (i+1), False) %}disabled style="font-weight: bold;"{% endif %}>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
 
-    <script>
-    function renderAtifalProgramatFields() {
-        var countInput = document.getElementById('atifal_programat_count');
-        var container = document.getElementById('atifal-programat-fields-container');
-        var count = parseInt(countInput.value) || 0;
-        if (count > 50) {
-            count = 50;
-            countInput.value = 50;
-        }
-        if (countInput.readOnly) return;
-
-        var existingNames = {};
-        var existingCounts = {};
-        for (var i = 1; i <= 50; i++) {
-            var nameInput = document.getElementById('atifal_nauyiat_' + i);
-            var countInputField = document.getElementById('atifal_programat_count_' + i);
-            if (nameInput) existingNames[i] = nameInput.value;
-            if (countInputField) existingCounts[i] = countInputField.value;
-        }
-
-        container.innerHTML = '';
-        for (var i = 1; i <= count; i++) {
-            var row = document.createElement('div');
-            row.className = 'form-row programat-row';
-
-            var group1 = document.createElement('div');
-            group1.className = 'form-group';
-            var label1 = document.createElement('label');
-            label1.setAttribute('for', 'atifal_nauyiat_' + i);
-            label1.textContent = 'نوعیت';
-            var input1 = document.createElement('input');
-            input1.type = 'text';
-            input1.id = 'atifal_nauyiat_' + i;
-            input1.name = 'atifal_nauyiat_' + i;
-            input1.className = 'atifal-programat-input';
-            input1.placeholder = 'پروگرام کی نوعیت لکھیں';
-            input1.value = existingNames[i] || '';
-            if (countInput.readOnly) {
-                input1.readOnly = true;
-            }
-            group1.appendChild(label1);
-            group1.appendChild(input1);
-
-            var group2 = document.createElement('div');
-            group2.className = 'form-group';
-            var label2 = document.createElement('label');
-            label2.setAttribute('for', 'atifal_programat_count_' + i);
-            label2.textContent = 'حاضری';
-            var input2 = document.createElement('input');
-            input2.type = 'number';
-            input2.min = '0';
-            input2.id = 'atifal_programat_count_' + i;
-            input2.name = 'atifal_programat_count_' + i;
-            input2.className = 'atifal-programat-count-input';
-            input2.placeholder = '0';
-            input2.value = existingCounts[i] || '';
-            if (countInput.readOnly) {
-                input2.readOnly = true;
-            }
-            group2.appendChild(label2);
-            group2.appendChild(input2);
-
-            row.appendChild(group1);
-            row.appendChild(group2);
-            container.appendChild(row);
-        }
-    }
-
-    var canSubmit = document.getElementById('can-submit-flag').getAttribute('data-can-submit');
-    document.addEventListener('DOMContentLoaded', function() {
-        if (canSubmit === "true") {
-            var countInput = document.getElementById('atifal_programat_count');
-            if (countInput && !countInput.readOnly && countInput.value) {
-                renderAtifalProgramatFields();
-            }
-        }
-    });
-    </script>
-</div>
-
-
-            
-
-      
-
-            <!-- ضلعی تنظیمی اجتماعات۔ -->
+            <!-- ضلعی تنظیمی اجتماعات -->
             <div class="form-section">
                 <h3 class="section-title">ضلعی تنظیمی اجتماعات</h3>
                 <table class="organizational-table">
@@ -547,42 +344,42 @@
                     <tbody>
                         <tr>
                             <td>اجلاس ضلعی شوریٰ</td>
-                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_shura_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_shura_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-planned" name="zilai_shura_planned" min="0" placeholder="0" value="{{ form_data.get('zilai_shura_planned', '') | int if form_data.get('zilai_shura_planned', '') != '' else '' }}" {% if locked_fields.get('zilai_shura_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-held" name="zilai_shura_held" min="0" placeholder="0" value="{{ form_data.get('zilai_shura_held', '') | int if form_data.get('zilai_shura_held', '') != '' else '' }}" {% if locked_fields.get('zilai_shura_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-shura-attendance" name="zilai_shura_attendance" min="0" placeholder="0" value="{{ form_data.get('zilai_shura_attendance', '') | int if form_data.get('zilai_shura_attendance', '') != '' else '' }}" {% if locked_fields.get('zilai_shura_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس نظم ضلع</td>
-                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazm_zila_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazm_zila_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-planned" name="nazm_zila_planned" min="0" placeholder="0" value="{{ form_data.get('nazm_zila_planned', '') | int if form_data.get('nazm_zila_planned', '') != '' else '' }}" {% if locked_fields.get('nazm_zila_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-held" name="nazm_zila_held" min="0" placeholder="0" value="{{ form_data.get('nazm_zila_held', '') | int if form_data.get('nazm_zila_held', '') != '' else '' }}" {% if locked_fields.get('nazm_zila_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazm-zila-attendance" name="nazm_zila_attendance" min="0" placeholder="0" value="{{ form_data.get('nazm_zila_attendance', '') | int if form_data.get('nazm_zila_attendance', '') != '' else '' }}" {% if locked_fields.get('nazm_zila_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجلاس ناظمین علاقہ جات</td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('nazimin_alaqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('nazimin_alaqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-planned" name="nazimin_alaqajat_planned" min="0" placeholder="0" value="{{ form_data.get('nazimin_alaqajat_planned', '') | int if form_data.get('nazimin_alaqajat_planned', '') != '' else '' }}" {% if locked_fields.get('nazimin_alaqajat_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-held" name="nazimin_alaqajat_held" min="0" placeholder="0" value="{{ form_data.get('nazimin_alaqajat_held', '') | int if form_data.get('nazimin_alaqajat_held', '') != '' else '' }}" {% if locked_fields.get('nazimin_alaqajat_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="nazimin-alaqajat-attendance" name="nazimin_alaqajat_attendance" min="0" placeholder="0" value="{{ form_data.get('nazimin_alaqajat_attendance', '') | int if form_data.get('nazimin_alaqajat_attendance', '') != '' else '' }}" {% if locked_fields.get('nazimin_alaqajat_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع ارکان</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_arkaan_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-planned" name="zilai_ijtima_arkaan_planned" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_planned', '') | int if form_data.get('zilai_ijtima_arkaan_planned', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_arkaan_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-held" name="zilai_ijtima_arkaan_held" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_held', '') | int if form_data.get('zilai_ijtima_arkaan_held', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_arkaan_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-arkaan-attendance" name="zilai_ijtima_arkaan_attendance" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_arkaan_attendance', '') | int if form_data.get('zilai_ijtima_arkaan_attendance', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_arkaan_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>ضلعی اجتماع امیدواران</td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0"   placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('zilai_ijtima_umeedwaran_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-planned" name="zilai_ijtima_umeedwaran_planned" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_planned', '') | int if form_data.get('zilai_ijtima_umeedwaran_planned', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-held" name="zilai_ijtima_umeedwaran_held" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_held', '') | int if form_data.get('zilai_ijtima_umeedwaran_held', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="zilai-ijtima-umeedwaran-attendance" name="zilai_ijtima_umeedwaran_attendance" min="0" placeholder="0" value="{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '') | int if form_data.get('zilai_ijtima_umeedwaran_attendance', '') != '' else '' }}" {% if locked_fields.get('zilai_ijtima_umeedwaran_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!--  تنظیمی اجتماعات۔ -->
+            <!-- تنظیمی اجتماعات -->
             <div class="form-section">
-                <h3 class="section-title"> تنظیمی اجتماعات</h3>
-              <table class="organizational-table">
+                <h3 class="section-title">تنظیمی اجتماعات</h3>
+                <table class="organizational-table">
                     <thead>
                         <tr>
                             <th></th>
@@ -594,42 +391,42 @@
                     <tbody>
                         <tr>
                             <td>اجتماع ارکان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_arkaan_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-planned" name="ijtima_arkaan_alaqah_planned" min="0" placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_planned', '') | int if form_data.get('ijtima_arkaan_alaqah_planned', '') != '' else '' }}" {% if locked_fields.get('ijtima_arkaan_alaqah_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-held" name="ijtima_arkaan_alaqah_held" min="0" placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_held', '') | int if form_data.get('ijtima_arkaan_alaqah_held', '') != '' else '' }}" {% if locked_fields.get('ijtima_arkaan_alaqah_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-arkaan-alaqah-attendance" name="ijtima_arkaan_alaqah_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtima_arkaan_alaqah_attendance', '') | int if form_data.get('ijtima_arkaan_alaqah_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtima_arkaan_alaqah_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع اُمیدواران (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_umeedwaran_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-planned" name="ijtima_umeedwaran_alaqah_planned" min="0" placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '') | int if form_data.get('ijtima_umeedwaran_alaqah_planned', '') != '' else '' }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-held" name="ijtima_umeedwaran_alaqah_held" min="0" placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_held', '') | int if form_data.get('ijtima_umeedwaran_alaqah_held', '') != '' else '' }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-umeedwaran-alaqah-attendance" name="ijtima_umeedwaran_alaqah_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '') | int if form_data.get('ijtima_umeedwaran_alaqah_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtima_umeedwaran_alaqah_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (علاقہ )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_alaqah_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-planned" name="ijtima_karkunaan_alaqah_planned" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_planned', '') | int if form_data.get('ijtima_karkunaan_alaqah_planned', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-held" name="ijtima_karkunaan_alaqah_held" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_held', '') | int if form_data.get('ijtima_karkunaan_alaqah_held', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-alaqah-attendance" name="ijtima_karkunaan_alaqah_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '') | int if form_data.get('ijtima_karkunaan_alaqah_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_alaqah_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع کارکنان (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_karkunaan_halqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-planned" name="ijtima_karkunaan_halqajat_planned" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_planned', '') | int if form_data.get('ijtima_karkunaan_halqajat_planned', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-held" name="ijtima_karkunaan_halqajat_held" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_held', '') | int if form_data.get('ijtima_karkunaan_halqajat_held', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-karkunaan-halqajat-attendance" name="ijtima_karkunaan_halqajat_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '') | int if form_data.get('ijtima_karkunaan_halqajat_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtima_karkunaan_halqajat_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماع ناظمین (حلقہ جات)</td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtima_nazimin_halqajat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-planned" name="ijtima_nazimin_halqajat_planned" min="0" placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_planned', '') | int if form_data.get('ijtima_nazimin_halqajat_planned', '') != '' else '' }}" {% if locked_fields.get('ijtima_nazimin_halqajat_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-held" name="ijtima_nazimin_halqajat_held" min="0" placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_held', '') | int if form_data.get('ijtima_nazimin_halqajat_held', '') != '' else '' }}" {% if locked_fields.get('ijtima_nazimin_halqajat_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtima-nazimin-halqajat-attendance" name="ijtima_nazimin_halqajat_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtima_nazimin_halqajat_attendance', '') | int if form_data.get('ijtima_nazimin_halqajat_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtima_nazimin_halqajat_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-             <!--  دعوتی اجتماعات۔ -->
+            <!-- دعوتی اجتماعات -->
             <div class="form-section">
-                <h3 class="section-title"> دعوتی اجتماعات</h3>
-              <table class="organizational-table">
+                <h3 class="section-title">دعوتی اجتماعات</h3>
+                <table class="organizational-table">
                     <thead>
                         <tr>
                             <th></th>
@@ -641,37 +438,35 @@
                     <tbody>
                         <tr>
                             <td>درس قرآن (حلقہ جات )</td>
-                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0"   placeholder="0" value="{{ form_data.get('dars_quran_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dars_quran_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-planned" name="dars_quran_planned" min="0" placeholder="0" value="{{ form_data.get('dars_quran_planned', '') | int if form_data.get('dars_quran_planned', '') != '' else '' }}" {% if locked_fields.get('dars_quran_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-held" name="dars_quran_held" min="0" placeholder="0" value="{{ form_data.get('dars_quran_held', '') | int if form_data.get('dars_quran_held', '') != '' else '' }}" {% if locked_fields.get('dars_quran_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dars-quran-attendance" name="dars_quran_attendance" min="0" placeholder="0" value="{{ form_data.get('dars_quran_attendance', '') | int if form_data.get('dars_quran_attendance', '') != '' else '' }}" {% if locked_fields.get('dars_quran_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>دعوتی کیمپ / مستقل و فود</td>
-                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0"   placeholder="0" value="{{ form_data.get('dawati_camp_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('dawati_camp_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-planned" name="dawati_camp_planned" min="0" placeholder="0" value="{{ form_data.get('dawati_camp_planned', '') | int if form_data.get('dawati_camp_planned', '') != '' else '' }}" {% if locked_fields.get('dawati_camp_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-held" name="dawati_camp_held" min="0" placeholder="0" value="{{ form_data.get('dawati_camp_held', '') | int if form_data.get('dawati_camp_held', '') != '' else '' }}" {% if locked_fields.get('dawati_camp_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="dawati-camp-attendance" name="dawati_camp_attendance" min="0" placeholder="0" value="{{ form_data.get('dawati_camp_attendance', '') | int if form_data.get('dawati_camp_attendance', '') != '' else '' }}" {% if locked_fields.get('dawati_camp_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>گھروں تک دعوت</td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0"   placeholder="0" value="{{ form_data.get('gharon_tak_dawat_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('gharon_tak_dawat_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-planned" name="gharon_tak_dawat_planned" min="0" placeholder="0" value="{{ form_data.get('gharon_tak_dawat_planned', '') | int if form_data.get('gharon_tak_dawat_planned', '') != '' else '' }}" {% if locked_fields.get('gharon_tak_dawat_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-held" name="gharon_tak_dawat_held" min="0" placeholder="0" value="{{ form_data.get('gharon_tak_dawat_held', '') | int if form_data.get('gharon_tak_dawat_held', '') != '' else '' }}" {% if locked_fields.get('gharon_tak_dawat_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="gharon-tak-dawat-attendance" name="gharon_tak_dawat_attendance" min="0" placeholder="0" value="{{ form_data.get('gharon_tak_dawat_attendance', '') | int if form_data.get('gharon_tak_dawat_attendance', '') != '' else '' }}" {% if locked_fields.get('gharon_tak_dawat_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>تقسیم دعوتی لٹریچر</td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_planned', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_planned', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_held', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_held', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0"   placeholder="0" value="{{ form_data.get('taqseem_literature_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('taqseem_literature_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-planned" name="taqseem_literature_planned" min="0" placeholder="0" value="{{ form_data.get('taqseem_literature_planned', '') | int if form_data.get('taqseem_literature_planned', '') != '' else '' }}" {% if locked_fields.get('taqseem_literature_planned', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-held" name="taqseem_literature_held" min="0" placeholder="0" value="{{ form_data.get('taqseem_literature_held', '') | int if form_data.get('taqseem_literature_held', '') != '' else '' }}" {% if locked_fields.get('taqseem_literature_held', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="taqseem-literature-attendance" name="taqseem_literature_attendance" min="0" placeholder="0" value="{{ form_data.get('taqseem_literature_attendance', '') | int if form_data.get('taqseem_literature_attendance', '') != '' else '' }}" {% if locked_fields.get('taqseem_literature_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-          
-
-             <!-- تربیتی اِجتماعات -->
+            <!-- تربیتی اِجتماعات -->
             <div class="form-section">
-                <h3 class="section-title"> تربیتی اِجتماعات</h3>
+                <h3 class="section-title">تربیتی اِجتماعات</h3>
                 <table class="organizational-table">
                     <thead>
                         <tr>
@@ -684,34 +479,36 @@
                     <tbody>
                         <tr>
                             <td>اسٹڈی سرکل/ ڈسکشن</td>
-                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0"   placeholder="0" value="{{ form_data.get('study_circle_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0"   placeholder="0" value="{{ form_data.get('study_circle_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('study_circle_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-maqamat" name="study_circle_maqamat" min="0" placeholder="0" value="{{ form_data.get('study_circle_maqamat', '') | int if form_data.get('study_circle_maqamat', '') != '' else '' }}" {% if locked_fields.get('study_circle_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-daurajat" name="study_circle_daurajat" min="0" placeholder="0" value="{{ form_data.get('study_circle_daurajat', '') | int if form_data.get('study_circle_daurajat', '') != '' else '' }}" {% if locked_fields.get('study_circle_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="study-circle-attendance" name="study_circle_attendance" min="0" placeholder="0" value="{{ form_data.get('study_circle_attendance', '') | int if form_data.get('study_circle_attendance', '') != '' else '' }}" {% if locked_fields.get('study_circle_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماعی طعام</td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-maqamat" name="ijtimai_tuaam_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-daurajat" name="ijtimai_tuaam_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-tuaam-attendance" name="ijtimai_tuaam_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_tuaam_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_tuaam_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-maqamat" name="ijtimai_tuaam_maqamat" min="0" placeholder="0" value="{{ form_data.get('ijtimai_tuaam_maqamat', '') | int if form_data.get('ijtimai_tuaam_maqamat', '') != '' else '' }}" {% if locked_fields.get('ijtimai_tuaam_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-daurajat" name="ijtimai_tuaam_daurajat" min="0" placeholder="0" value="{{ form_data.get('ijtimai_tuaam_daurajat', '') | int if form_data.get('ijtimai_tuaam_daurajat', '') != '' else '' }}" {% if locked_fields.get('ijtimai_tuaam_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-tuaam-attendance" name="ijtimai_tuaam_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtimai_tuaam_attendance', '') | int if form_data.get('ijtimai_tuaam_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtimai_tuaam_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                         <tr>
                             <td>اجتماعی اہل خانہ</td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-maqamat" name="ijtimai_ahle_khana_maqamat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_maqamat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-daurajat" name="ijtimai_ahle_khana_daurajat" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_daurajat', False) %}disabled{% endif %}></td>
-                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-attendance" name="ijtimai_ahle_khana_attendance" min="0"   placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_attendance', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('ijtimai_ahle_khana_attendance', False) %}disabled{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-maqamat" name="ijtimai_ahle_khana_maqamat" min="0" placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_maqamat', '') | int if form_data.get('ijtimai_ahle_khana_maqamat', '') != '' else '' }}" {% if locked_fields.get('ijtimai_ahle_khana_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-daurajat" name="ijtimai_ahle_khana_daurajat" min="0" placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_daurajat', '') | int if form_data.get('ijtimai_ahle_khana_daurajat', '') != '' else '' }}" {% if locked_fields.get('ijtimai_ahle_khana_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="ijtimai-ahle-khana-attendance" name="ijtimai_ahle_khana_attendance" min="0" placeholder="0" value="{{ form_data.get('ijtimai_ahle_khana_attendance', '') | int if form_data.get('ijtimai_ahle_khana_attendance', '') != '' else '' }}" {% if locked_fields.get('ijtimai_ahle_khana_attendance', False) %}disabled style="font-weight: bold;"{% endif %}></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            <!-- مرکز قرآن و سنہ -->
             <div class="form-section">
                 <h3 class="section-title">مرکز قرآن و سنہ</h3>
                 <div class="form-row single-column-row">
                     <div class="form-group">
                         <label for="quran-courses">کورسز</label>
                         {% if session['role'] == 'admin' %}
-                        <input type="number" id="quran-courses" name="quran_courses" min="0"   value="{{ form_data.get('quran_courses', '') }}" placeholder="0" disabled>
+                        <input type="number" id="quran-courses" name="quran_courses" min="0" value="{{ form_data.get('quran_courses', '') | int if form_data.get('quran_courses', '') != '' else '' }}" placeholder="0" disabled>
                         {% else %}
-                        <input type="number" id="quran-courses" name="quran_courses" min="0"   value="{{ form_data.get('quran_courses', '') }}" placeholder="0" {% if locked_fields.get('quran_courses', False) %}disabled{% endif %}>
+                        <input type="number" id="quran-courses" name="quran_courses" min="0" value="{{ form_data.get('quran_courses', '') | int if form_data.get('quran_courses', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('quran_courses', False) %}disabled style="font-weight: bold;"{% endif %}>
                         {% endif %}
                     </div>
                 </div>
@@ -719,9 +516,9 @@
                     <div class="form-group">
                         <label for="quran-classes">کلاس</label>
                         {% if session['role'] == 'admin' %}
-                        <input type="number" id="quran-classes" name="quran_classes" min="0"   value="{{ form_data.get('quran_classes', '') }}" placeholder="0" disabled>
+                        <input type="number" id="quran-classes" name="quran_classes" min="0" value="{{ form_data.get('quran_classes', '') | int if form_data.get('quran_classes', '') != '' else '' }}" placeholder="0" disabled>
                         {% else %}
-                        <input type="number" id="quran-classes" name="quran_classes" min="0"   value="{{ form_data.get('quran_classes', '') }}" placeholder="0" {% if locked_fields.get('quran_classes', False) %}disabled{% endif %}>
+                        <input type="number" id="quran-classes" name="quran_classes" min="0" value="{{ form_data.get('quran_classes', '') | int if form_data.get('quran_classes', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('quran_classes', False) %}disabled style="font-weight: bold;"{% endif %}>
                         {% endif %}
                     </div>
                 </div>
@@ -729,9 +526,9 @@
                     <div class="form-group">
                         <label for="quran-participants">شرکاء</label>
                         {% if session['role'] == 'admin' %}
-                        <input type="number" id="quran-participants" name="quran_participants" min="0"   value="{{ form_data.get('quran_participants', '') }}" placeholder="0" disabled>
+                        <input type="number" id="quran-participants" name="quran_participants" min="0" value="{{ form_data.get('quran_participants', '') | int if form_data.get('quran_participants', '') != '' else '' }}" placeholder="0" disabled>
                         {% else %}
-                        <input type="number" id="quran-participants" name="quran_participants" min="0"   value="{{ form_data.get('quran_participants', '') }}" placeholder="0" {% if locked_fields.get('quran_participants', False) %}disabled{% endif %}>
+                        <input type="number" id="quran-participants" name="quran_participants" min="0" value="{{ form_data.get('quran_participants', '') | int if form_data.get('quran_participants', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('quran_participants', False) %}disabled style="font-weight: bold;"{% endif %}>
                         {% endif %}
                     </div>
                 </div>
@@ -739,9 +536,9 @@
                     <div class="form-group">
                         <label for="fahem-quran-attendance">فہم القرآن پروگرام (حاضری)</label>
                         {% if session['role'] == 'admin' %}
-                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0"   value="{{ form_data.get('fahem_quran_attendance', '') }}" placeholder="0" disabled>
+                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0" value="{{ form_data.get('fahem_quran_attendance', '') | int if form_data.get('fahem_quran_attendance', '') != '' else '' }}" placeholder="0" disabled>
                         {% else %}
-                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0"   value="{{ form_data.get('fahem_quran_attendance', '') }}" placeholder="0" {% if locked_fields.get('fahem_quran_attendance', False) %}disabled{% endif %}>
+                        <input type="number" id="fahem-quran-attendance" name="fahem_quran_attendance" min="0" value="{{ form_data.get('fahem_quran_attendance', '') | int if form_data.get('fahem_quran_attendance', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('fahem_quran_attendance', False) %}disabled style="font-weight: bold;"{% endif %}>
                         {% endif %}
                     </div>
                 </div>
@@ -749,89 +546,89 @@
                     <div class="form-group">
                         <label for="quran-distributed">تقسیم ترجمه قرآن</label>
                         {% if session['role'] == 'admin' %}
-                        <input type="number" id="quran-distributed" name="quran_distributed" min="0"   value="{{ form_data.get('quran_distributed', '') }}" placeholder="0" disabled>
+                        <input type="number" id="quran-distributed" name="quran_distributed" min="0" value="{{ form_data.get('quran_distributed', '') | int if form_data.get('quran_distributed', '') != '' else '' }}" placeholder="0" disabled>
                         {% else %}
-                        <input type="number" id="quran-distributed" name="quran_distributed" min="0"   value="{{ form_data.get('quran_distributed', '') }}" placeholder="0" {% if locked_fields.get('quran_distributed', False) %}disabled{% endif %}>
+                        <input type="number" id="quran-distributed" name="quran_distributed" min="0" value="{{ form_data.get('quran_distributed', '') | int if form_data.get('quran_distributed', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('quran_distributed', False) %}disabled style="font-weight: bold;"{% endif %}>
                         {% endif %}
                     </div>
                 </div>
             </div>
 
-        <div class="form-section">
-            <h3 class="section-title">تربیتی و دیگر سرگرمیاں</h3>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="central-training-target">مرکزی تربیت گاہ (حاضری کا ہدف)</label>
-                    {% if session['role'] == 'admin' %}
-                    <input type="number" id="central_training_target" name="central_training_target" min="0"   value="{{ form_data.get('central_training_target', '') }}" placeholder="0" disabled>
-                    {% else %}
-                    <input type="number" id="central_training_target" name="central_training_target" min="0"   value="{{ form_data.get('central_training_target', '') }}" placeholder="0" {% if locked_fields.get('central_training_target', False) %}disabled{% endif %}>
-                    {% endif %}
+            <!-- تربیتی و دیگر سرگرمیاں -->
+            <div class="form-section">
+                <h3 class="section-title">تربیتی و دیگر سرگرمیاں</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="central-training-target">مرکزی تربیت گاہ (حاضری کا ہدف)</label>
+                        {% if session['role'] == 'admin' %}
+                        <input type="number" id="central_training_target" name="central_training_target" min="0" value="{{ form_data.get('central_training_target', '') | int if form_data.get('central_training_target', '') != '' else '' }}" placeholder="0" disabled>
+                        {% else %}
+                        <input type="number" id="central_training_target" name="central_training_target" min="0" value="{{ form_data.get('central_training_target', '') | int if form_data.get('central_training_target', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('central_training_target', False) %}disabled style="font-weight: bold;"{% endif %}>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="central-training-actual">شرکت</label>
+                        {% if session['role'] == 'admin' %}
+                        <input type="number" id="central_training_actual" name="central_training_actual" min="0" value="{{ form_data.get('central_training_actual', '') | int if form_data.get('central_training_actual', '') != '' else '' }}" placeholder="0" disabled>
+                        {% else %}
+                        <input type="number" id="central_training_actual" name="central_training_actual" min="0" value="{{ form_data.get('central_training_actual', '') | int if form_data.get('central_training_actual', '') != '' else '' }}" placeholder="0" {% if locked_fields.get('central_training_actual', False) %}disabled style="font-weight: bold;"{% endif %}>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="central-training-actual">شرکت</label>
-                    {% if session['role'] == 'admin' %}
-                    <input type="number" id="central_training_actual" name="central_training_actual" min="0"   value="{{ form_data.get('central_training_actual', '') }}" placeholder="0" disabled>
-                    {% else %}
-                    <input type="number" id="central_training_actual" name="central_training_actual" min="0"   value="{{ form_data.get('central_training_actual', '') }}" placeholder="0" {% if locked_fields.get('central_training_actual', False) %}disabled{% endif %}>
-                    {% endif %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="other-trainings">دیگر تربیتی اجتماعات (ضلعی تربیت گاہ، شب بیداریاں وغیرہ)</label>
+                        {% if session['role'] == 'admin' %}
+                        <input type="text" id="other_trainings" name="other_trainings" placeholder="" value="{{ form_data.get('other_trainings', '') }}" disabled>
+                        {% else %}
+                        <input type="text" id="other_trainings" name="other_trainings" placeholder="" value="{{ form_data.get('other_trainings', '') }}" {% if locked_fields.get('other_trainings', False) %}disabled style="font-weight: bold;"{% endif %}>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="atifal-programs">حاضری</label>
+                        {% if session['role'] == 'admin' %}
+                        <input type="number" id="atifal_programs" name="atifal_programs" min="0" placeholder="0" value="{{ form_data.get('atifal_programs', '') | int if form_data.get('atifal_programs', '') != '' else '' }}" disabled>
+                        {% else %}
+                        <input type="number" id="atifal_programs" name="atifal_programs" min="0" placeholder="0" value="{{ form_data.get('atifal_programs', '') | int if form_data.get('atifal_programs', '') != '' else '' }}" {% if locked_fields.get('atifal_programs', False) %}disabled style="font-weight: bold;"{% endif %}>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="other-trainings">دیگر تربیتی اجتماعات (ضلعی تربیت گاہ، شب بیداریاں وغیرہ)</label>
-                    {% if session['role'] == 'admin' %}
-                    <input type="text" id="other_trainings" name="other_trainings"   placeholder="" value="{{ form_data.get('other_trainings', '') }}" disabled>
-                    {% else %}
-                    <input type="text" id="other_trainings" name="other_trainings"   placeholder="" value="{{ form_data.get('other_trainings', '') }}" {% if locked_fields.get('other_trainings', False) %}disabled{% endif %}>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <label for="atifal-programs">حاضری</label>
-                    {% if session['role'] == 'admin' %}
-                    <input type="number" id="atifal_programs" name="atifal_programs" min="0"   placeholder="0" value="{{ form_data.get('atifal_programs', '') }}" disabled>
-                    {% else %}
-                    <input type="number" id="atifal_programs" name="atifal_programs" min="0"   placeholder="0" value="{{ form_data.get('atifal_programs', '') }}" {% if locked_fields.get('atifal_programs', False) %}disabled{% endif %}>
-                    {% endif %}
-                </div>
+            <!-- ذمہ داران -->
+            <div class="form-section">
+                <h3 class="section-title">ذمہ داران</h3>
+                <table class="organizational-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>مقامات</th>
+                            <th>دورہ جات</th>
+                            <th>انفرادی ملاقاتیں</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>امیر ضلع</td>
+                            <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0" placeholder="0" value="{{ form_data.get('amir_zila_maqamat', '') | int if form_data.get('amir_zila_maqamat', '') != '' else '' }}" {% if locked_fields.get('amir_zila_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0" placeholder="0" value="{{ form_data.get('amir_zila_daurajat', '') | int if form_data.get('amir_zila_daurajat', '') != '' else '' }}" {% if locked_fields.get('amir_zila_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0" placeholder="0" value="{{ form_data.get('amir_zila_mulaqat', '') | int if form_data.get('amir_zila_mulaqat', '') != '' else '' }}" {% if locked_fields.get('amir_zila_mulaqat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td>قیم ضلع</td>
+                            <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0" placeholder="0" value="{{ form_data.get('qaim_zila_maqamat', '') | int if form_data.get('qaim_zila_maqamat', '') != '' else '' }}" {% if locked_fields.get('qaim_zila_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0" placeholder="0" value="{{ form_data.get('qaim_zila_daurajat', '') | int if form_data.get('qaim_zila_daurajat', '') != '' else '' }}" {% if locked_fields.get('qaim_zila_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0" placeholder="0" value="{{ form_data.get('qaim_zila_mulaqat', '') | int if form_data.get('qaim_zila_mulaqat', '') != '' else '' }}" {% if locked_fields.get('qaim_zila_mulaqat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                        </tr>
+                        <tr>
+                            <td>نائب امیر ضلع</td>
+                            <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0" placeholder="0" value="{{ form_data.get('naib_amir_zila_maqamat', '') | int if form_data.get('naib_amir_zila_maqamat', '') != '' else '' }}" {% if locked_fields.get('naib_amir_zila_maqamat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0" placeholder="0" value="{{ form_data.get('naib_amir_zila_daurajat', '') | int if form_data.get('naib_amir_zila_daurajat', '') != '' else '' }}" {% if locked_fields.get('naib_amir_zila_daurajat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                            <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0" placeholder="0" value="{{ form_data.get('naib_amir_zila_mulaqat', '') | int if form_data.get('naib_amir_zila_mulaqat', '') != '' else '' }}" {% if locked_fields.get('naib_amir_zila_mulaqat', False) %}disabled style="font-weight: bold;"{% endif %}></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
-          <!-- ذمہ داران -->
-          <div class="form-section">
-            <h3 class="section-title"> ذمہ داران </h3>
-            <table class="organizational-table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>مقامات</th>
-                        <th>دورہ جات</th>
-                        <th>انفرادی ملاقاتیں</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="amir_zila_maqamat" name="amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_daurajat" name="amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="amir_zila_mulaqat" name="amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('amir_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('amir_zila_mulaqat', False) %}disabled{% endif %}></td>
-                    </tr>
-                    <tr>
-                        <td>قیم ضلع</td>
-                        <td><input type="number" class="input-field" id="qaim_zila_maqamat" name="qaim_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_daurajat" name="qaim_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="qaim_zila_mulaqat" name="qaim_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('qaim_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('qaim_zila_mulaqat', False) %}disabled{% endif %}></td>
-                    </tr>
-                    <tr>
-                        <td>نائب امیر ضلع</td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_maqamat" name="naib_amir_zila_maqamat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_maqamat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_maqamat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_daurajat" name="naib_amir_zila_daurajat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_daurajat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_daurajat', False) %}disabled{% endif %}></td>
-                        <td><input type="number" class="input-field" id="naib_amir_zila_mulaqat" name="naib_amir_zila_mulaqat" min="0"   placeholder="0" value="{{ form_data.get('naib_amir_zila_mulaqat', '') }}" {% if session['role'] == 'admin' %}disabled{% elif locked_fields.get('naib_amir_zila_mulaqat', False) %}disabled{% endif %}></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
 
             <!--حق دو کراچی تحریک-->
             <div class="form-section haq-do-karachi-section">
@@ -876,35 +673,199 @@
             </div>
 
         <!-- فارم بٹن -->
-        {% if session['role'] == 'admin' %}
+        {% if can_submit and not is_view_mode %}
         <div class="form-actions">
-            <button type="submit" class="submit-btn">رپورٹ جمع کروائیں</button>
+            <button type="submit" class="submit-btn" onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
         </div>
-        {% elif can_submit %}
+        {% elif is_view_mode %}
         <div class="form-actions">
-            <button type="submit" class="submit-btn" {% if session['role'] != 'admin' and not can_submit %}disabled{% endif %} onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
-            {% if session['role'] != 'admin' and not can_submit %}
-                <div class="alert alert-info">تمام فیلڈز مکمل ہیں۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
-            {% endif %}
+            <div class="alert alert-info">آپ ویو موڈ میں ہیں۔ تمام فیلڈز لاک ہیں اور کوئی تبدیلی نہیں کی جا سکتی۔</div>
+        </div>
+        {% elif is_admin_target_setting %}
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">ہدف محفوظ کریں</button>
         </div>
         {% else %}
         <div class="form-actions">
             <div class="alert alert-info">تمام فیلڈز مکمل ہیں۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
         </div>
         {% endif %}
-        {% if session['role'] != 'admin' %}
-        <a href="{{ url_for('logout') }}" class="reset-btn" style="text-decoration:none;display:inline-block;text-align:center;">لاگ آؤٹ</a>
-        {% endif %}
-        {% if session['role'] == 'admin' %}
-        <div style="margin-top: 20px; margin-bottom: 10px; text-align: left;">
-            <a href="{{ url_for('dashboard') }}" class="back-btn" style="padding: 8px 18px; background: #1976D2; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">ڈیش بورڈ پر واپس جائیں</a>
-        </div>
-        {% endif %}
+
+
         </form> <!-- Close the form -->
         </div> <!-- Close the container -->
 
         <!-- اسکرپٹس -->
         <script>
+            function updateIkhtitaam(prefix) {
+                var aghaazInput = document.querySelector('[name="' + prefix + '_start"]');
+                var izafaInput = document.querySelector('[name="' + prefix + '_izafa"]');
+                var kamiInput = document.querySelector('[name="' + prefix + '_kami"]');
+                var input = document.getElementById(prefix + '_ikhtitaam_input');
+
+                var aghaaz = aghaazInput && aghaazInput.value !== '' ? parseInt(aghaazInput.value) : 0;
+                var izafa = izafaInput && izafaInput.value !== '' ? parseInt(izafaInput.value) : 0;
+                var kami = kamiInput && kamiInput.value !== '' ? parseInt(kamiInput.value) : 0;
+
+                if (input) {
+                    var ikhtitaam = aghaaz + izafa - kami;
+                    input.value = ikhtitaam;
+                }
+            }
+
+            function setupIkhtitaamListeners(prefix) {
+                var aghaazInput = document.querySelector('[name="' + prefix + '_start"]');
+                var izafaInput = document.querySelector('[name="' + prefix + '_izafa"]');
+                var kamiInput = document.querySelector('[name="' + prefix + '_kami"]');
+                
+                [aghaazInput, izafaInput, kamiInput].forEach(function(input) {
+                    if (input) {
+                        input.addEventListener('input', function() { 
+                            updateIkhtitaam(prefix); 
+                        });
+                    }
+                });
+                
+                updateIkhtitaam(prefix);
+            }
+
+            function renderProgramatFields() {
+                var countInput = document.getElementById('youth_programat_count');
+                var container = document.getElementById('programat-fields-container');
+                var count = parseInt(countInput.value) || 0;
+                // Limit to maximum 50 boxes
+                if (count > 50) {
+                    count = 50;
+                    countInput.value = 50;
+                }
+                // If admin or after submission, do not allow dynamic changes
+                if (countInput.readOnly) return;
+
+                // Preserve existing values
+                var existingNames = {};
+                var existingCounts = {};
+                for (var i = 1; i <= 50; i++) {
+                    var nameInput = document.getElementById('programat_' + i);
+                    var countInputField = document.getElementById('programat_count_' + i);
+                    if (nameInput) existingNames[i] = nameInput.value;
+                    if (countInputField) existingCounts[i] = countInputField.value;
+                }
+
+                container.innerHTML = '';
+                for (var i = 1; i <= count; i++) {
+                    var row = document.createElement('div');
+                    row.className = 'form-row programat-row';
+                    // نوعیت input
+                    var group1 = document.createElement('div');
+                    group1.className = 'form-group';
+                    var label1 = document.createElement('label');
+                    label1.setAttribute('for', 'programat_' + i);
+                    label1.textContent = 'نوعیت';
+                    var input1 = document.createElement('input');
+                    input1.type = 'text';
+                    input1.id = 'programat_' + i;
+                    input1.name = 'programat_' + i;
+                    input1.className = 'programat-input';
+                    input1.placeholder = 'پروگرام کی نوعیت لکھیں';
+                    input1.value = existingNames[i] || '';
+                    if (countInput.readOnly) {
+                        input1.readOnly = true;
+                    }
+                    group1.appendChild(label1);
+                    group1.appendChild(input1);
+                    // تعداد input
+                    var group2 = document.createElement('div');
+                    group2.className = 'form-group';
+                    var label2 = document.createElement('label');
+                    label2.setAttribute('for', 'programat_count_' + i);
+                    label2.textContent = 'حاضری';
+                    var input2 = document.createElement('input');
+                    input2.type = 'number';
+                    input2.min = '0';
+                    input2.id = 'programat_count_' + i;
+                    input2.name = 'programat_count_' + i;
+                    input2.className = 'programat-count-input';
+                    input2.placeholder = '0';
+                    input2.value = existingCounts[i] || '';
+                    if (countInput.readOnly) {
+                        input2.readOnly = true;
+                    }
+                    group2.appendChild(label2);
+                    group2.appendChild(input2);
+                    // Append groups to row
+                    row.appendChild(group1);
+                    row.appendChild(group2);
+                    container.appendChild(row);
+                }
+            }
+
+            function renderAtifalProgramatFields() {
+                var countInput = document.getElementById('atifal_programat_count');
+                var container = document.getElementById('atifal-programat-fields-container');
+                var count = parseInt(countInput.value) || 0;
+                if (count > 50) {
+                    count = 50;
+                    countInput.value = 50;
+                }
+                if (countInput.readOnly) return;
+
+                var existingNames = {};
+                var existingCounts = {};
+                for (var i = 1; i <= 50; i++) {
+                    var nameInput = document.getElementById('atifal_nauyiat_' + i);
+                    var countInputField = document.getElementById('atifal_programat_count_' + i);
+                    if (nameInput) existingNames[i] = nameInput.value;
+                    if (countInputField) existingCounts[i] = countInputField.value;
+                }
+
+                container.innerHTML = '';
+                for (var i = 1; i <= count; i++) {
+                    var row = document.createElement('div');
+                    row.className = 'form-row programat-row';
+
+                    var group1 = document.createElement('div');
+                    group1.className = 'form-group';
+                    var label1 = document.createElement('label');
+                    label1.setAttribute('for', 'atifal_nauyiat_' + i);
+                    label1.textContent = 'نوعیت';
+                    var input1 = document.createElement('input');
+                    input1.type = 'text';
+                    input1.id = 'atifal_nauyiat_' + i;
+                    input1.name = 'atifal_nauyiat_' + i;
+                    input1.className = 'atifal-programat-input';
+                    input1.placeholder = 'پروگرام کی نوعیت لکھیں';
+                    input1.value = existingNames[i] || '';
+                    if (countInput.readOnly) {
+                        input1.readOnly = true;
+                    }
+                    group1.appendChild(label1);
+                    group1.appendChild(input1);
+
+                    var group2 = document.createElement('div');
+                    group2.className = 'form-group';
+                    var label2 = document.createElement('label');
+                    label2.setAttribute('for', 'atifal_programat_count_' + i);
+                    label2.textContent = 'حاضری';
+                    var input2 = document.createElement('input');
+                    input2.type = 'number';
+                    input2.min = '0';
+                    input2.id = 'atifal_programat_count_' + i;
+                    input2.name = 'atifal_programat_count_' + i;
+                    input2.className = 'atifal-programat-count-input';
+                    input2.placeholder = '0';
+                    input2.value = existingCounts[i] || '';
+                    if (countInput.readOnly) {
+                        input2.readOnly = true;
+                    }
+                    group2.appendChild(label2);
+                    group2.appendChild(input2);
+
+                    row.appendChild(group1);
+                    row.appendChild(group2);
+                    container.appendChild(row);
+                }
+            }
+
             function calculateDifference(category) {
                 const startValue = parseInt(document.getElementById(category + '-start').textContent) || 0;
                 const endValue = parseInt(document.getElementById(category + '-end').value) || 0;
@@ -927,8 +888,6 @@
                 }
             }
 
-
-
             // Init difference calculations
             document.addEventListener('DOMContentLoaded', function () {
                 const categories = [
@@ -946,6 +905,40 @@
                 categories.forEach(category => {
                     calculateDifference(category);
                 });
+
+                // Initialize Ikhtitaam calculations
+                var prefixes = [
+                    'alaqajat', 'halqajat', 'halqajat_ward', 'block_code', 'nizam_e_fajar', 'awaami_committee',
+                    'arkaan', 'umeedwaran', 'karkunan', 'hangami', 'muawanin', 'mutayyin_afrad', 'member'
+                ];
+                prefixes.forEach(setupIkhtitaamListeners);
+                
+                // Recalculate all ikhtitaam fields on page load to ensure consistency
+                setTimeout(function() {
+                    prefixes.forEach(function(prefix) {
+                        updateIkhtitaam(prefix);
+                    });
+                }, 100);
+
+                // Initialize dynamic program fields
+                var canSubmit = document.getElementById('can-submit-flag').getAttribute('data-can-submit');
+                if (canSubmit === "true") {
+                    var youthCountInput = document.getElementById('youth_programat_count');
+                    if (youthCountInput && !youthCountInput.readOnly && youthCountInput.value) {
+                        renderProgramatFields();
+                    }
+                    
+                    var atifalCountInput = document.getElementById('atifal_programat_count');
+                    if (atifalCountInput && !atifalCountInput.readOnly && atifalCountInput.value) {
+                        renderAtifalProgramatFields();
+                    }
+                }
+
+                // Initialize character counters
+                var haqTextarea = document.getElementById('haq-do-karachi');
+                var koiTextarea = document.getElementById('koi-or-bat');
+                if (haqTextarea) updateCharCounter(haqTextarea, 'char-counter-haq');
+                if (koiTextarea) updateCharCounter(koiTextarea, 'char-counter-koi');
             });
 
             // Character counter function
@@ -969,11 +962,27 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.querySelector('.report-form');
                 const submitBtn = document.querySelector('.submit-btn');
-
-                form.addEventListener('submit', function () {
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = 'جمع کرایا جا رہا ہے...';
-                });
+                const canSubmitFlag = document.getElementById('can-submit-flag');
+                
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        // Check if form submission is allowed
+                        if (canSubmitFlag && canSubmitFlag.dataset.canSubmit === 'false') {
+                            e.preventDefault();
+                            return false;
+                        }
+                        
+                        // Check if we're in view mode (form action is #)
+                        if (form.action.endsWith('#') || form.action === window.location.href + '#') {
+                            e.preventDefault();
+                            return false;
+                        }
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.textContent = 'جمع کرایا جا رہا ہے...';
+                        }
+                    });
+                }
             });
 
             // ... existing Ikhtitaam logic ...

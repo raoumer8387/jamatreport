@@ -250,25 +250,25 @@ def create_default_users():
     """Create default users DataFrame"""
     default_users = pd.DataFrame({
         'username': [
-            'admin', 
+            'admin', 'admin2',
             'airport', 'gadap', 'gharbi', 'wasti', 'gulberg_wasti', 
             'junoobi', 'keemari', 'korangi', 'malir', 'quaideen', 
             'sharqi', 'shumali', 'site_gharbi'
         ],
         'password': [
-            'admin123',
+            'admin123', 'admin2123',
             'airport123', 'gadap123', 'gharbi123', 'wasti123', 'gulberg123',
             'junoobi123', 'keemari123', 'korangi123', 'malir123', 'quaideen123',
             'sharqi123', 'shumali123', 'site123'
         ],
         'zila': [
-            'کراچی مرکز',
+            'کراچی مرکز', 'کراچی مرکز',
             'ایئرپورٹ', 'گڈاپ', 'غربی', 'وسطی', 'گلبرگ وسطی',
             'جنوبی', 'کیماڑی', 'کورنگی', 'ملیر', 'قائدین',
             'شرقی', 'شمالی', 'سائٹ غربی'
         ],
         'role': [
-            'admin',
+            'admin', 'admin2',
             'user', 'user', 'user', 'user', 'user',
             'user', 'user', 'user', 'user', 'user',
             'user', 'user', 'user'
@@ -390,8 +390,8 @@ def login():
             session['username'] = username
             session['zila'] = user.iloc[0]['zila']
             session['role'] = user.iloc[0]['role']
-            # Redirect admin to dashboard, others to report
-            if user.iloc[0]['role'] == 'admin':
+            # Redirect admin and admin2 to dashboard, others to report
+            if user.iloc[0]['role'] in ['admin', 'admin2']:
                 return redirect(url_for('dashboard'))
             else:
                 return redirect(url_for('report'))
@@ -406,6 +406,9 @@ def report():
     try:
         if 'username' not in session:
             return redirect(url_for('login'))
+        # Redirect admin2 users to dashboard since they should only view reports, not edit them
+        if session.get('role') == 'admin2':
+            return redirect(url_for('dashboard'))
         zila = session['zila']
         global report_df
         report_df = load_reports_from_db()
@@ -531,10 +534,10 @@ def report():
             update_fields = {}
             if session.get('role') == 'admin':
                 admin_editable_fields = [
-                    'alaqajat_target', 'alaqajat_start', 'halqajat_target', 'halqajat_start', 'halqajat_ward_target', 'halqajat_ward_start',
-                    'block_code_target', 'block_code_start', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'awaami_committee_target', 'awaami_committee_start',
-                    'arkaan_target', 'arkaan_start', 'umeedwaran_target', 'umeedwaran_start', 'karkunan_target', 'karkunan_start', 'hangami_target', 'hangami_start',
-                    'muawanin_target', 'muawanin_start', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'member_target', 'member_start',
+                    'alaqajat_target', 'alaqajat_start', 'alaqajat_ikhtitaam', 'halqajat_target', 'halqajat_start', 'halqajat_ikhtitaam', 'halqajat_ward_target', 'halqajat_ward_start', 'halqajat_ward_ikhtitaam',
+                    'block_code_target', 'block_code_start', 'block_code_ikhtitaam', 'nizam_e_fajar_target', 'nizam_e_fajar_start', 'nizam_e_fajar_ikhtitaam', 'awaami_committee_target', 'awaami_committee_start', 'awaami_committee_ikhtitaam',
+                    'arkaan_target', 'arkaan_start', 'arkaan_ikhtitaam', 'umeedwaran_target', 'umeedwaran_start', 'umeedwaran_ikhtitaam', 'karkunan_target', 'karkunan_start', 'karkunan_ikhtitaam', 'hangami_target', 'hangami_start', 'hangami_ikhtitaam',
+                    'muawanin_target', 'muawanin_start', 'muawanin_ikhtitaam', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'mutayyin_afrad_ikhtitaam', 'member_target', 'member_start', 'member_ikhtitaam',
                     'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count'
                 ]
                 for key in admin_editable_fields:
@@ -688,7 +691,9 @@ def report():
                              report_exists=report_exists,
                              programat_list=programat_list,
                              locked_fields=locked_fields,
-                             can_submit=can_submit)
+                             can_submit=can_submit,
+                             is_view_mode=False,
+                             is_admin_target_setting=False)
     except Exception as e:
         import logging
         logging.error("Exception in /report route", exc_info=True)
@@ -699,7 +704,7 @@ def dashboard():
     try:
         if 'username' not in session:
             return redirect(url_for('login'))
-        if session.get('role') != 'admin':
+        if session.get('role') not in ['admin', 'admin2']:
             flash("آپ کو ڈیش بورڈ دیکھنے کی اجازت نہیں ہے", "error")
             return redirect(url_for('report'))
         global report_df, users_df
@@ -777,6 +782,7 @@ def dashboard():
                 zila_dict['status'] = 'not_started'
                 zila_dict['has_report'] = False
             zila_status.append(zila_dict)
+        
         # Calculate summary statistics
         total_submitted = sum(1 for zila in zila_status if zila['status'] == 'submitted')
         total_partial = sum(1 for zila in zila_status if zila['status'] == 'partial')
@@ -999,178 +1005,884 @@ def update_manpower():
 @app.route('/view_report/<zila>')
 def view_report(zila):
     try:
-        if 'username' not in session or session.get('role') != 'admin':
+        if 'username' not in session:
             return redirect(url_for('login'))
+        
+        # Allow access if user is admin/admin2 OR if user is viewing their own zila
+        user_role = session.get('role')
+        user_zila = session.get('zila')
+        
+        # Decode URL if needed
+        from urllib.parse import unquote
+        zila = unquote(zila)
+        
+        # Check access: admin/admin2 can view any zila, regular users can only view their own
+        if user_role not in ['admin', 'admin2'] and user_zila != zila:
+            flash("آپ کو صرف اپنی ضلع کی رپورٹ دیکھنے کی اجازت ہے", "error")
+            return redirect(url_for('report'))
+        
         global report_df
         report_df = load_reports_from_db()
+        
+        # Try exact match first
         report_row = report_df[report_df['zila'] == zila]
+        
+        # If no exact match, try case-insensitive and normalized matching
         if report_row.empty:
-            flash("اس ضلع کی رپورٹ موجود نہیں ہے۔", "error")
-            return redirect(url_for('dashboard'))
-        form_data = report_row.iloc[0].to_dict()
-        # Convert NaN to empty string
-        form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
-        # All fields locked (read-only)
-        locked_fields = {k: True for k in form_data.keys()}
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
+            
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[report_df['zila'] == db_zila]
+                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
+                        break
+        
+        if report_row.empty:
+            # No report exists, create empty form data
+            form_data = get_form_data(zila)  # This will initialize all required fields
+            report_exists = False
+        else:
+            # Report exists, get the data
+            form_data = report_row.iloc[0].to_dict()
+            # Convert NaN to empty string
+            form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
+            report_exists = True
+        
+        # Calculate report completion status
+        visible_fields = [
+            'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+            'alaqajat_izafa', 'alaqajat_kami', 'halqajat_izafa', 'halqajat_kami',
+            'halqajat_ward_izafa', 'halqajat_ward_kami', 'block_code_izafa', 'block_code_kami',
+            'arkaan_izafa', 'arkaan_kami', 'umeedwaran_izafa', 'umeedwaran_kami',
+            'karkunan_izafa', 'karkunan_kami',
+            'hangami_izafa', 'hangami_kami', 'muawanin_izafa', 'muawanin_kami',
+            'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'member_izafa', 'member_kami',
+            'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'awaami_committee_izafa', 'awaami_committee_kami',
+            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'koi_or_bat', 'haq_do_karachi',
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count',
+            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+        ]
+        
+        if report_exists:
+            total_fields = len(visible_fields)
+            filled_fields = sum(1 for field in visible_fields if str(form_data.get(field, '')).strip() not in ['', 'nan', 'None'])
+            
+            if filled_fields == 0:
+                report_status = 'not_started'
+                status_text = 'شروع نہیں ہوئی'
+            elif filled_fields == total_fields:
+                report_status = 'submitted'
+                status_text = 'مکمل جمع'
+            else:
+                report_status = 'partial'
+                status_text = 'جزوی جمع'
+            
+            completion_percentage = round((filled_fields / total_fields) * 100, 1)
+        else:
+            # No report exists
+            report_status = 'not_started'
+            status_text = 'رپورٹ موجود نہیں'
+            completion_percentage = 0
+            filled_fields = 0
+            total_fields = len(visible_fields)
+        
+        # All fields locked (read-only for admin view)
+        # Initialize locked_fields with all possible form fields
+        all_possible_fields = [
+            'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+            'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+            'alaqajat_start', 'alaqajat_end', 'alaqajat_target', 'alaqajat_izafa', 'alaqajat_kami', 'alaqajat_ikhtitaam',
+            'halqajat_start', 'halqajat_end', 'halqajat_target', 'halqajat_izafa', 'halqajat_kami', 'halqajat_ikhtitaam',
+            'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target', 'halqajat_ward_izafa', 'halqajat_ward_kami', 'halqajat_ward_ikhtitaam',
+            'block_code_start', 'block_code_end', 'block_code_target', 'block_code_izafa', 'block_code_kami', 'block_code_ikhtitaam',
+            'arkaan_start', 'arkaan_end', 'arkaan_target', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
+            'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
+            'karkunan_start', 'karkunan_end', 'karkunan_target', 'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam',
+            'hangami_start', 'hangami_end', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
+            'muawanin_start', 'muawanin_end', 'muawanin_target', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
+            'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
+            'member_start', 'member_end', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam',
+            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programs_json',
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+            'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
+            'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
+            'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
+            'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
+            'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
+            'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
+            'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
+            'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
+            'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
+            'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
+            'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
+            'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
+            'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
+            'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
+            'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
+            'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
+            'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
+            'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+            'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
+            'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
+            'quran_courses', 'quran_classes', 'quran_participants',
+            'fahem_quran_attendance', 'quran_target', 'quran_distributed',
+            'central_training_target', 'central_training_actual', 'other_trainings',
+            'atifal_programs', 'awaami_committees', 'awaami_committees_count',
+            'koi_or_bat', 'haq_do_karachi',
+            'nizam_e_fajar_start', 'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
+            'awaami_committee_start', 'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+        ]
+        
+        # Lock all fields for admin view (read-only)
+        locked_fields = {field: True for field in all_possible_fields}
+        
+        # Load youth programs
         programat_list = []
-        programat_json = form_data.get('youth_programs_json', '')
-        if programat_json:
-            try:
-                programat_list = json.loads(programat_json)
-            except Exception:
-                programat_list = []
+        if report_exists:
+            programat_json = form_data.get('youth_programs_json', '')
+            if programat_json:
+                try:
+                    programat_list = json.loads(programat_json)
+                except Exception:
+                    programat_list = []
+        
         # Load atifal programs list from JSON
         atifal_programs_list = []
-        atifal_programs_json = form_data.get('atifal_programs_json', '')
-        if atifal_programs_json:
-            try:
-                atifal_programs_list = json.loads(atifal_programs_json)
-            except Exception:
-                atifal_programs_list = []
+        if report_exists:
+            atifal_programs_json = form_data.get('atifal_programs_json', '')
+            if atifal_programs_json:
+                try:
+                    atifal_programs_list = json.loads(atifal_programs_json)
+                except Exception:
+                    atifal_programs_list = []
+        
         # Populate form_data fields for template compatibility
         for idx, prog in enumerate(atifal_programs_list):
             form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
             form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
+            # Lock dynamic atifal fields
+            locked_fields[f'atifal_nauyiat_{idx+1}'] = True
+            locked_fields[f'atifal_programat_count_{idx+1}'] = True
+        
+        # Lock dynamic youth program fields
+        for idx, prog in enumerate(programat_list):
+            locked_fields[f'programat_{idx+1}'] = True
+            locked_fields[f'programat_count_{idx+1}'] = True
+        
+        # Add report metadata
+        report_metadata = {
+            'status': report_status,
+            'status_text': status_text,
+            'completion_percentage': completion_percentage,
+            'filled_fields': filled_fields,
+            'total_fields': total_fields,
+            'submitted_by': form_data.get('submitted_by', ''),
+            'timestamp': form_data.get('timestamp', ''),
+            'last_submitted_by': form_data.get('last_submitted_by', '')
+        }
+        
         return render_template("report.html", 
                              zila=zila, 
                              form_data=form_data,
-                             report_exists=True,
+                             report_exists=report_exists,
                              programat_list=programat_list,
                              atifal_programs_list=atifal_programs_list,
                              locked_fields=locked_fields,
-                             can_submit=False)
+                             can_submit=False,
+                             report_metadata=report_metadata,
+                             is_view_mode=True,
+                             is_admin_target_setting=False,
+                             hide_header=request.args.get('hide_header', False))
     except Exception as e:
         import logging
         logging.error("Exception in /view_report route", exc_info=True)
         flash("رپورٹ دیکھنے میں خرابی۔", "error")
         return redirect(url_for('dashboard'))
 
+
+@app.route('/print_report/<zila>')
+def print_report(zila):
+    global report_df  # Move to top to avoid SyntaxError
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("آپ کو پرنٹ رپورٹ کی اجازت نہیں ہے", "error")
+            return redirect(url_for('dashboard'))
+        
+        # Decode URL if needed
+        from urllib.parse import unquote
+        zila = unquote(zila)
+        
+        # Load report data
+        report_df = load_reports_from_db()
+        
+        # Try exact match first
+        report_row = report_df[report_df['zila'] == zila]
+        
+        # If no exact match, try case-insensitive and normalized matching
+        if report_row.empty:
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
+            
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[report_df['zila'] == db_zila]
+                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
+                        break
+        
+        if report_row.empty:
+            form_data = get_form_data(zila)
+            report_exists = False
+        else:
+            form_data = report_row.iloc[0].to_dict()
+            form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
+            report_exists = True
+        
+        # Calculate report completion status
+        visible_fields = [
+            'union_committee_count', 'nazm_qaim_union', 'wards_count', 'nazm_qaim_wards',
+            'block_code_count', 'nazm_qaim_blockcode', 'cantonment_board_count', 'nazm_qaim_cantonment',
+            'arkaan_target', 'arkaan_start', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
+            'umeedwaran_target', 'umeedwaran_start', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
+            'karkunan_target', 'karkunan_start', 'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam',
+            'hangami_target', 'hangami_start', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
+            'muawanin_target', 'muawanin_start', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
+            'mutayyin_afrad_target', 'mutayyin_afrad_start', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
+            'member_target', 'member_start', 'member_izafa', 'member_kami', 'member_ikhtitaam'
+        ]
+        
+        filled_fields = sum(1 for field in visible_fields if form_data.get(field) and str(form_data.get(field)).strip())
+        completion_percentage = round((filled_fields / len(visible_fields)) * 100, 1) if visible_fields else 0
+        
+        if completion_percentage == 0:
+            status_text = "شروع نہیں ہوا"
+        elif completion_percentage < 100:
+            status_text = "جزوی مکمل"
+        else:
+            status_text = "مکمل"
+        
+        report_metadata = {
+            'status_text': status_text,
+            'completion_percentage': completion_percentage,
+            'timestamp': form_data.get('timestamp', 'نامعلوم تاریخ'),
+            'submitted_by': form_data.get('submitted_by', '—')
+        }
+        
+        # Return print-friendly HTML page with Urdu text
+        return render_template('print_report.html', zila=zila, form_data=form_data, report_metadata=report_metadata)
+    except Exception as e:
+        import logging
+        logging.error("Exception in /print_report route", exc_info=True)
+        flash("Error generating print report", "error")
+        return redirect(url_for('dashboard'))
+
+
+
+
+
+
+
 @app.route('/set_zila_and_redirect', methods=['POST'])
 def set_zila_and_redirect():
     if 'username' not in session or session.get('role') != 'admin':
-        return redirect(url_for('login'))
+        flash("آپ کو یہ عمل کرنے کی اجازت نہیں ہے", "error")
+        return redirect(url_for('dashboard'))
     zila = request.form.get('zila')
     if zila:
         session['zila'] = zila
     return redirect(url_for('report'))
 
-@app.route('/update_schema')
-def update_schema():
-    """Route to manually update database schema"""
+@app.route('/admin_target_setting/<zila>', methods=['GET', 'POST'])
+def admin_target_setting(zila):
     try:
-        force_update_database_schema()
-        return "Database schema updated successfully!", 200
-    except Exception as e:
-        return f"Error updating schema: {str(e)}", 500
-
-@app.route('/fix_karkunan_columns')
-def fix_karkunan_columns():
-    """Route to specifically fix karkunan columns"""
-    try:
-        karkunan_columns = [
-            'karkunan_start', 'karkunan_end', 'karkunan_target',
-            'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam'
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("آپ کو ہدف درج کرنے کی اجازت نہیں ہے", "error")
+            return redirect(url_for('dashboard'))
+        
+        # Decode URL if needed
+        from urllib.parse import unquote
+        zila = unquote(zila)
+        
+        global report_df
+        report_df = load_reports_from_db()
+        
+        # Try exact match first
+        report_row = report_df[report_df['zila'] == zila]
+        
+        # If no exact match, try case-insensitive and normalized matching
+        if report_row.empty:
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
+            
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[report_df['zila'] == db_zila]
+                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
+                        break
+        
+        if report_row.empty:
+            # No report exists, create empty form data
+            form_data = get_form_data(zila)
+            report_exists = False
+        else:
+            # Report exists, get the data
+            form_data = report_row.iloc[0].to_dict()
+            form_data = {k: ('' if pd.isna(v) else v) for k, v in form_data.items()}
+            report_exists = True
+        
+        # For admin target setting, only lock non-target fields
+        # Admin can edit target fields and start fields
+        locked_fields = {}
+        
+        # Define which fields admin can edit (targets, starts, and ikhtitaam)
+        admin_editable_fields = [
+            'alaqajat_target', 'alaqajat_start', 'alaqajat_ikhtitaam', 'halqajat_target', 'halqajat_start', 'halqajat_ikhtitaam', 
+            'halqajat_ward_target', 'halqajat_ward_start', 'halqajat_ward_ikhtitaam', 'block_code_target', 'block_code_start', 'block_code_ikhtitaam', 
+            'nizam_e_fajar_target', 'nizam_e_fajar_start', 'nizam_e_fajar_ikhtitaam', 'awaami_committee_target', 'awaami_committee_start', 'awaami_committee_ikhtitaam',
+            'arkaan_target', 'arkaan_start', 'arkaan_ikhtitaam', 'umeedwaran_target', 'umeedwaran_start', 'umeedwaran_ikhtitaam', 
+            'karkunan_target', 'karkunan_start', 'karkunan_ikhtitaam', 'hangami_target', 'hangami_start', 'hangami_ikhtitaam',
+            'muawanin_target', 'muawanin_start', 'muawanin_ikhtitaam', 'mutayyin_afrad_target', 'mutayyin_afrad_start', 'mutayyin_afrad_ikhtitaam', 
+            'member_target', 'member_start', 'member_ikhtitaam', 'union_committee_count', 'wards_count', 
+            'block_code_count', 'cantonment_board_count'
         ]
         
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        
-        # Get existing columns
-        c.execute('PRAGMA table_info(monthly_reports)')
-        existing_cols = [row[1] for row in c.fetchall()]
-        
-        # Add missing karkunan columns
-        added_columns = []
-        for col in karkunan_columns:
-            if col not in existing_cols:
-                try:
-                    c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
-                    added_columns.append(col)
-                except Exception as e:
-                    return f"Error adding column {col}: {str(e)}", 500
-        
-        conn.commit()
-        conn.close()
-        
-        if added_columns:
-            return f"Successfully added karkunan columns: {', '.join(added_columns)}", 200
-        else:
-            return "All karkunan columns already exist!", 200
-            
-    except Exception as e:
-        return f"Error fixing karkunan columns: {str(e)}", 500
-
-@app.route('/fix_youth_atifal_columns')
-def fix_youth_atifal_columns():
-    """Route to specifically fix youth and atifal program columns"""
-    try:
-        missing_columns = [
-            'youth_programs_json', 'atifal_programs_json'
+        # Lock all fields except admin editable ones
+        all_possible_fields = [
+            'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+            'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+            'alaqajat_start', 'alaqajat_end', 'alaqajat_target', 'alaqajat_izafa', 'alaqajat_kami', 'alaqajat_ikhtitaam',
+            'halqajat_start', 'halqajat_end', 'halqajat_target', 'halqajat_izafa', 'halqajat_kami', 'halqajat_ikhtitaam',
+            'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target', 'halqajat_ward_izafa', 'halqajat_ward_kami', 'halqajat_ward_ikhtitaam',
+            'block_code_start', 'block_code_end', 'block_code_target', 'block_code_izafa', 'block_code_kami', 'block_code_ikhtitaam',
+            'arkaan_start', 'arkaan_end', 'arkaan_target', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
+            'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
+            'karkunan_start', 'karkunan_end', 'karkunan_target', 'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam',
+            'hangami_start', 'hangami_end', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
+            'muawanin_start', 'muawanin_end', 'muawanin_target', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
+            'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
+            'member_start', 'member_end', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam',
+            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programs_json',
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+            'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
+            'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
+            'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
+            'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
+            'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
+            'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
+            'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
+            'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
+            'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
+            'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
+            'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
+            'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
+            'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
+            'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
+            'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
+            'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
+            'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
+            'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+            'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
+            'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
+            'quran_courses', 'quran_classes', 'quran_participants',
+            'fahem_quran_attendance', 'quran_target', 'quran_distributed',
+            'central_training_target', 'central_training_actual', 'other_trainings',
+            'atifal_programs', 'awaami_committees', 'awaami_committees_count',
+            'koi_or_bat', 'haq_do_karachi',
+            'nizam_e_fajar_start', 'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
+            'awaami_committee_start', 'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
         ]
         
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
+        # Lock fields that are not admin editable
+        for field in all_possible_fields:
+            locked_fields[field] = field not in admin_editable_fields
         
-        # Get existing columns
-        c.execute('PRAGMA table_info(monthly_reports)')
-        existing_cols = [row[1] for row in c.fetchall()]
-        
-        # Add missing columns
-        added_columns = []
-        for col in missing_columns:
-            if col not in existing_cols:
+        # Load youth programs
+        programat_list = []
+        if report_exists:
+            programat_json = form_data.get('youth_programs_json', '')
+            if programat_json:
                 try:
-                    c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} TEXT')
-                    added_columns.append(col)
-                except Exception as e:
-                    return f"Error adding column {col}: {str(e)}", 500
+                    programat_list = json.loads(programat_json)
+                except Exception:
+                    programat_list = []
         
-        conn.commit()
-        conn.close()
+        # Load atifal programs list from JSON
+        atifal_programs_list = []
+        if report_exists:
+            atifal_programs_json = form_data.get('atifal_programs_json', '')
+            if atifal_programs_json:
+                try:
+                    atifal_programs_list = json.loads(atifal_programs_json)
+                except Exception:
+                    atifal_programs_list = []
         
-        if added_columns:
-            return f"Successfully added youth/atifal columns: {', '.join(added_columns)}", 200
-        else:
-            return "All youth/atifal columns already exist!", 200
+        # Populate form_data fields for template compatibility
+        for idx, prog in enumerate(atifal_programs_list):
+            form_data[f'atifal_nauyiat_{idx+1}'] = prog.get('nauiyat', '')
+            form_data[f'atifal_programat_count_{idx+1}'] = prog.get('hazri', '')
+            # Lock dynamic atifal fields
+            locked_fields[f'atifal_nauyiat_{idx+1}'] = True
+            locked_fields[f'atifal_programat_count_{idx+1}'] = True
+        
+        # Lock dynamic youth program fields
+        for idx, prog in enumerate(programat_list):
+            locked_fields[f'programat_{idx+1}'] = True
+            locked_fields[f'programat_count_{idx+1}'] = True
+        
+        # Handle POST request for form submission
+        if request.method == 'POST':
+            new_entry = dict(request.form)
+            new_entry['zila'] = zila
+            new_entry['timestamp'] = datetime.now().isoformat()
+            new_entry['submitted_by'] = session['username']
+            new_entry['last_submitted_by'] = session.get('role', 'user')
             
+            # Only update admin editable fields
+            update_fields = {}
+            for key in admin_editable_fields:
+                if key in new_entry:
+                    update_fields[key] = new_entry[key]
+            
+            update_fields['zila'] = zila
+            update_fields['timestamp'] = new_entry['timestamp']
+            update_fields['submitted_by'] = new_entry['submitted_by']
+            update_fields['last_submitted_by'] = new_entry['last_submitted_by']
+            
+            if report_exists:
+                update_report_in_db(zila, update_fields)
+                flash("ہدف کامیابی سے اپ ڈیٹ ہو گئے!", "success")
+            else:
+                save_report_to_db(update_fields)
+                flash("ہدف کامیابی سے محفوظ ہو گئے!", "success")
+            
+            # Redirect back to the same page to allow multiple submissions
+            return redirect(url_for('admin_target_setting', zila=zila))
+        
+        return render_template("report.html", 
+                             zila=zila, 
+                             form_data=form_data,
+                             report_exists=report_exists,
+                             programat_list=programat_list,
+                             atifal_programs_list=atifal_programs_list,
+                             locked_fields=locked_fields,
+                             can_submit=True,
+                             is_admin_target_setting=True,
+                             is_view_mode=False)
     except Exception as e:
-        return f"Error fixing youth/atifal columns: {str(e)}", 500
+        import logging
+        logging.error("Exception in /admin_target_setting route", exc_info=True)
+        flash("ہدف درج کرنے میں خرابی۔", "error")
+        return redirect(url_for('dashboard'))
 
-@app.route('/cleanup_duplicates')
-def cleanup_duplicates():
-    """Route to clean up duplicate entries in the database"""
+@app.route('/view_combined_report/<zila>')
+def view_combined_report(zila):
     try:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("آپ کو رپورٹ دیکھنے کی اجازت نہیں ہے", "error")
+            return redirect(url_for('dashboard'))
         
-        # Find duplicates by zila only
-        c.execute('''
-            SELECT zila, COUNT(*) as count
-            FROM monthly_reports 
-            GROUP BY zila 
-            HAVING COUNT(*) > 1
-        ''')
-        duplicates = c.fetchall()
+        # Decode URL if needed
+        from urllib.parse import unquote
+        zila = unquote(zila)
         
-        cleaned_count = 0
-        for zila, count in duplicates:
-            # Keep the most recent entry (highest id) and delete others
-            c.execute('''
-                DELETE FROM monthly_reports 
-                WHERE zila = ? AND id NOT IN (
-                    SELECT MAX(id) FROM monthly_reports 
-                    WHERE zila = ?
-                )
-            ''', (zila, zila))
-            cleaned_count += count - 1
+        # Load report data
+        global report_df
+        report_df = load_reports_from_db()
         
-        conn.commit()
-        conn.close()
+        # Try exact match first
+        report_row = report_df[report_df['zila'] == zila]
         
-        return f"Cleaned up {cleaned_count} duplicate entries!", 200
+        # If no exact match, try case-insensitive and normalized matching
+        if report_row.empty:
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
             
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[report_df['zila'] == db_zila]
+                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
+                        break
+        
+        if report_row.empty:
+            # No data available, create empty data structures
+            form_data = {}
+        else:
+            form_data = report_row.iloc[0].to_dict()
+            form_data = {k: (0 if pd.isna(v) else v) for k, v in form_data.items()}
+        
+        # Prepare data for Tanzeemi Hayyat charts
+        alaqajat_data = {
+            'hadaf': form_data.get('alaqajat_target', 0),
+            'izafa': form_data.get('alaqajat_izafa', 0)
+        }
+        
+        halqajat_data = {
+            'hadaf': form_data.get('halqajat_target', 0),
+            'izafa': form_data.get('halqajat_izafa', 0)
+        }
+        
+        halqajat_ward_data = {
+            'hadaf': form_data.get('halqajat_ward_target', 0),
+            'izafa': form_data.get('halqajat_ward_izafa', 0)
+        }
+        
+        block_code_data = {
+            'hadaf': form_data.get('block_code_target', 0),
+            'izafa': form_data.get('block_code_izafa', 0)
+        }
+        
+        nizam_fajar_data = {
+            'hadaf': form_data.get('nizam_e_fajar_target', 0),
+            'izafa': form_data.get('nizam_e_fajar_izafa', 0)
+        }
+        
+        awaami_committee_data = {
+            'hadaf': form_data.get('awaami_committee_target', 0),
+            'izafa': form_data.get('awaami_committee_izafa', 0)
+        }
+        
+        # Prepare data for Afradi Quwat charts
+        arkaan_data = {
+            'hadaf': form_data.get('arkaan_target', 0),
+            'izafa': form_data.get('arkaan_izafa', 0)
+        }
+        
+        umeedwaran_data = {
+            'hadaf': form_data.get('umeedwaran_target', 0),
+            'izafa': form_data.get('umeedwaran_izafa', 0)
+        }
+        
+        karkunan_data = {
+            'hadaf': form_data.get('karkunan_target', 0),
+            'izafa': form_data.get('karkunan_izafa', 0)
+        }
+        
+        # Prepare data for Ijtimaat charts - Individual charts for each type
+        # Zilai Ijtimaat (individual charts)
+        zilai_shura_data = {
+            'planned': form_data.get('zilai_shura_planned', 0),
+            'held': form_data.get('zilai_shura_held', 0)
+        }
+        
+        nazm_zila_data = {
+            'planned': form_data.get('nazm_zila_planned', 0),
+            'held': form_data.get('nazm_zila_held', 0)
+        }
+        
+        nazimin_alaqajat_data = {
+            'planned': form_data.get('nazimin_alaqajat_planned', 0),
+            'held': form_data.get('nazimin_alaqajat_held', 0)
+        }
+        
+        zilai_ijtima_arkaan_data = {
+            'planned': form_data.get('zilai_ijtima_arkaan_planned', 0),
+            'held': form_data.get('zilai_ijtima_arkaan_held', 0)
+        }
+        
+        zilai_ijtima_umeedwaran_data = {
+            'planned': form_data.get('zilai_ijtima_umeedwaran_planned', 0),
+            'held': form_data.get('zilai_ijtima_umeedwaran_held', 0)
+        }
+        
+        # Tanzeemi Ijtimaat (individual charts)
+        ijtima_arkaan_alaqah_data = {
+            'planned': form_data.get('ijtima_arkaan_alaqah_planned', 0),
+            'held': form_data.get('ijtima_arkaan_alaqah_held', 0)
+        }
+        
+        ijtima_umeedwaran_alaqah_data = {
+            'planned': form_data.get('ijtima_umeedwaran_alaqah_planned', 0),
+            'held': form_data.get('ijtima_umeedwaran_alaqah_held', 0)
+        }
+        
+        ijtima_karkunan_alaqah_data = {
+            'planned': form_data.get('ijtima_karkunaan_alaqah_planned', 0),
+            'held': form_data.get('ijtima_karkunaan_alaqah_held', 0)
+        }
+        
+        ijtima_karkunan_halqajat_data = {
+            'planned': form_data.get('ijtima_karkunaan_halqajat_planned', 0),
+            'held': form_data.get('ijtima_karkunaan_halqajat_held', 0)
+        }
+        
+        ijtima_nazimin_halqajat_data = {
+            'planned': form_data.get('ijtima_nazimin_halqajat_planned', 0),
+            'held': form_data.get('ijtima_nazimin_halqajat_held', 0)
+        }
+        
+        # Dawati Ijtimaat (individual charts)
+        dars_quran_data = {
+            'planned': form_data.get('dars_quran_planned', 0),
+            'held': form_data.get('dars_quran_held', 0)
+        }
+        
+        dawati_camp_data = {
+            'planned': form_data.get('dawati_camp_planned', 0),
+            'held': form_data.get('dawati_camp_held', 0)
+        }
+        
+        gharon_tak_dawat_data = {
+            'planned': form_data.get('gharon_tak_dawat_planned', 0),
+            'held': form_data.get('gharon_tak_dawat_held', 0)
+        }
+        
+        taqseem_literature_data = {
+            'planned': form_data.get('taqseem_literature_planned', 0),
+            'held': form_data.get('taqseem_literature_held', 0)
+        }
+        
+        # Haq do Karachi and Koi or Baat text content
+        haq_do_karachi_text = form_data.get('haq_do_karachi', '')
+        koi_or_bat_text = form_data.get('koi_or_bat', '')
+        
+        return render_template('combined_report.html', 
+                             zila=zila,
+                             alaqajat_data=alaqajat_data,
+                             halqajat_data=halqajat_data,
+                             halqajat_ward_data=halqajat_ward_data,
+                             block_code_data=block_code_data,
+                             nizam_fajar_data=nizam_fajar_data,
+                             awaami_committee_data=awaami_committee_data,
+                             arkaan_data=arkaan_data,
+                             umeedwaran_data=umeedwaran_data,
+                             karkunan_data=karkunan_data,
+                             zilai_shura_data=zilai_shura_data,
+                             nazm_zila_data=nazm_zila_data,
+                             nazimin_alaqajat_data=nazimin_alaqajat_data,
+                             zilai_ijtima_arkaan_data=zilai_ijtima_arkaan_data,
+                             zilai_ijtima_umeedwaran_data=zilai_ijtima_umeedwaran_data,
+                             ijtima_arkaan_alaqah_data=ijtima_arkaan_alaqah_data,
+                             ijtima_umeedwaran_alaqah_data=ijtima_umeedwaran_alaqah_data,
+                             ijtima_karkunan_alaqah_data=ijtima_karkunan_alaqah_data,
+                             ijtima_karkunan_halqajat_data=ijtima_karkunan_halqajat_data,
+                             ijtima_nazimin_halqajat_data=ijtima_nazimin_halqajat_data,
+                             dars_quran_data=dars_quran_data,
+                             dawati_camp_data=dawati_camp_data,
+                             gharon_tak_dawat_data=gharon_tak_dawat_data,
+                             taqseem_literature_data=taqseem_literature_data,
+                             haq_do_karachi_text=haq_do_karachi_text,
+                             koi_or_bat_text=koi_or_bat_text)
+                             
     except Exception as e:
-        return f"Error cleaning up duplicates: {str(e)}", 500
+        import logging
+        logging.error("Exception in /view_combined_report route", exc_info=True)
+        flash("Error loading combined report", "error")
+        return redirect(url_for('dashboard'))
+
+@app.route('/view_graphs/<zila>')
+def view_graphs(zila):
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("آپ کو گراف دیکھنے کی اجازت نہیں ہے", "error")
+            return redirect(url_for('dashboard'))
+        
+        # Decode URL if needed
+        from urllib.parse import unquote
+        zila = unquote(zila)
+        
+        # Load report data
+        global report_df
+        report_df = load_reports_from_db()
+        
+        # Try exact match first
+        report_row = report_df[report_df['zila'] == zila]
+        
+        # If no exact match, try case-insensitive and normalized matching
+        if report_row.empty:
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
+            
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[report_df['zila'] == db_zila]
+                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
+                        break
+        
+        if report_row.empty:
+            # No data available, create empty data structures
+            form_data = {}
+        else:
+            form_data = report_row.iloc[0].to_dict()
+            form_data = {k: (0 if pd.isna(v) else v) for k, v in form_data.items()}
+        
+        # Prepare data for Tanzeemi Hayyat charts
+        alaqajat_data = {
+            'hadaf': form_data.get('alaqajat_target', 0),
+            'izafa': form_data.get('alaqajat_izafa', 0)
+        }
+        
+        halqajat_data = {
+            'hadaf': form_data.get('halqajat_target', 0),
+            'izafa': form_data.get('halqajat_izafa', 0)
+        }
+        
+        halqajat_ward_data = {
+            'hadaf': form_data.get('halqajat_ward_target', 0),
+            'izafa': form_data.get('halqajat_ward_izafa', 0)
+        }
+        
+        block_code_data = {
+            'hadaf': form_data.get('block_code_target', 0),
+            'izafa': form_data.get('block_code_izafa', 0)
+        }
+        
+        nizam_fajar_data = {
+            'hadaf': form_data.get('nizam_e_fajar_target', 0),
+            'izafa': form_data.get('nizam_e_fajar_izafa', 0)
+        }
+        
+        awaami_committee_data = {
+            'hadaf': form_data.get('awaami_committee_target', 0),
+            'izafa': form_data.get('awaami_committee_izafa', 0)
+        }
+        
+        # Prepare data for Afradi Quwat charts
+        arkaan_data = {
+            'hadaf': form_data.get('arkaan_target', 0),
+            'izafa': form_data.get('arkaan_izafa', 0)
+        }
+        
+        umeedwaran_data = {
+            'hadaf': form_data.get('umeedwaran_target', 0),
+            'izafa': form_data.get('umeedwaran_izafa', 0)
+        }
+        
+        karkunan_data = {
+            'hadaf': form_data.get('karkunan_target', 0),
+            'izafa': form_data.get('karkunan_izafa', 0)
+        }
+        
+        # Prepare data for Ijtimaat charts - Individual charts for each type
+        # Zilai Ijtimaat (individual charts)
+        zilai_shura_data = {
+            'planned': form_data.get('zilai_shura_planned', 0),
+            'held': form_data.get('zilai_shura_held', 0)
+        }
+        
+        nazm_zila_data = {
+            'planned': form_data.get('nazm_zila_planned', 0),
+            'held': form_data.get('nazm_zila_held', 0)
+        }
+        
+        nazimin_alaqajat_data = {
+            'planned': form_data.get('nazimin_alaqajat_planned', 0),
+            'held': form_data.get('nazimin_alaqajat_held', 0)
+        }
+        
+        zilai_ijtima_arkaan_data = {
+            'planned': form_data.get('zilai_ijtima_arkaan_planned', 0),
+            'held': form_data.get('zilai_ijtima_arkaan_held', 0)
+        }
+        
+        zilai_ijtima_umeedwaran_data = {
+            'planned': form_data.get('zilai_ijtima_umeedwaran_planned', 0),
+            'held': form_data.get('zilai_ijtima_umeedwaran_held', 0)
+        }
+        
+        # Tanzeemi Ijtimaat (individual charts)
+        ijtima_arkaan_alaqah_data = {
+            'planned': form_data.get('ijtima_arkaan_alaqah_planned', 0),
+            'held': form_data.get('ijtima_arkaan_alaqah_held', 0)
+        }
+        
+        ijtima_umeedwaran_alaqah_data = {
+            'planned': form_data.get('ijtima_umeedwaran_alaqah_planned', 0),
+            'held': form_data.get('ijtima_umeedwaran_alaqah_held', 0)
+        }
+        
+        ijtima_karkunan_alaqah_data = {
+            'planned': form_data.get('ijtima_karkunaan_alaqah_planned', 0),
+            'held': form_data.get('ijtima_karkunaan_alaqah_held', 0)
+        }
+        
+        ijtima_karkunan_halqajat_data = {
+            'planned': form_data.get('ijtima_karkunaan_halqajat_planned', 0),
+            'held': form_data.get('ijtima_karkunaan_halqajat_held', 0)
+        }
+        
+        ijtima_nazimin_halqajat_data = {
+            'planned': form_data.get('ijtima_nazimin_halqajat_planned', 0),
+            'held': form_data.get('ijtima_nazimin_halqajat_held', 0)
+        }
+        
+        # Dawati Ijtimaat (individual charts)
+        dars_quran_data = {
+            'planned': form_data.get('dars_quran_planned', 0),
+            'held': form_data.get('dars_quran_held', 0)
+        }
+        
+        dawati_camp_data = {
+            'planned': form_data.get('dawati_camp_planned', 0),
+            'held': form_data.get('dawati_camp_held', 0)
+        }
+        
+        gharon_tak_dawat_data = {
+            'planned': form_data.get('gharon_tak_dawat_planned', 0),
+            'held': form_data.get('gharon_tak_dawat_held', 0)
+        }
+        
+        taqseem_literature_data = {
+            'planned': form_data.get('taqseem_literature_planned', 0),
+            'held': form_data.get('taqseem_literature_held', 0)
+        }
+        
+        # Haq do Karachi and Koi or Baat text content
+        haq_do_karachi_text = form_data.get('haq_do_karachi', '')
+        koi_or_bat_text = form_data.get('koi_or_bat', '')
+        
+        return render_template('graphs.html', 
+                             zila=zila,
+                             alaqajat_data=alaqajat_data,
+                             halqajat_data=halqajat_data,
+                             halqajat_ward_data=halqajat_ward_data,
+                             block_code_data=block_code_data,
+                             nizam_fajar_data=nizam_fajar_data,
+                             awaami_committee_data=awaami_committee_data,
+                             arkaan_data=arkaan_data,
+                             umeedwaran_data=umeedwaran_data,
+                             karkunan_data=karkunan_data,
+                             zilai_shura_data=zilai_shura_data,
+                             nazm_zila_data=nazm_zila_data,
+                             nazimin_alaqajat_data=nazimin_alaqajat_data,
+                             zilai_ijtima_arkaan_data=zilai_ijtima_arkaan_data,
+                             zilai_ijtima_umeedwaran_data=zilai_ijtima_umeedwaran_data,
+                             ijtima_arkaan_alaqah_data=ijtima_arkaan_alaqah_data,
+                             ijtima_umeedwaran_alaqah_data=ijtima_umeedwaran_alaqah_data,
+                             ijtima_karkunan_alaqah_data=ijtima_karkunan_alaqah_data,
+                             ijtima_karkunan_halqajat_data=ijtima_karkunan_halqajat_data,
+                             ijtima_nazimin_halqajat_data=ijtima_nazimin_halqajat_data,
+                             dars_quran_data=dars_quran_data,
+                             dawati_camp_data=dawati_camp_data,
+                             gharon_tak_dawat_data=gharon_tak_dawat_data,
+                             taqseem_literature_data=taqseem_literature_data,
+                             haq_do_karachi_text=haq_do_karachi_text,
+                             koi_or_bat_text=koi_or_bat_text)
+                             
+    except Exception as e:
+        import logging
+        logging.error("Exception in /view_graphs route", exc_info=True)
+        flash("Error loading graphs", "error")
+        return redirect(url_for('dashboard'))
 
 @app.route('/logout')
 def logout():
@@ -1178,61 +1890,64 @@ def logout():
     flash("آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں", "info")
     return redirect(url_for('login'))
 
-@app.route('/print_schema')
-def print_schema():
-    import sqlite3
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute('PRAGMA table_info(monthly_reports)')
-    columns = c.fetchall()
-    conn.close()
-    return '<br>'.join([str(col) for col in columns])
-
-@app.route('/fix_atifal_column')
-def fix_atifal_column():
-    import sqlite3
+@app.route('/debug_db')
+def debug_db():
+    """Debug route to check database status"""
     try:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        c.execute("PRAGMA table_info(monthly_reports)")
-        columns = [row[1] for row in c.fetchall()]
-        if 'atifal_programat_count' not in columns:
-            c.execute("ALTER TABLE monthly_reports ADD COLUMN atifal_programat_count INTEGER")
-            conn.commit()
-            msg = 'Column atifal_programat_count added.'
-        else:
-            msg = 'Column atifal_programat_count already exists.'
-        conn.close()
-        return msg
-    except Exception as e:
-        return f'Error: {e}'
-
-@app.route('/debug_atifal_data')
-def debug_atifal_data():
-    """Route to debug atifal data in the database"""
-    try:
+        info = {
+            'db_file': DB_FILE,
+            'db_exists': os.path.exists(DB_FILE),
+            'current_dir': os.getcwd(),
+            'session_user': session.get('username'),
+            'session_role': session.get('role'),
+            'session_zila': session.get('zila')
+        }
+        
+        # Test database connection
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
         
-        # Get all atifal data
-        c.execute('SELECT zila, atifal_programat_count, atifal_programs_json FROM monthly_reports WHERE atifal_programs_json IS NOT NULL AND atifal_programs_json != ""')
-        rows = c.fetchall()
+        # Check tables
+        c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = c.fetchall()
+        info['tables'] = [table[0] for table in tables]
         
-        debug_info = []
-        for zila, count, json_data in rows:
-            try:
-                programs = json.loads(json_data) if json_data else []
-                debug_info.append(f"Zila: {zila}, Count: {count}, Programs: {programs}")
-            except Exception as e:
-                debug_info.append(f"Zila: {zila}, Count: {count}, JSON Error: {e}")
-        
-        conn.close()
-        
-        if debug_info:
-            return "<br>".join(debug_info)
-        else:
-            return "No atifal data found in database"
+        # Check users
+        if 'users' in info['tables']:
+            c.execute("SELECT COUNT(*) FROM users")
+            user_count = c.fetchone()[0]
+            info['user_count'] = user_count
             
+            # Get sample users
+            c.execute("SELECT username, role, zila FROM users LIMIT 10")
+            sample_users = c.fetchall()
+            info['sample_users'] = sample_users
+        
+        # Check reports
+        if 'monthly_reports' in info['tables']:
+            c.execute("SELECT COUNT(*) FROM monthly_reports")
+            report_count = c.fetchone()[0]
+            info['report_count'] = report_count
+            
+            # Get sample reports
+            c.execute("SELECT zila, submitted_by, timestamp FROM monthly_reports LIMIT 5")
+            sample_reports = c.fetchall()
+            info['sample_reports'] = sample_reports
+            
+            # Get unique zilas
+            c.execute("SELECT DISTINCT zila FROM monthly_reports")
+            zilas = c.fetchall()
+            info['available_zilas'] = [zila[0] for zila in zilas]
+        
+        conn.close()
+        
+        return jsonify(info)
     except Exception as e:
-        return f"Error debugging atifal data: {str(e)}"
+        return jsonify({
+            'error': str(e),
+            'db_file': DB_FILE,
+            'db_exists': os.path.exists(DB_FILE) if 'DB_FILE' in globals() else False
+        })
 
+if __name__ == '__main__':
+    app.run(debug=True, port=5002)

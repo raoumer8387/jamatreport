@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رپورٹ پرنٹ - {{ zila }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @media print {
+            body { margin: 0; padding: 20px; }
+            .no-print { display: none; }
+        }
+        
+        body {
+            font-family: 'Noto Nastaliq Urdu', 'Arial', 'Tahoma', sans-serif;
+            margin: 20px;
+            direction: rtl;
+            background: white;
+            line-height: 1.6;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .status-info {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .form-group .value {
+            padding: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            min-height: 20px;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .metadata {
+            margin-top: 40px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+        
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .print-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn no-print" onclick="window.print()">پرنٹ کریں</button>
+    
+    <div class="header">
+        <div class="title">جماعتِ اسلامی</div>
+        <div class="subtitle">ضلع کارکردگی رپورٹ - {{ zila }}</div>
+    </div>
+    
+    <div class="status-info">
+        <strong>رپورٹ کی حیثیت:</strong> {{ report_metadata.status_text }} | 
+        <strong>مکملی کا فیصد:</strong> {{ report_metadata.completion_percentage }}%
+    </div>
+    
+    <!-- ابتدائی معلومات -->
+    <div class="section">
+        <div class="section-title">ابتدائی معلومات</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>تعداد یونین کمیٹی</label>
+                <div class="value">{{ form_data.get('union_committee_count', '—') }}</div>
+            </div>
+            <div class="form-group">
+                <label>نظم قائم یونین</label>
+                <div class="value">{{ form_data.get('nazm_qaim_union', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>تعداد وارڈز</label>
+                <div class="value">{{ form_data.get('wards_count', '—') }}</div>
+            </div>
+            <div class="form-group">
+                <label>نظم قائم وارڈز</label>
+                <div class="value">{{ form_data.get('nazm_qaim_wards', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>تعداد بلاک کوڈ</label>
+                <div class="value">{{ form_data.get('block_code_count', '—') }}</div>
+            </div>
+            <div class="form-group">
+                <label>نظم قائم بلاک کوڈ</label>
+                <div class="value">{{ form_data.get('nazm_qaim_blockcode', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>تعداد کنٹونمنٹ بورڈ</label>
+                <div class="value">{{ form_data.get('cantonment_board_count', '—') }}</div>
+            </div>
+            <div class="form-group">
+                <label>نظم قائم کنٹونمنٹ</label>
+                <div class="value">{{ form_data.get('nazm_qaim_cantonment', '—') }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- تنظیمی ہیٔت -->
+    <div class="section">
+        <div class="section-title">تنظیمی ہیٔت</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>شعبہ</th>
+                    <th>ہدف</th>
+                    <th>آغاز</th>
+                    <th>اضافہ</th>
+                    <th>کمی</th>
+                    <th>اختتام</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>علاقہ جات</td>
+                    <td>{{ form_data.get('alaqajat_target', '—') }}</td>
+                    <td>{{ form_data.get('alaqajat_start', '—') }}</td>
+                    <td>{{ form_data.get('alaqajat_izafa', '—') }}</td>
+                    <td>{{ form_data.get('alaqajat_kami', '—') }}</td>
+                    <td>{{ form_data.get('alaqajat_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>حلقہ جات</td>
+                    <td>{{ form_data.get('halqajat_target', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_start', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_izafa', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_kami', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>حلقہ جات وارڈ</td>
+                    <td>{{ form_data.get('halqajat_ward_target', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_ward_start', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_ward_izafa', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_ward_kami', '—') }}</td>
+                    <td>{{ form_data.get('halqajat_ward_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>بلاک کوڈ</td>
+                    <td>{{ form_data.get('block_code_target', '—') }}</td>
+                    <td>{{ form_data.get('block_code_start', '—') }}</td>
+                    <td>{{ form_data.get('block_code_izafa', '—') }}</td>
+                    <td>{{ form_data.get('block_code_kami', '—') }}</td>
+                    <td>{{ form_data.get('block_code_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>نظام فجر</td>
+                    <td>{{ form_data.get('nizam_e_fajar_target', '—') }}</td>
+                    <td>{{ form_data.get('nizam_e_fajar_start', '—') }}</td>
+                    <td>{{ form_data.get('nizam_e_fajar_izafa', '—') }}</td>
+                    <td>{{ form_data.get('nizam_e_fajar_kami', '—') }}</td>
+                    <td>{{ form_data.get('nizam_e_fajar_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>عوامی کمیٹی</td>
+                    <td>{{ form_data.get('awaami_committee_target', '—') }}</td>
+                    <td>{{ form_data.get('awaami_committee_start', '—') }}</td>
+                    <td>{{ form_data.get('awaami_committee_izafa', '—') }}</td>
+                    <td>{{ form_data.get('awaami_committee_kami', '—') }}</td>
+                    <td>{{ form_data.get('awaami_committee_ikhtitaam', '—') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- افرادی قوت -->
+    <div class="section">
+        <div class="section-title">افرادی قوت</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>شعبہ</th>
+                    <th>ہدف</th>
+                    <th>آغاز</th>
+                    <th>اضافہ</th>
+                    <th>کمی</th>
+                    <th>اختتام</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ارکان</td>
+                    <td>{{ form_data.get('arkaan_target', '—') }}</td>
+                    <td>{{ form_data.get('arkaan_start', '—') }}</td>
+                    <td>{{ form_data.get('arkaan_izafa', '—') }}</td>
+                    <td>{{ form_data.get('arkaan_kami', '—') }}</td>
+                    <td>{{ form_data.get('arkaan_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>امیدواران رکنیت</td>
+                    <td>{{ form_data.get('umeedwaran_target', '—') }}</td>
+                    <td>{{ form_data.get('umeedwaran_start', '—') }}</td>
+                    <td>{{ form_data.get('umeedwaran_izafa', '—') }}</td>
+                    <td>{{ form_data.get('umeedwaran_kami', '—') }}</td>
+                    <td>{{ form_data.get('umeedwaran_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>کارکنان</td>
+                    <td>{{ form_data.get('karkunan_target', '—') }}</td>
+                    <td>{{ form_data.get('karkunan_start', '—') }}</td>
+                    <td>{{ form_data.get('karkunan_izafa', '—') }}</td>
+                    <td>{{ form_data.get('karkunan_kami', '—') }}</td>
+                    <td>{{ form_data.get('karkunan_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>ہنگامی/ دیگر کارکنان</td>
+                    <td>{{ form_data.get('hangami_target', '—') }}</td>
+                    <td>{{ form_data.get('hangami_start', '—') }}</td>
+                    <td>{{ form_data.get('hangami_izafa', '—') }}</td>
+                    <td>{{ form_data.get('hangami_kami', '—') }}</td>
+                    <td>{{ form_data.get('hangami_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>معاونین</td>
+                    <td>{{ form_data.get('muawanin_target', '—') }}</td>
+                    <td>{{ form_data.get('muawanin_start', '—') }}</td>
+                    <td>{{ form_data.get('muawanin_izafa', '—') }}</td>
+                    <td>{{ form_data.get('muawanin_kami', '—') }}</td>
+                    <td>{{ form_data.get('muawanin_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>متعین افراد</td>
+                    <td>{{ form_data.get('mutayyin_afrad_target', '—') }}</td>
+                    <td>{{ form_data.get('mutayyin_afrad_start', '—') }}</td>
+                    <td>{{ form_data.get('mutayyin_afrad_izafa', '—') }}</td>
+                    <td>{{ form_data.get('mutayyin_afrad_kami', '—') }}</td>
+                    <td>{{ form_data.get('mutayyin_afrad_ikhtitaam', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>ممبران</td>
+                    <td>{{ form_data.get('member_target', '—') }}</td>
+                    <td>{{ form_data.get('member_start', '—') }}</td>
+                    <td>{{ form_data.get('member_izafa', '—') }}</td>
+                    <td>{{ form_data.get('member_kami', '—') }}</td>
+                    <td>{{ form_data.get('member_ikhtitaam', '—') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- جماعت اسلامی یوتھ -->
+    <div class="section">
+        <div class="section-title">جماعت اسلامی یوتھ</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>کتنے علاقہ میں نظم قائم ہے</label>
+                <div class="value">{{ form_data.get('youth_nazm_areas', '—') }}</div>
+            </div>
+            <div class="form-group">
+                <label>کارکنان کی تعداد</label>
+                <div class="value">{{ form_data.get('youth_karkunan', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>پروگرامات کی تعداد</label>
+                <div class="value">{{ form_data.get('youth_programat_count', '—') }}</div>
+            </div>
+        </div>
+        
+        {% if form_data.get('youth_programat_count', 0) and form_data.get('youth_programat_count', 0)|int > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>پروگرام نمبر</th>
+                    <th>نوعیت</th>
+                    <th>حاضری</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(1, form_data.get('youth_programat_count', 0)|int + 1) %}
+                <tr>
+                    <td>{{ i }}</td>
+                    <td>{{ form_data.get('programat_' ~ i, '—') }}</td>
+                    <td>{{ form_data.get('programat_count_' ~ i, '—') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    
+    <!-- جماعتِ اسلامی شعبہ اطفال -->
+    <div class="section">
+        <div class="section-title">جماعتِ اسلامی شعبہ اطفال</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>کتنے علاقہ میں نظم قائم ہے</label>
+                <div class="value">{{ form_data.get('atifal_nazm_areas', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>پروگرامات کی تعداد</label>
+                <div class="value">{{ form_data.get('atifal_programat_count', '—') }}</div>
+            </div>
+        </div>
+        
+        {% if form_data.get('atifal_programat_count', 0) and form_data.get('atifal_programat_count', 0)|int > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>پروگرام نمبر</th>
+                    <th>نوعیت</th>
+                    <th>حاضری</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(1, form_data.get('atifal_programat_count', 0)|int + 1) %}
+                <tr>
+                    <td>{{ i }}</td>
+                    <td>{{ form_data.get('atifal_nauyiat_' ~ i, '—') }}</td>
+                    <td>{{ form_data.get('atifal_programat_count_' ~ i, '—') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    
+    <!-- ضلعی تنظیمی اجتماعات -->
+    <div class="section">
+        <div class="section-title">ضلعی تنظیمی اجتماعات</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>اجلاس کی قسم</th>
+                    <th>طے شدہ</th>
+                    <th>ہوئے</th>
+                    <th>حاضری</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>اجلاس ضلعی شوریٰ</td>
+                    <td>{{ form_data.get('zilai_shura_planned', '—') }}</td>
+                    <td>{{ form_data.get('zilai_shura_held', '—') }}</td>
+                    <td>{{ form_data.get('zilai_shura_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجلاس نظم ضلع</td>
+                    <td>{{ form_data.get('nazm_zila_planned', '—') }}</td>
+                    <td>{{ form_data.get('nazm_zila_held', '—') }}</td>
+                    <td>{{ form_data.get('nazm_zila_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجلاس ناظمین علاقہ جات</td>
+                    <td>{{ form_data.get('nazimin_alaqajat_planned', '—') }}</td>
+                    <td>{{ form_data.get('nazimin_alaqajat_held', '—') }}</td>
+                    <td>{{ form_data.get('nazimin_alaqajat_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>ضلعی اجتماع ارکان</td>
+                    <td>{{ form_data.get('zilai_ijtima_arkaan_planned', '—') }}</td>
+                    <td>{{ form_data.get('zilai_ijtima_arkaan_held', '—') }}</td>
+                    <td>{{ form_data.get('zilai_ijtima_arkaan_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>ضلعی اجتماع امیدواران</td>
+                    <td>{{ form_data.get('zilai_ijtima_umeedwaran_planned', '—') }}</td>
+                    <td>{{ form_data.get('zilai_ijtima_umeedwaran_held', '—') }}</td>
+                    <td>{{ form_data.get('zilai_ijtima_umeedwaran_attendance', '—') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- تنظیمی اجتماعات -->
+    <div class="section">
+        <div class="section-title">تنظیمی اجتماعات</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>اجلاس کی قسم</th>
+                    <th>طے شدہ</th>
+                    <th>ہوئے</th>
+                    <th>حاضری</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>اجتماع ارکان (علاقہ)</td>
+                    <td>{{ form_data.get('ijtima_arkaan_alaqah_planned', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_arkaan_alaqah_held', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_arkaan_alaqah_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجتماع امیدواران (علاقہ)</td>
+                    <td>{{ form_data.get('ijtima_umeedwaran_alaqah_planned', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_umeedwaran_alaqah_held', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_umeedwaran_alaqah_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجتماع کارکنان (علاقہ)</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_alaqah_planned', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_alaqah_held', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_alaqah_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجتماع کارکنان (حلقہ)</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_halqajat_planned', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_halqajat_held', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_karkunaan_halqajat_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>اجتماع ناظمین (حلقہ)</td>
+                    <td>{{ form_data.get('ijtima_nazimin_halqajat_planned', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_nazimin_halqajat_held', '—') }}</td>
+                    <td>{{ form_data.get('ijtima_nazimin_halqajat_attendance', '—') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- اضافی سرگرمیاں -->
+    <div class="section">
+        <div class="section-title">اضافی سرگرمیاں</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>سرگرمی</th>
+                    <th>طے شدہ</th>
+                    <th>ہوئے</th>
+                    <th>حاضری</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>درس قرآن</td>
+                    <td>{{ form_data.get('dars_quran_planned', '—') }}</td>
+                    <td>{{ form_data.get('dars_quran_held', '—') }}</td>
+                    <td>{{ form_data.get('dars_quran_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>دعوتی کیمپ</td>
+                    <td>{{ form_data.get('dawati_camp_planned', '—') }}</td>
+                    <td>{{ form_data.get('dawati_camp_held', '—') }}</td>
+                    <td>{{ form_data.get('dawati_camp_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>گھروں تک دعوت</td>
+                    <td>{{ form_data.get('gharon_tak_dawat_planned', '—') }}</td>
+                    <td>{{ form_data.get('gharon_tak_dawat_held', '—') }}</td>
+                    <td>{{ form_data.get('gharon_tak_dawat_attendance', '—') }}</td>
+                </tr>
+                <tr>
+                    <td>تقسیم لٹریچر</td>
+                    <td>{{ form_data.get('taqseem_literature_planned', '—') }}</td>
+                    <td>{{ form_data.get('taqseem_literature_held', '—') }}</td>
+                    <td>{{ form_data.get('taqseem_literature_attendance', '—') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- دیگر معلومات -->
+    <div class="section">
+        <div class="section-title">دیگر معلومات</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>کوئی اور بات</label>
+                <div class="value">{{ form_data.get('koi_or_bat', '—') }}</div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>حق دو کراچی</label>
+                <div class="value">{{ form_data.get('haq_do_karachi', '—') }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metadata">
+        <strong>یہ رپورٹ {{ report_metadata.timestamp }} کو تیار کی گئی</strong><br>
+        <strong>جمع کرنے والا:</strong> {{ report_metadata.submitted_by }}
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="no-print" style="margin-top: 30px; text-align: center; padding: 20px; border-top: 1px solid #ddd;">
+        <button onclick="window.print()" style="background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; font-family: 'Noto Nastaliq Urdu', serif; margin: 0 10px; cursor: pointer;">
+            پرنٹ کریں
+        </button>
+        <a href="{{ url_for('dashboard') }}" style="background: #2ecc71; color: white; text-decoration: none; padding: 12px 24px; border-radius: 5px; font-size: 16px; font-family: 'Noto Nastaliq Urdu', serif; margin: 0 10px; display: inline-block;">
+            ڈیش بورڈ پر واپس جائیں
+        </a>
+    </div>
+</body>
+</html> 

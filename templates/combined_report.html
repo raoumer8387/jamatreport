@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ zila }} - رپورٹ - جماعت اسلامی ضلعی رپورٹنگ سسٹم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        .view-toggle {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .toggle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .toggle-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .toggle-btn.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .toggle-btn.inactive {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .view-content {
+            display: none;
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>جماعت اسلامی ضلعی رپورٹنگ سسٹم</h1>
+                <h2>{{ zila }} - رپورٹ</h2>
+            </div>
+            <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+                <a href="{{ url_for('dashboard') }}" class="dashboard-btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">ڈیش بورڈ پر واپس جائیں</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn" style="background-color: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">لاگ آؤٹ</a>
+            </div>
+        </header>
+
+        <!-- View Toggle Section -->
+        <div class="view-toggle">
+            <div class="toggle-buttons">
+                <button class="toggle-btn active" onclick="showView('graphs')">گراف دیکھیں</button>
+                <button class="toggle-btn inactive" onclick="showView('report')">رپورٹ دیکھیں</button>
+            </div>
+        </div>
+
+        <!-- Graphs View -->
+        <div id="graphs-view" class="view-content active">
+            <div class="graphs-container">
+                <!-- Tanzeemi Hayyat Section -->
+                <div class="graph-section">
+                    <h2>تنظیمی ہیٔت</h2>
+                    <div class="graph-grid">
+                        <div class="graph-card">
+                            <h3>بلاک کوڈ انچارجز</h3>
+                            <div class="chart-container">
+                                <canvas id="blockCodeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>نظام فجر</h3>
+                            <div class="chart-container">
+                                <canvas id="nizamFajarChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>عوامی کمیٹی</h3>
+                            <div class="chart-container">
+                                <canvas id="awaamiCommitteeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Afradi Quwat Section -->
+                <div class="graph-section">
+                    <h2>افرادی قوت</h2>
+                    <div class="graph-grid">
+                        <div class="graph-card">
+                            <h3>ارکان</h3>
+                            <div class="chart-container">
+                                <canvas id="arkaanChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>امیدواران رکنیت</h3>
+                            <div class="chart-container">
+                                <canvas id="umeedwaranChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>کارکنان</h3>
+                            <div class="chart-container">
+                                <canvas id="karkunanChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zilai Tanzeemi Ijtimaat Section -->
+                <div class="graph-section">
+                    <h2>ضلعی تنظیمی اجتماعات</h2>
+                    <div class="graph-grid">
+                        <div class="graph-card">
+                            <h3>اجلاس ضلعی شوریٰ</h3>
+                            <div class="chart-container">
+                                <canvas id="zilaiShuraChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجلاس نظم ضلع</h3>
+                            <div class="chart-container">
+                                <canvas id="nazmZilaChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجلاس ناظمین علاقہ جات</h3>
+                            <div class="chart-container">
+                                <canvas id="naziminAlaqajatChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>ضلعی اجتماع ارکان</h3>
+                            <div class="chart-container">
+                                <canvas id="zilaiIjtimaArkaanChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>ضلعی اجتماع امیدواران</h3>
+                            <div class="chart-container">
+                                <canvas id="zilaiIjtimaUmeedwaranChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="graph-section">
+                    <h2>تنظیمی اجتماعات</h2>
+                    <div class="graph-grid">
+                        <div class="graph-card">
+                            <h3>اجتماع ارکان (علاقہ)</h3>
+                            <div class="chart-container">
+                                <canvas id="ijtimaArkaanAlaqahChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجتماع اُمیدواران (علاقہ)</h3>
+                            <div class="chart-container">
+                                <canvas id="ijtimaUmeedwaranAlaqahChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجتماع کارکنان (علاقہ)</h3>
+                            <div class="chart-container">
+                                <canvas id="ijtimaKarkunanAlaqahChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجتماع کارکنان (حلقہ جات)</h3>
+                            <div class="chart-container">
+                                <canvas id="ijtimaKarkunanHalqajatChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>اجتماع ناظمین (حلقہ جات)</h3>
+                            <div class="chart-container">
+                                <canvas id="ijtimaNaziminHalqajatChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="graph-section">
+                    <h2>دعوتی اجتماعات</h2>
+                    <div class="graph-grid">
+                        <div class="graph-card">
+                            <h3>درس قرآن (حلقہ جات)</h3>
+                            <div class="chart-container">
+                                <canvas id="darsQuranChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>دعوتی کیمپ / مستقل و فود</h3>
+                            <div class="chart-container">
+                                <canvas id="dawatiCampChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>گھروں تک دعوت</h3>
+                            <div class="chart-container">
+                                <canvas id="gharonTakDawatChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="graph-card">
+                            <h3>تقسیم لٹریچر</h3>
+                            <div class="chart-container">
+                                <canvas id="taqseemLiteratureChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Report View -->
+        <div id="report-view" class="view-content">
+            <iframe src="{{ url_for('view_report', zila=zila, hide_header='true') }}" width="100%" height="800px" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Register the datalabels plugin
+        Chart.register(ChartDataLabels);
+        
+        function showView(viewType) {
+            // Hide all views
+            document.querySelectorAll('.view-content').forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Show selected view
+            if (viewType === 'graphs') {
+                document.getElementById('graphs-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+                document.querySelectorAll('.toggle-btn')[0].classList.remove('inactive');
+                document.querySelectorAll('.toggle-btn')[1].classList.add('inactive');
+                document.querySelectorAll('.toggle-btn')[1].classList.remove('active');
+            } else {
+                document.getElementById('report-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+                document.querySelectorAll('.toggle-btn')[1].classList.remove('inactive');
+                document.querySelectorAll('.toggle-btn')[0].classList.add('inactive');
+                document.querySelectorAll('.toggle-btn')[0].classList.remove('active');
+            }
+        }
+
+        // Chart.js configuration for bar charts
+        const chartConfig = {
+            type: 'bar',
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 20
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                family: 'Noto Nastaliq Urdu, serif',
+                                size: 12
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                family: 'Noto Nastaliq Urdu, serif',
+                                size: 14
+                            },
+                            color: '#333'
+                        }
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderWidth: 0,
+                        borderRadius: 2,
+                        borderSkipped: false
+                    }
+                }
+            }
+        };
+
+        // Tanzeemi Hayyat Charts
+        function createTanzeemiChart(canvasId, data, label) {
+            console.log('Creating chart for:', canvasId, 'with data:', data);
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const hadaf = data.hadaf || 0;
+            const izafa = data.izafa || 0;
+            const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
+            
+            new Chart(ctx, {
+                ...chartConfig,
+                data: {
+                    labels: ['اضافہ', 'ہدف'],
+                    datasets: [{
+                        label: 'Data',
+                        data: [izafa, hadaf],
+                        backgroundColor: ['#2ecc71', '#3498db'],
+                        borderWidth: 0,
+                        categoryPercentage: 0.8,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    ...chartConfig.options,
+                    plugins: {
+                        ...chartConfig.options.plugins,
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataIndex === 0) {
+                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                    }
+                                    return context.label + ': ' + context.parsed;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        ...chartConfig.options.plugins,
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            anchor: 'end',
+                            align: 'center',
+                            offset: 5,
+                            font: {
+                                weight: 'bold',
+                                size: 16
+                            },
+                            formatter: function(value, context) {
+                                if (context.dataIndex === 0) {
+                                    return value + '\n(' + percentage + '%)';
+                                } else {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Afradi Quwat Charts
+        function createAfradiChart(canvasId, data, label) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const hadaf = data.hadaf || 0;
+            const izafa = data.izafa || 0;
+            const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
+            
+            new Chart(ctx, {
+                ...chartConfig,
+                data: {
+                    labels: ['اضافہ', 'ہدف'],
+                    datasets: [{
+                        label: 'Data',
+                        data: [izafa, hadaf],
+                        backgroundColor: ['#f39c12', '#e74c3c'],
+                        borderWidth: 0,
+                        categoryPercentage: 0.8,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    ...chartConfig.options,
+                    plugins: {
+                        ...chartConfig.options.plugins,
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataIndex === 0) {
+                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                    }
+                                    return context.label + ': ' + context.parsed;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            anchor: 'end',
+                            align: 'center',
+                            offset: 5,
+                            font: {
+                                weight: 'bold',
+                                size: 16
+                            },
+                            formatter: function(value, context) {
+                                if (context.dataIndex === 0) {
+                                    return value + '\n(' + percentage + '%)';
+                                } else {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ijtimaat Charts
+        function createIjtimaatChart(canvasId, data, label) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const planned = data.planned || 0;
+            const held = data.held || 0;
+            const percentage = planned > 0 ? Math.round((held / planned) * 100) : 0;
+            
+            new Chart(ctx, {
+                ...chartConfig,
+                data: {
+                    labels: ['ہوئے', 'طے شدہ'],
+                    datasets: [{
+                        label: 'Data',
+                        data: [held, planned],
+                        backgroundColor: ['#1abc9c', '#9b59b6'],
+                        borderWidth: 0,
+                        categoryPercentage: 0.8,
+                        barPercentage: 0.5
+                    }]
+                },
+                options: {
+                    ...chartConfig.options,
+                    plugins: {
+                        ...chartConfig.options.plugins,
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    if (context.dataIndex === 0) {
+                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                    }
+                                    return context.label + ': ' + context.parsed;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            display: true,
+                            color: '#333',
+                            anchor: 'end',
+                            align: 'center',
+                            offset: 5,
+                            font: {
+                                weight: 'bold',
+                                size: 18
+                            },
+                            formatter: function(value, context) {
+                                if (context.dataIndex === 0) {
+                                    return value + '\n(' + percentage + '%)';
+                                } else {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts with data from Flask
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tanzeemi Hayyat Charts
+            createTanzeemiChart('blockCodeChart', JSON.parse('{{ block_code_data | tojson | safe }}'), 'بلاک کوڈ انچارجز');
+            createTanzeemiChart('nizamFajarChart', JSON.parse('{{ nizam_fajar_data | tojson | safe }}'), 'نظام فجر');
+            createTanzeemiChart('awaamiCommitteeChart', JSON.parse('{{ awaami_committee_data | tojson | safe }}'), 'عوامی کمیٹی');
+
+            // Afradi Quwat Charts
+            createAfradiChart('arkaanChart', JSON.parse('{{ arkaan_data | tojson | safe }}'), 'ارکان');
+            createAfradiChart('umeedwaranChart', JSON.parse('{{ umeedwaran_data | tojson | safe }}'), 'امیدواران رکنیت');
+            createAfradiChart('karkunanChart', JSON.parse('{{ karkunan_data | tojson | safe }}'), 'کارکنان');
+
+            // Ijtimaat Charts
+            createIjtimaatChart('zilaiShuraChart', JSON.parse('{{ zilai_shura_data | tojson | safe }}'), 'اجلاس ضلعی شوریٰ');
+            createIjtimaatChart('nazmZilaChart', JSON.parse('{{ nazm_zila_data | tojson | safe }}'), 'اجلاس نظم ضلع');
+            createIjtimaatChart('naziminAlaqajatChart', JSON.parse('{{ nazimin_alaqajat_data | tojson | safe }}'), 'اجلاس ناظمین علاقہ جات');
+            createIjtimaatChart('zilaiIjtimaArkaanChart', JSON.parse('{{ zilai_ijtima_arkaan_data | tojson | safe }}'), 'ضلعی اجتماع ارکان');
+            createIjtimaatChart('zilaiIjtimaUmeedwaranChart', JSON.parse('{{ zilai_ijtima_umeedwaran_data | tojson | safe }}'), 'ضلعی اجتماع امیدواران');
+            createIjtimaatChart('ijtimaArkaanAlaqahChart', JSON.parse('{{ ijtima_arkaan_alaqah_data | tojson | safe }}'), 'اجتماع ارکان (علاقہ)');
+            createIjtimaatChart('ijtimaUmeedwaranAlaqahChart', JSON.parse('{{ ijtima_umeedwaran_alaqah_data | tojson | safe }}'), 'اجتماع اُمیدواران (علاقہ)');
+            createIjtimaatChart('ijtimaKarkunanAlaqahChart', JSON.parse('{{ ijtima_karkunan_alaqah_data | tojson | safe }}'), 'اجتماع کارکنان (علاقہ)');
+            createIjtimaatChart('ijtimaKarkunanHalqajatChart', JSON.parse('{{ ijtima_karkunan_halqajat_data | tojson | safe }}'), 'اجتماع کارکنان (حلقہ جات)');
+            createIjtimaatChart('ijtimaNaziminHalqajatChart', JSON.parse('{{ ijtima_nazimin_halqajat_data | tojson | safe }}'), 'اجتماع ناظمین (حلقہ جات)');
+            createIjtimaatChart('darsQuranChart', JSON.parse('{{ dars_quran_data | tojson | safe }}'), 'درس قرآن (حلقہ جات)');
+            createIjtimaatChart('dawatiCampChart', JSON.parse('{{ dawati_camp_data | tojson | safe }}'), 'دعوتی کیمپ / مستقل و فود');
+            createIjtimaatChart('gharonTakDawatChart', JSON.parse('{{ gharon_tak_dawat_data | tojson | safe }}'), 'گھروں تک دعوت');
+            createIjtimaatChart('taqseemLiteratureChart', JSON.parse('{{ taqseem_literature_data | tojson | safe }}'), 'تقسیم لٹریچر');
+        });
+    </script>
+</body>
+</html> 
