@@ -5,11 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ zila }} - رپورٹ - جماعت اسلامی ضلعی رپورٹنگ سسٹم</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chart-styles.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script>
+        // Fallback for Chart.js loading
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not loaded from CDN, trying alternative source...');
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js';
+            script.onload = function() {
+                console.log('Chart.js loaded from alternative source');
+            };
+            document.head.appendChild(script);
+        }
+    </script>
     <style>
         .view-toggle {
             text-align: center;
@@ -61,6 +74,55 @@
             display: block;
         }
         
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            max-width: 100% !important;
+            max-height: 100% !important;
+            display: block !important;
+        }
+
+        .section-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .data-table-container {
+            flex: 1;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-family: 'Noto Nastaliq Urdu', serif;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .data-table td {
+            background: #fff;
+        }
+
+        .graph-grid {
+            flex: 2;
+        }
 
     </style>
 </head>
@@ -68,8 +130,8 @@
     <div class="container">
         <header class="dashboard-header">
             <div class="header-content">
-                <h1>جماعت اسلامی ضلعی رپورٹنگ سسٹم</h1>
-                <h2>{{ zila }} - رپورٹ</h2>
+                <h1>{{ zila }} کارکردگی رپورٹ</h1>
+                <h1> رپورٹ  بابت  ماہ 1 اپریل - 30 جون</h1>
             </div>
             <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
                 <a href="{{ url_for('dashboard') }}" class="dashboard-btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold;">ڈیش بورڈ پر واپس جائیں</a>
@@ -81,6 +143,7 @@
         <div class="view-toggle">
             <div class="toggle-buttons">
                 <button class="toggle-btn active" onclick="showView('graphs')">گراف دیکھیں</button>
+                <button class="toggle-btn inactive" onclick="showView('spider')">مکمل گراف دیکھیں</button>
                 <button class="toggle-btn inactive" onclick="showView('report')">رپورٹ دیکھیں</button>
             </div>
         </div>
@@ -91,23 +154,60 @@
                 <!-- Tanzeemi Hayyat Section -->
                 <div class="graph-section">
                     <h2>تنظیمی ہیٔت</h2>
-                    <div class="graph-grid">
-                        <div class="graph-card">
-                            <h3>بلاک کوڈ انچارجز</h3>
-                            <div class="chart-container">
-                                <canvas id="blockCodeChart"></canvas>
-                            </div>
+                    <div class="section-container">
+                        <!-- Data Table -->
+                        <div class="data-table-container">
+                            <h3>تفصیلی اعداد و شمار</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>شعبہ</th>
+                                        <th>ہدف</th>
+                                        <th>اضافہ/قائم/تقرری</th>
+                                        <th>فیصد</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>بلاک کوڈ انچارجز</td>
+                                        <td id="blockCodeTarget">-</td>
+                                        <td id="blockCodeIzafa">-</td>
+                                        <td id="blockCodePercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>نظام فجر</td>
+                                        <td id="nizamFajarTarget">-</td>
+                                        <td id="nizamFajarIzafa">-</td>
+                                        <td id="nizamFajarPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>عوامی کمیٹی</td>
+                                        <td id="awaamiCommitteeTarget">-</td>
+                                        <td id="awaamiCommitteeIzafa">-</td>
+                                        <td id="awaamiCommitteePercentage">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="graph-card">
-                            <h3>نظام فجر</h3>
-                            <div class="chart-container">
-                                <canvas id="nizamFajarChart"></canvas>
+                        <!-- Bar Graphs -->
+                        <div class="graph-grid">
+                            <div class="graph-card">
+                                <h3>بلاک کوڈ انچارجز</h3>
+                                <div class="chart-container">
+                                    <canvas id="blockCodeChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>عوامی کمیٹی</h3>
-                            <div class="chart-container">
-                                <canvas id="awaamiCommitteeChart"></canvas>
+                            <div class="graph-card">
+                                <h3>نظام فجر</h3>
+                                <div class="chart-container">
+                                    <canvas id="nizamFajarChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>عوامی کمیٹی</h3>
+                                <div class="chart-container">
+                                    <canvas id="awaamiCommitteeChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,96 +216,206 @@
                 <!-- Afradi Quwat Section -->
                 <div class="graph-section">
                     <h2>افرادی قوت</h2>
-                    <div class="graph-grid">
-                        <div class="graph-card">
-                            <h3>ارکان</h3>
-                            <div class="chart-container">
-                                <canvas id="arkaanChart"></canvas>
-                            </div>
+                    <div class="section-container">
+                        <!-- Data Table -->
+                        <div class="data-table-container">
+                            <h3>تفصیلی اعداد و شمار</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>شعبہ</th>
+                                        <th>ہدف</th>
+                                        <th>اضافہ</th>
+                                        <th>فیصد</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>ارکان</td>
+                                        <td id="arkaanTarget">-</td>
+                                        <td id="arkaanIzafa">-</td>
+                                        <td id="arkaanPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>امیدواران رکنیت</td>
+                                        <td id="umeedwaranTarget">-</td>
+                                        <td id="umeedwaranIzafa">-</td>
+                                        <td id="umeedwaranPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>کارکنان</td>
+                                        <td id="karkunanTarget">-</td>
+                                        <td id="karkunanIzafa">-</td>
+                                        <td id="karkunanPercentage">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="graph-card">
-                            <h3>امیدواران رکنیت</h3>
-                            <div class="chart-container">
-                                <canvas id="umeedwaranChart"></canvas>
+                        <!-- Bar Graphs -->
+                        <div class="graph-grid">
+                            <div class="graph-card">
+                                <h3>ارکان</h3>
+                                <div class="chart-container">
+                                    <canvas id="arkaanChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>کارکنان</h3>
-                            <div class="chart-container">
-                                <canvas id="karkunanChart"></canvas>
+                            <div class="graph-card">
+                                <h3>امیدواران رکنیت</h3>
+                                <div class="chart-container">
+                                    <canvas id="umeedwaranChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>کارکنان</h3>
+                                <div class="chart-container">
+                                    <canvas id="karkunanChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Zilai Tanzeemi Ijtimaat Section -->
-                <div class="graph-section">
-                    <h2>ضلعی تنظیمی اجتماعات</h2>
-                    <div class="graph-grid">
-                        <div class="graph-card">
-                            <h3>اجلاس ضلعی شوریٰ</h3>
-                            <div class="chart-container">
-                                <canvas id="zilaiShuraChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>اجلاس نظم ضلع</h3>
-                            <div class="chart-container">
-                                <canvas id="nazmZilaChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>اجلاس ناظمین علاقہ جات</h3>
-                            <div class="chart-container">
-                                <canvas id="naziminAlaqajatChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>ضلعی اجتماع ارکان</h3>
-                            <div class="chart-container">
-                                <canvas id="zilaiIjtimaArkaanChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>ضلعی اجتماع امیدواران</h3>
-                            <div class="chart-container">
-                                <canvas id="zilaiIjtimaUmeedwaranChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <!-- Tanzeemi Ijtimaat Section -->
                 <div class="graph-section">
                     <h2>تنظیمی اجتماعات</h2>
-                    <div class="graph-grid">
-                        <div class="graph-card">
-                            <h3>اجتماع ارکان (علاقہ)</h3>
-                            <div class="chart-container">
-                                <canvas id="ijtimaArkaanAlaqahChart"></canvas>
-                            </div>
+                    <div class="section-container">
+                        <!-- Data Table -->
+                        <div class="data-table-container">
+                            <h3>تفصیلی اعداد و شمار</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>شعبہ</th>
+                                        <th>طے شدہ</th>
+                                        <th>ہوئے</th>
+                                        <th>فیصد</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>اجلاس ضلعی شوریٰ</td>
+                                        <td id="zilaiShuraPlanned">-</td>
+                                        <td id="zilaiShuraHeld">-</td>
+                                        <td id="zilaiShuraPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجلاس نظم ضلع</td>
+                                        <td id="nazmZilaPlanned">-</td>
+                                        <td id="nazmZilaHeld">-</td>
+                                        <td id="nazmZilaPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجلاس ناظمین علاقہ جات</td>
+                                        <td id="naziminAlaqajatPlanned">-</td>
+                                        <td id="naziminAlaqajatHeld">-</td>
+                                        <td id="naziminAlaqajatPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ضلعی اجتماع ارکان</td>
+                                        <td id="zilaiIjtimaArkaanPlanned">-</td>
+                                        <td id="zilaiIjtimaArkaanHeld">-</td>
+                                        <td id="zilaiIjtimaArkaanPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ضلعی اجتماع امیدواران</td>
+                                        <td id="zilaiIjtimaUmeedwaranPlanned">-</td>
+                                        <td id="zilaiIjtimaUmeedwaranHeld">-</td>
+                                        <td id="zilaiIjtimaUmeedwaranPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجتماع ارکان (علاقہ)</td>
+                                        <td id="ijtimaArkaanAlaqahPlanned">-</td>
+                                        <td id="ijtimaArkaanAlaqahHeld">-</td>
+                                        <td id="ijtimaArkaanAlaqahPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجتماع اُمیدواران (علاقہ)</td>
+                                        <td id="ijtimaUmeedwaranAlaqahPlanned">-</td>
+                                        <td id="ijtimaUmeedwaranAlaqahHeld">-</td>
+                                        <td id="ijtimaUmeedwaranAlaqahPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجتماع کارکنان (علاقہ)</td>
+                                        <td id="ijtimaKarkunanAlaqahPlanned">-</td>
+                                        <td id="ijtimaKarkunanAlaqahHeld">-</td>
+                                        <td id="ijtimaKarkunanAlaqahPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجتماع کارکنان (حلقہ جات)</td>
+                                        <td id="ijtimaKarkunanHalqajatPlanned">-</td>
+                                        <td id="ijtimaKarkunanHalqajatHeld">-</td>
+                                        <td id="ijtimaKarkunanHalqajatPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>اجتماع ناظمین (حلقہ جات)</td>
+                                        <td id="ijtimaNaziminHalqajatPlanned">-</td>
+                                        <td id="ijtimaNaziminHalqajatHeld">-</td>
+                                        <td id="ijtimaNaziminHalqajatPercentage">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="graph-card">
-                            <h3>اجتماع اُمیدواران (علاقہ)</h3>
-                            <div class="chart-container">
-                                <canvas id="ijtimaUmeedwaranAlaqahChart"></canvas>
+                        <!-- Bar Graphs -->
+                        <div class="graph-grid">
+                            <div class="graph-card">
+                                <h3>اجلاس ضلعی شوریٰ</h3>
+                                <div class="chart-container">
+                                    <canvas id="zilaiShuraChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>اجتماع کارکنان (علاقہ)</h3>
-                            <div class="chart-container">
-                                <canvas id="ijtimaKarkunanAlaqahChart"></canvas>
+                            <div class="graph-card">
+                                <h3>اجلاس نظم ضلع</h3>
+                                <div class="chart-container">
+                                    <canvas id="nazmZilaChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>اجتماع کارکنان (حلقہ جات)</h3>
-                            <div class="chart-container">
-                                <canvas id="ijtimaKarkunanHalqajatChart"></canvas>
+                            <div class="graph-card">
+                                <h3>اجلاس ناظمین علاقہ جات</h3>
+                                <div class="chart-container">
+                                    <canvas id="naziminAlaqajatChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>اجتماع ناظمین (حلقہ جات)</h3>
-                            <div class="chart-container">
-                                <canvas id="ijtimaNaziminHalqajatChart"></canvas>
+                            <div class="graph-card">
+                                <h3>ضلعی اجتماع ارکان</h3>
+                                <div class="chart-container">
+                                    <canvas id="zilaiIjtimaArkaanChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>ضلعی اجتماع امیدواران</h3>
+                                <div class="chart-container">
+                                    <canvas id="zilaiIjtimaUmeedwaranChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>اجتماع ارکان (علاقہ)</h3>
+                                <div class="chart-container">
+                                    <canvas id="ijtimaArkaanAlaqahChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>اجتماع اُمیدواران (علاقہ)</h3>
+                                <div class="chart-container">
+                                    <canvas id="ijtimaUmeedwaranAlaqahChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>اجتماع کارکنان (علاقہ)</h3>
+                                <div class="chart-container">
+                                    <canvas id="ijtimaKarkunanAlaqahChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>اجتماع کارکنان (حلقہ جات)</h3>
+                                <div class="chart-container">
+                                    <canvas id="ijtimaKarkunanHalqajatChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>اجتماع ناظمین (حلقہ جات)</h3>
+                                <div class="chart-container">
+                                    <canvas id="ijtimaNaziminHalqajatChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -213,35 +423,85 @@
 
                 <div class="graph-section">
                     <h2>دعوتی اجتماعات</h2>
-                    <div class="graph-grid">
-                        <div class="graph-card">
-                            <h3>درس قرآن (حلقہ جات)</h3>
-                            <div class="chart-container">
-                                <canvas id="darsQuranChart"></canvas>
-                            </div>
+                    <div class="section-container">
+                        <!-- Data Table -->
+                        <div class="data-table-container">
+                            <h3>تفصیلی اعداد و شمار</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>شعبہ</th>
+                                        <th>طے شدہ</th>
+                                        <th>ہوئے</th>
+                                        <th>فیصد</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>درس قرآن (حلقہ جات)</td>
+                                        <td id="darsQuranPlanned">-</td>
+                                        <td id="darsQuranHeld">-</td>
+                                        <td id="darsQuranPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>دعوتی کیمپ / مستقل و فود</td>
+                                        <td id="dawatiCampPlanned">-</td>
+                                        <td id="dawatiCampHeld">-</td>
+                                        <td id="dawatiCampPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>گھروں تک دعوت</td>
+                                        <td id="gharonTakDawatPlanned">-</td>
+                                        <td id="gharonTakDawatHeld">-</td>
+                                        <td id="gharonTakDawatPercentage">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>تقسیم لٹریچر</td>
+                                        <td id="taqseemLiteraturePlanned">-</td>
+                                        <td id="taqseemLiteratureHeld">-</td>
+                                        <td id="taqseemLiteraturePercentage">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="graph-card">
-                            <h3>دعوتی کیمپ / مستقل و فود</h3>
-                            <div class="chart-container">
-                                <canvas id="dawatiCampChart"></canvas>
+                        <!-- Bar Graphs -->
+                        <div class="graph-grid">
+                            <div class="graph-card">
+                                <h3>درس قرآن (حلقہ جات)</h3>
+                                <div class="chart-container">
+                                    <canvas id="darsQuranChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>گھروں تک دعوت</h3>
-                            <div class="chart-container">
-                                <canvas id="gharonTakDawatChart"></canvas>
+                            <div class="graph-card">
+                                <h3>دعوتی کیمپ / مستقل و فود</h3>
+                                <div class="chart-container">
+                                    <canvas id="dawatiCampChart"></canvas>
+                                </div>
                             </div>
-                        </div>
-                        <div class="graph-card">
-                            <h3>تقسیم لٹریچر</h3>
-                            <div class="chart-container">
-                                <canvas id="taqseemLiteratureChart"></canvas>
+                            <div class="graph-card">
+                                <h3>گھروں تک دعوت</h3>
+                                <div class="chart-container">
+                                    <canvas id="gharonTakDawatChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="graph-card">
+                                <h3>تقسیم لٹریچر</h3>
+                                <div class="chart-container">
+                                    <canvas id="taqseemLiteratureChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
+            </div>
+        </div>
+
+        <!-- Spider Graph View -->
+        <div id="spider-view" class="view-content">
+            <div class="chart-container" style="height: 700px;">
+                <canvas id="spiderChart"></canvas>
             </div>
         </div>
 
@@ -261,19 +521,29 @@
                 view.classList.remove('active');
             });
             
-            // Show selected view
+            // Reset all buttons to inactive
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.add('inactive');
+                btn.classList.remove('active');
+            });
+            
+            // Show selected view and activate corresponding button
             if (viewType === 'graphs') {
                 document.getElementById('graphs-view').classList.add('active');
                 document.querySelectorAll('.toggle-btn')[0].classList.add('active');
                 document.querySelectorAll('.toggle-btn')[0].classList.remove('inactive');
-                document.querySelectorAll('.toggle-btn')[1].classList.add('inactive');
-                document.querySelectorAll('.toggle-btn')[1].classList.remove('active');
-            } else {
-                document.getElementById('report-view').classList.add('active');
+            } else if (viewType === 'spider') {
+                document.getElementById('spider-view').classList.add('active');
                 document.querySelectorAll('.toggle-btn')[1].classList.add('active');
                 document.querySelectorAll('.toggle-btn')[1].classList.remove('inactive');
-                document.querySelectorAll('.toggle-btn')[0].classList.add('inactive');
-                document.querySelectorAll('.toggle-btn')[0].classList.remove('active');
+                // Initialize spider chart when view is shown
+                if (typeof createSpiderChart === 'function') {
+                    createSpiderChart();
+                }
+            } else {
+                document.getElementById('report-view').classList.add('active');
+                document.querySelectorAll('.toggle-btn')[2].classList.add('active');
+                document.querySelectorAll('.toggle-btn')[2].classList.remove('inactive');
             }
         }
 
@@ -285,246 +555,673 @@
                 maintainAspectRatio: false,
                 layout: {
                     padding: {
-                        top: 20
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20
                     }
                 },
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        cornerRadius: 4,
+                        displayColors: false
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)',
+                            drawBorder: false
+                        },
                         ticks: {
                             font: {
-                                family: 'Noto Nastaliq Urdu, serif',
+                                family: 'Noto Nastaliq Urdu, Arial, sans-serif',
                                 size: 12
-                            }
+                            },
+                            color: '#333',
+                            padding: 5
                         }
                     },
                     x: {
+                        grid: {
+                            display: false
+                        },
                         ticks: {
                             font: {
-                                family: 'Noto Nastaliq Urdu, serif',
+                                family: 'Noto Nastaliq Urdu, Arial, sans-serif',
                                 size: 14
                             },
-                            color: '#333'
+                            color: '#333',
+                            maxRotation: 0,
+                            minRotation: 0
                         }
                     }
                 },
                 elements: {
                     bar: {
                         borderWidth: 0,
-                        borderRadius: 2,
-                        borderSkipped: false
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        backgroundColor: function(context) {
+                            const colors = ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6'];
+                            return colors[context.dataIndex % colors.length];
+                        }
                     }
+                },
+                animation: {
+                    duration: 500,
+                    easing: 'easeOutQuart'
+                },
+                interaction: {
+                    mode: 'index',
+                    axis: 'x',
+                    intersect: false
                 }
             }
         };
 
         // Tanzeemi Hayyat Charts
         function createTanzeemiChart(canvasId, data, label) {
-            console.log('Creating chart for:', canvasId, 'with data:', data);
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const hadaf = data.hadaf || 0;
-            const izafa = data.izafa || 0;
-            const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
-            
-            new Chart(ctx, {
-                ...chartConfig,
-                data: {
-                    labels: ['اضافہ', 'ہدف'],
-                    datasets: [{
-                        label: 'Data',
-                        data: [izafa, hadaf],
-                        backgroundColor: ['#2ecc71', '#3498db'],
-                        borderWidth: 0,
-                        categoryPercentage: 0.8,
-                        barPercentage: 0.5
-                    }]
-                },
-                options: {
-                    ...chartConfig.options,
-                    plugins: {
-                        ...chartConfig.options.plugins,
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    if (context.dataIndex === 0) {
-                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
-                                    }
-                                    return context.label + ': ' + context.parsed;
-                                }
-                            }
-                        }
+            try {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) {
+                    console.error('Canvas element not found:', canvasId);
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get 2D context for canvas:', canvasId);
+                    return;
+                }
+                
+                const hadaf = data.hadaf || 0;
+                const izafa = data.izafa || 0;
+                const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
+                
+                // Set labels based on chart type with counts and percentages
+                let labels = [];
+                if (canvasId === 'blockCodeChart') {
+                    labels = [`تقرری (${izafa}) % ${percentage}`, `ہدف (${hadaf})`];
+                } else if (canvasId === 'nizamFajarChart' || canvasId === 'awaamiCommitteeChart') {
+                    labels = [`قائم (${izafa}) % ${percentage}`, `ہدف (${hadaf})`];    
+                } else {
+                    labels = [`اضافہ (${izafa}) % ${percentage}`, `ہدف (${hadaf})`];
+                }
+                
+                // Destroy existing chart if it exists
+                const existingChart = Chart.getChart(canvas);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                new Chart(ctx, {
+                    ...chartConfig,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Data',
+                            data: [izafa, hadaf],
+                            backgroundColor: ['#2ecc71', '#3498db'],
+                            borderWidth: 0,
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.5
+                        }]
                     },
-                    plugins: {
-                        ...chartConfig.options.plugins,
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'center',
-                            offset: 5,
-                            font: {
-                                weight: 'bold',
-                                size: 16
-                            },
-                            formatter: function(value, context) {
-                                if (context.dataIndex === 0) {
-                                    return value + '\n(' + percentage + '%)';
-                                } else {
-                                    return value;
+                    options: {
+                        ...chartConfig.options,
+                        plugins: {
+                            ...chartConfig.options.plugins,
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataIndex === 0) {
+                                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                        }
+                                        return context.label + ': ' + context.parsed;
+                                    }
                                 }
+                            },
+                            datalabels: {
+                                display: false
                             }
                         }
                     }
+                });
+            } catch (error) {
+                console.error('Error creating chart for', canvasId, ':', error);
+                // Show fallback content
+                const canvas = document.getElementById(canvasId);
+                if (canvas) {
+                    canvas.style.display = 'none';
+                    const container = canvas.parentElement;
+                    if (container) {
+                        container.innerHTML += '<div style="text-align: center; padding: 20px; color: #666;">چارٹ لوڈ نہیں ہو سکا</div>';
+                    }
                 }
-            });
+            }
         }
 
         // Afradi Quwat Charts
         function createAfradiChart(canvasId, data, label) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const hadaf = data.hadaf || 0;
-            const izafa = data.izafa || 0;
-            const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
-            
-            new Chart(ctx, {
-                ...chartConfig,
-                data: {
-                    labels: ['اضافہ', 'ہدف'],
-                    datasets: [{
-                        label: 'Data',
-                        data: [izafa, hadaf],
-                        backgroundColor: ['#f39c12', '#e74c3c'],
-                        borderWidth: 0,
-                        categoryPercentage: 0.8,
-                        barPercentage: 0.5
-                    }]
-                },
-                options: {
-                    ...chartConfig.options,
-                    plugins: {
-                        ...chartConfig.options.plugins,
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    if (context.dataIndex === 0) {
-                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+            try {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) {
+                    console.error('Canvas element not found:', canvasId);
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get 2D context for canvas:', canvasId);
+                    return;
+                }
+                
+                const hadaf = data.hadaf || 0;
+                const izafa = data.izafa || 0;
+                const percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
+                
+                // Destroy existing chart if it exists
+                const existingChart = Chart.getChart(canvas);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                new Chart(ctx, {
+                    ...chartConfig,
+                    data: {
+                        labels: [`اضافہ (${izafa}) % ${percentage}`, `ہدف (${hadaf})`],
+                        datasets: [{
+                            label: 'Data',
+                            data: [izafa, hadaf],
+                            backgroundColor: ['#f39c12', '#e74c3c'],
+                            borderWidth: 0,
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: {
+                        ...chartConfig.options,
+                        plugins: {
+                            ...chartConfig.options.plugins,
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataIndex === 0) {
+                                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                        }
+                                        return context.label + ': ' + context.parsed;
                                     }
-                                    return context.label + ': ' + context.parsed;
                                 }
-                            }
-                        },
-                        datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'center',
-                            offset: 5,
-                            font: {
-                                weight: 'bold',
-                                size: 16
                             },
-                            formatter: function(value, context) {
-                                if (context.dataIndex === 0) {
-                                    return value + '\n(' + percentage + '%)';
-                                } else {
-                                    return value;
-                                }
+                            datalabels: {
+                                display: false
                             }
                         }
                     }
+                });
+            } catch (error) {
+                console.error('Error creating chart for', canvasId, ':', error);
+                // Show fallback content
+                const canvas = document.getElementById(canvasId);
+                if (canvas) {
+                    canvas.style.display = 'none';
+                    const container = canvas.parentElement;
+                    if (container) {
+                        container.innerHTML += '<div style="text-align: center; padding: 20px; color: #666;">چارٹ لوڈ نہیں ہو سکا</div>';
+                    }
                 }
-            });
+            }
         }
 
         // Ijtimaat Charts
         function createIjtimaatChart(canvasId, data, label) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            const planned = data.planned || 0;
-            const held = data.held || 0;
-            const percentage = planned > 0 ? Math.round((held / planned) * 100) : 0;
-            
-            new Chart(ctx, {
-                ...chartConfig,
+            try {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) {
+                    console.error('Canvas element not found:', canvasId);
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get 2D context for canvas:', canvasId);
+                    return;
+                }
+                
+                const planned = data.planned || 0;
+                const held = data.held || 0;
+                const percentage = planned > 0 ? Math.round((held / planned) * 100) : 0;
+                
+                // Destroy existing chart if it exists
+                const existingChart = Chart.getChart(canvas);
+                if (existingChart) {
+                    existingChart.destroy();
+                }
+                
+                new Chart(ctx, {
+                    ...chartConfig,
+                    data: {
+                        labels: [`ہوئے (${held}) % ${percentage}`, `طے شدہ (${planned})`],
+                        datasets: [{
+                            label: 'Data',
+                            data: [held, planned],
+                            backgroundColor: ['#1abc9c', '#9b59b6'],
+                            borderWidth: 0,
+                            categoryPercentage: 0.8,
+                            barPercentage: 0.5
+                        }]
+                    },
+                    options: {
+                        ...chartConfig.options,
+                        plugins: {
+                            ...chartConfig.options.plugins,
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (context.dataIndex === 0) {
+                                            return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                        }
+                                        return context.label + ': ' + context.parsed;
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error creating chart for', canvasId, ':', error);
+                // Show fallback content
+                const canvas = document.getElementById(canvasId);
+                if (canvas) {
+                    canvas.style.display = 'none';
+                    const container = canvas.parentElement;
+                    if (container) {
+                        container.innerHTML += '<div style="text-align: center; padding: 20px; color: #666;">چارٹ لوڈ نہیں ہو سکا</div>';
+                    }
+                }
+            }
+        }
+
+        // Spider Chart Function
+        function calculatePercentage(data, type) {
+            let percentage = 0;
+            if (type === 'tanzeemi' || type === 'afradi') {
+                const hadaf = data.hadaf || 0;
+                const izafa = data.izafa || 0;
+                percentage = hadaf > 0 ? Math.round((izafa / hadaf) * 100) : 0;
+            } else {
+                const planned = data.planned || 0;
+                const held = data.held || 0;
+                percentage = planned > 0 ? Math.round((held / planned) * 100) : 0;
+            }
+            return percentage;
+        }
+
+        // Create Spider Chart
+        function createSpiderChart() {
+            const blockCodeData = JSON.parse('{{ block_code_data | tojson | safe }}');
+            const nizamFajarData = JSON.parse('{{ nizam_fajar_data | tojson | safe }}');
+            const awaamiCommitteeData = JSON.parse('{{ awaami_committee_data | tojson | safe }}');
+            const arkaanData = JSON.parse('{{ arkaan_data | tojson | safe }}');
+            const umeedwaranData = JSON.parse('{{ umeedwaran_data | tojson | safe }}');
+            const karkunanData = JSON.parse('{{ karkunan_data | tojson | safe }}');
+            const ijtimaKarkunanAlaqahData = JSON.parse('{{ ijtima_karkunan_alaqah_data | tojson | safe }}');
+            const ijtimaKarkunanHalqajatData = JSON.parse('{{ ijtima_karkunan_halqajat_data | tojson | safe }}');
+            const darsQuranData = JSON.parse('{{ dars_quran_data | tojson | safe }}');
+            const gharonTakDawatData = JSON.parse('{{ gharon_tak_dawat_data | tojson | safe }}');
+            const taqseemLiteratureData = JSON.parse('{{ taqseem_literature_data | tojson | safe }}');
+
+            const labels = [
+                `بلاک کوڈ انچارجز (%${calculatePercentage(blockCodeData, 'tanzeemi')})`,
+                `نظام فجر (%${calculatePercentage(nizamFajarData, 'tanzeemi')})`,
+                `عوامی کمیٹی (%${calculatePercentage(awaamiCommitteeData, 'tanzeemi')})`,
+                `ارکان سازی (%${calculatePercentage(arkaanData, 'afradi')})`,
+                `امیدواران رکنیت (%${calculatePercentage(umeedwaranData, 'afradi')})`,
+                `کارکنان (%${calculatePercentage(karkunanData, 'afradi')})`,
+                `اجتماع کارکنان (علاقہ) (%${calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat')})`,
+                `اجتماع کارکنان (حلقہ جات) (%${calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat')})`,
+                `درس قرآن (حلقہ جات) (%${calculatePercentage(darsQuranData, 'ijtimaat')})`,
+                `گھروں تک دعوت (%${calculatePercentage(gharonTakDawatData, 'ijtimaat')})`,
+                `تقسیم لٹریچر (%${calculatePercentage(taqseemLiteratureData, 'ijtimaat')})`
+            ];
+
+            const percentages = [
+                calculatePercentage(blockCodeData, 'tanzeemi'),
+                calculatePercentage(nizamFajarData, 'tanzeemi'),
+                calculatePercentage(awaamiCommitteeData, 'tanzeemi'),
+                calculatePercentage(arkaanData, 'afradi'),
+                calculatePercentage(umeedwaranData, 'afradi'),
+                calculatePercentage(karkunanData, 'afradi'),
+                calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat'),
+                calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat'),
+                calculatePercentage(darsQuranData, 'ijtimaat'),
+                calculatePercentage(gharonTakDawatData, 'ijtimaat'),
+                calculatePercentage(taqseemLiteratureData, 'ijtimaat')
+            ];
+
+            const maxValue = Math.ceil(Math.max(...percentages) / 10) * 10;
+
+            // Destroy existing chart if it exists
+            const existingChart = Chart.getChart('spiderChart');
+            if (existingChart) {
+                existingChart.destroy();
+            }
+
+            new Chart(document.getElementById('spiderChart').getContext('2d'), {
+                type: 'radar',
                 data: {
-                    labels: ['ہوئے', 'طے شدہ'],
+                    labels: labels,
                     datasets: [{
-                        label: 'Data',
-                        data: [held, planned],
-                        backgroundColor: ['#1abc9c', '#9b59b6'],
-                        borderWidth: 0,
-                        categoryPercentage: 0.8,
-                        barPercentage: 0.5
+                        label: 'کارکردگی کا فیصد',
+                        data: percentages,
+                        backgroundColor: 'rgba(46, 204, 113, 0.4)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(46, 204, 113, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: 'rgba(39, 174, 96, 1)',
+                        pointHoverBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
-                    ...chartConfig.options,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: maxValue,
+                            min: 0,
+                            ticks: {
+                                display: false
+                            },
+                            pointLabels: {
+                                font: {
+                                    family: 'Noto Nastaliq Urdu, serif',
+                                    size: 18,
+                                    weight: 'bold'
+                                },
+                                color: '#333',
+                                padding: 15
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
+                        }
+                    },
                     plugins: {
-                        ...chartConfig.options.plugins,
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    family: 'Noto Nastaliq Urdu, serif',
+                                    size: 18
+                                },
+                                color: '#333'
+                            }
+                        },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    if (context.dataIndex === 0) {
-                                        return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
-                                    }
-                                    return context.label + ': ' + context.parsed;
+                                    const value = context.parsed.r;
+                                    return `${value}%`;
                                 }
                             }
                         },
                         datalabels: {
-                            display: true,
-                            color: '#333',
-                            anchor: 'end',
-                            align: 'center',
-                            offset: 5,
-                            font: {
-                                weight: 'bold',
-                                size: 18
-                            },
-                            formatter: function(value, context) {
-                                if (context.dataIndex === 0) {
-                                    return value + '\n(' + percentage + '%)';
-                                } else {
-                                    return;
-                                }
-                            }
+                            display: false
                         }
                     }
                 }
             });
         }
 
+
+
+        // Function to populate data tables
+        function populateDataTables() {
+            // Tanzeemi Hayyat Data
+            const blockCodeData = JSON.parse('{{ block_code_data | tojson | safe }}');
+            const nizamFajarData = JSON.parse('{{ nizam_fajar_data | tojson | safe }}');
+            const awaamiCommitteeData = JSON.parse('{{ awaami_committee_data | tojson | safe }}');
+
+            // Afradi Quwat Data
+            const arkaanData = JSON.parse('{{ arkaan_data | tojson | safe }}');
+            const umeedwaranData = JSON.parse('{{ umeedwaran_data | tojson | safe }}');
+            const karkunanData = JSON.parse('{{ karkunan_data | tojson | safe }}');
+
+            // Ijtimaat Data
+            const zilaiShuraData = JSON.parse('{{ zilai_shura_data | tojson | safe }}');
+            const nazmZilaData = JSON.parse('{{ nazm_zila_data | tojson | safe }}');
+            const naziminAlaqajatData = JSON.parse('{{ nazimin_alaqajat_data | tojson | safe }}');
+            const zilaiIjtimaArkaanData = JSON.parse('{{ zilai_ijtima_arkaan_data | tojson | safe }}');
+            const zilaiIjtimaUmeedwaranData = JSON.parse('{{ zilai_ijtima_umeedwaran_data | tojson | safe }}');
+            const ijtimaArkaanAlaqahData = JSON.parse('{{ ijtima_arkaan_alaqah_data | tojson | safe }}');
+            const ijtimaUmeedwaranAlaqahData = JSON.parse('{{ ijtima_umeedwaran_alaqah_data | tojson | safe }}');
+            const ijtimaKarkunanAlaqahData = JSON.parse('{{ ijtima_karkunan_alaqah_data | tojson | safe }}');
+            const ijtimaKarkunanHalqajatData = JSON.parse('{{ ijtima_karkunan_halqajat_data | tojson | safe }}');
+            const ijtimaNaziminHalqajatData = JSON.parse('{{ ijtima_nazimin_halqajat_data | tojson | safe }}');
+
+            // Dawati Data
+            const darsQuranData = JSON.parse('{{ dars_quran_data | tojson | safe }}');
+            const dawatiCampData = JSON.parse('{{ dawati_camp_data | tojson | safe }}');
+            const gharonTakDawatData = JSON.parse('{{ gharon_tak_dawat_data | tojson | safe }}');
+            const taqseemLiteratureData = JSON.parse('{{ taqseem_literature_data | tojson | safe }}');
+
+            // Tanzeemi Hayyat - Block Code
+            document.getElementById('blockCodeTarget').textContent = blockCodeData.hadaf || 0;
+            document.getElementById('blockCodeIzafa').textContent = blockCodeData.izafa || 0;
+            document.getElementById('blockCodePercentage').textContent = 
+                blockCodeData.hadaf > 0 ? Math.round((blockCodeData.izafa / blockCodeData.hadaf) * 100) + '%' : '0%';
+
+            // Tanzeemi Hayyat - Nizam Fajar
+            document.getElementById('nizamFajarTarget').textContent = nizamFajarData.hadaf || 0;
+            document.getElementById('nizamFajarIzafa').textContent = nizamFajarData.izafa || 0;
+            document.getElementById('nizamFajarPercentage').textContent = 
+                nizamFajarData.hadaf > 0 ? Math.round((nizamFajarData.izafa / nizamFajarData.hadaf) * 100) + '%' : '0%';
+
+            // Tanzeemi Hayyat - Awaami Committee
+            document.getElementById('awaamiCommitteeTarget').textContent = awaamiCommitteeData.hadaf || 0;
+            document.getElementById('awaamiCommitteeIzafa').textContent = awaamiCommitteeData.izafa || 0;
+            document.getElementById('awaamiCommitteePercentage').textContent = 
+                awaamiCommitteeData.hadaf > 0 ? Math.round((awaamiCommitteeData.izafa / awaamiCommitteeData.hadaf) * 100) + '%' : '0%';
+
+            // Afradi Quwat - Arkaan
+            document.getElementById('arkaanTarget').textContent = arkaanData.hadaf || 0;
+            document.getElementById('arkaanIzafa').textContent = arkaanData.izafa || 0;
+            document.getElementById('arkaanPercentage').textContent = 
+                arkaanData.hadaf > 0 ? Math.round((arkaanData.izafa / arkaanData.hadaf) * 100) + '%' : '0%';
+
+            // Afradi Quwat - Umeedwaran
+            document.getElementById('umeedwaranTarget').textContent = umeedwaranData.hadaf || 0;
+            document.getElementById('umeedwaranIzafa').textContent = umeedwaranData.izafa || 0;
+            document.getElementById('umeedwaranPercentage').textContent = 
+                umeedwaranData.hadaf > 0 ? Math.round((umeedwaranData.izafa / umeedwaranData.hadaf) * 100) + '%' : '0%';
+
+            // Afradi Quwat - Karkunan
+            document.getElementById('karkunanTarget').textContent = karkunanData.hadaf || 0;
+            document.getElementById('karkunanIzafa').textContent = karkunanData.izafa || 0;
+            document.getElementById('karkunanPercentage').textContent = 
+                karkunanData.hadaf > 0 ? Math.round((karkunanData.izafa / karkunanData.hadaf) * 100) + '%' : '0%';
+
+            // Ijtimaat - Zilai Shura
+            document.getElementById('zilaiShuraPlanned').textContent = zilaiShuraData.planned || 0;
+            document.getElementById('zilaiShuraHeld').textContent = zilaiShuraData.held || 0;
+            document.getElementById('zilaiShuraPercentage').textContent = 
+                zilaiShuraData.planned > 0 ? Math.round((zilaiShuraData.held / zilaiShuraData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Nazm Zila
+            document.getElementById('nazmZilaPlanned').textContent = nazmZilaData.planned || 0;
+            document.getElementById('nazmZilaHeld').textContent = nazmZilaData.held || 0;
+            document.getElementById('nazmZilaPercentage').textContent = 
+                nazmZilaData.planned > 0 ? Math.round((nazmZilaData.held / nazmZilaData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Nazimin Alaqajat
+            document.getElementById('naziminAlaqajatPlanned').textContent = naziminAlaqajatData.planned || 0;
+            document.getElementById('naziminAlaqajatHeld').textContent = naziminAlaqajatData.held || 0;
+            document.getElementById('naziminAlaqajatPercentage').textContent = 
+                naziminAlaqajatData.planned > 0 ? Math.round((naziminAlaqajatData.held / naziminAlaqajatData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Zilai Ijtima Arkaan
+            document.getElementById('zilaiIjtimaArkaanPlanned').textContent = zilaiIjtimaArkaanData.planned || 0;
+            document.getElementById('zilaiIjtimaArkaanHeld').textContent = zilaiIjtimaArkaanData.held || 0;
+            document.getElementById('zilaiIjtimaArkaanPercentage').textContent = 
+                zilaiIjtimaArkaanData.planned > 0 ? Math.round((zilaiIjtimaArkaanData.held / zilaiIjtimaArkaanData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Zilai Ijtima Umeedwaran
+            document.getElementById('zilaiIjtimaUmeedwaranPlanned').textContent = zilaiIjtimaUmeedwaranData.planned || 0;
+            document.getElementById('zilaiIjtimaUmeedwaranHeld').textContent = zilaiIjtimaUmeedwaranData.held || 0;
+            document.getElementById('zilaiIjtimaUmeedwaranPercentage').textContent = 
+                zilaiIjtimaUmeedwaranData.planned > 0 ? Math.round((zilaiIjtimaUmeedwaranData.held / zilaiIjtimaUmeedwaranData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Ijtima Arkaan Alaqah
+            document.getElementById('ijtimaArkaanAlaqahPlanned').textContent = ijtimaArkaanAlaqahData.planned || 0;
+            document.getElementById('ijtimaArkaanAlaqahHeld').textContent = ijtimaArkaanAlaqahData.held || 0;
+            document.getElementById('ijtimaArkaanAlaqahPercentage').textContent = 
+                ijtimaArkaanAlaqahData.planned > 0 ? Math.round((ijtimaArkaanAlaqahData.held / ijtimaArkaanAlaqahData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Ijtima Umeedwaran Alaqah
+            document.getElementById('ijtimaUmeedwaranAlaqahPlanned').textContent = ijtimaUmeedwaranAlaqahData.planned || 0;
+            document.getElementById('ijtimaUmeedwaranAlaqahHeld').textContent = ijtimaUmeedwaranAlaqahData.held || 0;
+            document.getElementById('ijtimaUmeedwaranAlaqahPercentage').textContent = 
+                ijtimaUmeedwaranAlaqahData.planned > 0 ? Math.round((ijtimaUmeedwaranAlaqahData.held / ijtimaUmeedwaranAlaqahData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Ijtima Karkunan Alaqah
+            document.getElementById('ijtimaKarkunanAlaqahPlanned').textContent = ijtimaKarkunanAlaqahData.planned || 0;
+            document.getElementById('ijtimaKarkunanAlaqahHeld').textContent = ijtimaKarkunanAlaqahData.held || 0;
+            document.getElementById('ijtimaKarkunanAlaqahPercentage').textContent = 
+                ijtimaKarkunanAlaqahData.planned > 0 ? Math.round((ijtimaKarkunanAlaqahData.held / ijtimaKarkunanAlaqahData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Ijtima Karkunan Halqajat
+            document.getElementById('ijtimaKarkunanHalqajatPlanned').textContent = ijtimaKarkunanHalqajatData.planned || 0;
+            document.getElementById('ijtimaKarkunanHalqajatHeld').textContent = ijtimaKarkunanHalqajatData.held || 0;
+            document.getElementById('ijtimaKarkunanHalqajatPercentage').textContent = 
+                ijtimaKarkunanHalqajatData.planned > 0 ? Math.round((ijtimaKarkunanHalqajatData.held / ijtimaKarkunanHalqajatData.planned) * 100) + '%' : '0%';
+
+            // Ijtimaat - Ijtima Nazimin Halqajat
+            document.getElementById('ijtimaNaziminHalqajatPlanned').textContent = ijtimaNaziminHalqajatData.planned || 0;
+            document.getElementById('ijtimaNaziminHalqajatHeld').textContent = ijtimaNaziminHalqajatData.held || 0;
+            document.getElementById('ijtimaNaziminHalqajatPercentage').textContent = 
+                ijtimaNaziminHalqajatData.planned > 0 ? Math.round((ijtimaNaziminHalqajatData.held / ijtimaNaziminHalqajatData.planned) * 100) + '%' : '0%';
+
+            // Dawati - Dars Quran
+            document.getElementById('darsQuranPlanned').textContent = darsQuranData.planned || 0;
+            document.getElementById('darsQuranHeld').textContent = darsQuranData.held || 0;
+            document.getElementById('darsQuranPercentage').textContent = 
+                darsQuranData.planned > 0 ? Math.round((darsQuranData.held / darsQuranData.planned) * 100) + '%' : '0%';
+
+            // Dawati - Dawati Camp
+            document.getElementById('dawatiCampPlanned').textContent = dawatiCampData.planned || 0;
+            document.getElementById('dawatiCampHeld').textContent = dawatiCampData.held || 0;
+            document.getElementById('dawatiCampPercentage').textContent = 
+                dawatiCampData.planned > 0 ? Math.round((dawatiCampData.held / dawatiCampData.planned) * 100) + '%' : '0%';
+
+            // Dawati - Gharon Tak Dawat
+            document.getElementById('gharonTakDawatPlanned').textContent = gharonTakDawatData.planned || 0;
+            document.getElementById('gharonTakDawatHeld').textContent = gharonTakDawatData.held || 0;
+            document.getElementById('gharonTakDawatPercentage').textContent = 
+                gharonTakDawatData.planned > 0 ? Math.round((gharonTakDawatData.held / gharonTakDawatData.planned) * 100) + '%' : '0%';
+
+            // Dawati - Taqseem Literature
+            document.getElementById('taqseemLiteraturePlanned').textContent = taqseemLiteratureData.planned || 0;
+            document.getElementById('taqseemLiteratureHeld').textContent = taqseemLiteratureData.held || 0;
+            document.getElementById('taqseemLiteraturePercentage').textContent = 
+                taqseemLiteratureData.planned > 0 ? Math.round((taqseemLiteratureData.held / taqseemLiteratureData.planned) * 100) + '%' : '0%';
+        }
+
+        // Function to ensure proper chart initialization
+        function initializeCharts() {
+            // Wait for fonts to load
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function() {
+                    createAllCharts();
+                });
+            } else {
+                // Fallback for browsers that don't support document.fonts
+                setTimeout(createAllCharts, 1000);
+            }
+        }
+
+        function createAllCharts() {
+            try {
+                // Tanzeemi Hayyat Charts
+                createTanzeemiChart('blockCodeChart', JSON.parse('{{ block_code_data | tojson | safe }}'), 'بلاک کوڈ انچارجز');
+                createTanzeemiChart('nizamFajarChart', JSON.parse('{{ nizam_fajar_data | tojson | safe }}'), 'نظام فجر');
+                createTanzeemiChart('awaamiCommitteeChart', JSON.parse('{{ awaami_committee_data | tojson | safe }}'), 'عوامی کمیٹی');
+
+                // Afradi Quwat Charts
+                createAfradiChart('arkaanChart', JSON.parse('{{ arkaan_data | tojson | safe }}'), 'ارکان');
+                createAfradiChart('umeedwaranChart', JSON.parse('{{ umeedwaran_data | tojson | safe }}'), 'امیدواران رکنیت');
+                createAfradiChart('karkunanChart', JSON.parse('{{ karkunan_data | tojson | safe }}'), 'کارکنان');
+
+                // Ijtimaat Charts
+                createIjtimaatChart('zilaiShuraChart', JSON.parse('{{ zilai_shura_data | tojson | safe }}'), 'اجلاس ضلعی شوریٰ');
+                createIjtimaatChart('nazmZilaChart', JSON.parse('{{ nazm_zila_data | tojson | safe }}'), 'اجلاس نظم ضلع');
+                createIjtimaatChart('naziminAlaqajatChart', JSON.parse('{{ nazimin_alaqajat_data | tojson | safe }}'), 'اجلاس ناظمین علاقہ جات');
+                createIjtimaatChart('zilaiIjtimaArkaanChart', JSON.parse('{{ zilai_ijtima_arkaan_data | tojson | safe }}'), 'ضلعی اجتماع ارکان');
+                createIjtimaatChart('zilaiIjtimaUmeedwaranChart', JSON.parse('{{ zilai_ijtima_umeedwaran_data | tojson | safe }}'), 'ضلعی اجتماع امیدواران');
+                createIjtimaatChart('ijtimaArkaanAlaqahChart', JSON.parse('{{ ijtima_arkaan_alaqah_data | tojson | safe }}'), 'اجتماع ارکان (علاقہ)');
+                createIjtimaatChart('ijtimaUmeedwaranAlaqahChart', JSON.parse('{{ ijtima_umeedwaran_alaqah_data | tojson | safe }}'), 'اجتماع اُمیدواران (علاقہ)');
+                createIjtimaatChart('ijtimaKarkunanAlaqahChart', JSON.parse('{{ ijtima_karkunan_alaqah_data | tojson | safe }}'), 'اجتماع کارکنان (علاقہ)');
+                createIjtimaatChart('ijtimaKarkunanHalqajatChart', JSON.parse('{{ ijtima_karkunan_halqajat_data | tojson | safe }}'), 'اجتماع کارکنان (حلقہ جات)');
+                createIjtimaatChart('ijtimaNaziminHalqajatChart', JSON.parse('{{ ijtima_nazimin_halqajat_data | tojson | safe }}'), 'اجتماع ناظمین (حلقہ جات)');
+                createIjtimaatChart('darsQuranChart', JSON.parse('{{ dars_quran_data | tojson | safe }}'), 'درس قرآن (حلقہ جات)');
+                createIjtimaatChart('dawatiCampChart', JSON.parse('{{ dawati_camp_data | tojson | safe }}'), 'دعوتی کیمپ / مستقل و فود');
+                createIjtimaatChart('gharonTakDawatChart', JSON.parse('{{ gharon_tak_dawat_data | tojson | safe }}'), 'گھروں تک دعوت');
+                createIjtimaatChart('taqseemLiteratureChart', JSON.parse('{{ taqseem_literature_data | tojson | safe }}'), 'تقسیم لٹریچر');
+
+                // Populate data tables
+                populateDataTables();
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+                // Retry after a short delay
+                setTimeout(createAllCharts, 500);
+            }
+        }
+
         // Initialize charts with data from Flask
         document.addEventListener('DOMContentLoaded', function() {
-            // Tanzeemi Hayyat Charts
-            createTanzeemiChart('blockCodeChart', JSON.parse('{{ block_code_data | tojson | safe }}'), 'بلاک کوڈ انچارجز');
-            createTanzeemiChart('nizamFajarChart', JSON.parse('{{ nizam_fajar_data | tojson | safe }}'), 'نظام فجر');
-            createTanzeemiChart('awaamiCommitteeChart', JSON.parse('{{ awaami_committee_data | tojson | safe }}'), 'عوامی کمیٹی');
+            // Ensure Chart.js is loaded
+            if (typeof Chart !== 'undefined') {
+                initializeCharts();
+            } else {
+                // Wait for Chart.js to load
+                const checkChartJS = setInterval(function() {
+                    if (typeof Chart !== 'undefined') {
+                        clearInterval(checkChartJS);
+                        initializeCharts();
+                    }
+                }, 100);
+            }
+        });
 
-            // Afradi Quwat Charts
-            createAfradiChart('arkaanChart', JSON.parse('{{ arkaan_data | tojson | safe }}'), 'ارکان');
-            createAfradiChart('umeedwaranChart', JSON.parse('{{ umeedwaran_data | tojson | safe }}'), 'امیدواران رکنیت');
-            createAfradiChart('karkunanChart', JSON.parse('{{ karkunan_data | tojson | safe }}'), 'کارکنان');
-
-            // Ijtimaat Charts
-            createIjtimaatChart('zilaiShuraChart', JSON.parse('{{ zilai_shura_data | tojson | safe }}'), 'اجلاس ضلعی شوریٰ');
-            createIjtimaatChart('nazmZilaChart', JSON.parse('{{ nazm_zila_data | tojson | safe }}'), 'اجلاس نظم ضلع');
-            createIjtimaatChart('naziminAlaqajatChart', JSON.parse('{{ nazimin_alaqajat_data | tojson | safe }}'), 'اجلاس ناظمین علاقہ جات');
-            createIjtimaatChart('zilaiIjtimaArkaanChart', JSON.parse('{{ zilai_ijtima_arkaan_data | tojson | safe }}'), 'ضلعی اجتماع ارکان');
-            createIjtimaatChart('zilaiIjtimaUmeedwaranChart', JSON.parse('{{ zilai_ijtima_umeedwaran_data | tojson | safe }}'), 'ضلعی اجتماع امیدواران');
-            createIjtimaatChart('ijtimaArkaanAlaqahChart', JSON.parse('{{ ijtima_arkaan_alaqah_data | tojson | safe }}'), 'اجتماع ارکان (علاقہ)');
-            createIjtimaatChart('ijtimaUmeedwaranAlaqahChart', JSON.parse('{{ ijtima_umeedwaran_alaqah_data | tojson | safe }}'), 'اجتماع اُمیدواران (علاقہ)');
-            createIjtimaatChart('ijtimaKarkunanAlaqahChart', JSON.parse('{{ ijtima_karkunan_alaqah_data | tojson | safe }}'), 'اجتماع کارکنان (علاقہ)');
-            createIjtimaatChart('ijtimaKarkunanHalqajatChart', JSON.parse('{{ ijtima_karkunan_halqajat_data | tojson | safe }}'), 'اجتماع کارکنان (حلقہ جات)');
-            createIjtimaatChart('ijtimaNaziminHalqajatChart', JSON.parse('{{ ijtima_nazimin_halqajat_data | tojson | safe }}'), 'اجتماع ناظمین (حلقہ جات)');
-            createIjtimaatChart('darsQuranChart', JSON.parse('{{ dars_quran_data | tojson | safe }}'), 'درس قرآن (حلقہ جات)');
-            createIjtimaatChart('dawatiCampChart', JSON.parse('{{ dawati_camp_data | tojson | safe }}'), 'دعوتی کیمپ / مستقل و فود');
-            createIjtimaatChart('gharonTakDawatChart', JSON.parse('{{ gharon_tak_dawat_data | tojson | safe }}'), 'گھروں تک دعوت');
-            createIjtimaatChart('taqseemLiteratureChart', JSON.parse('{{ taqseem_literature_data | tojson | safe }}'), 'تقسیم لٹریچر');
+        // Handle window resize for better responsiveness
+        window.addEventListener('resize', function() {
+            // Resize all charts
+            Chart.instances.forEach(function(chart) {
+                chart.resize();
+            });
         });
     </script>
 </body>

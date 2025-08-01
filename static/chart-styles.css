@@ -1,0 +1,234 @@
+/* Chart.js Specific Styles for Better Rendering on Deployed Servers */
+
+/* Ensure proper canvas sizing and responsiveness - ONLY for bar charts */
+.graph-card .chart-container {
+    position: relative;
+    width: 100% !important;
+    height: 250px !important;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.graph-card .chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+}
+
+/* Special handling for spider/radar chart */
+#spider-view .chart-container {
+    position: relative;
+    width: 100% !important;
+    height: 700px !important;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#spider-view .chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+}
+
+/* Chart.js responsive fixes - ONLY for bar charts */
+.graph-card .chart-container canvas[style*="width"] {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Ensure proper font loading for chart labels - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif !important;
+}
+
+/* Font loading for spider chart */
+#spider-view .chart-container canvas {
+    font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif !important;
+}
+
+/* Chart.js legend and tooltip styles */
+.chartjs-tooltip {
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    border-radius: 4px !important;
+    padding: 8px 12px !important;
+    font-family: 'Noto Nastaliq Urdu', 'Arial', sans-serif !important;
+    font-size: 14px !important;
+}
+
+/* Fix for chart grid and axis lines - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    background: white;
+}
+
+/* Spider chart should not have border */
+#spider-view .chart-container canvas {
+    border: none;
+    background: transparent;
+}
+
+/* Ensure proper chart rendering on different screen sizes - ONLY for bar charts */
+@media (max-width: 768px) {
+    .graph-card .chart-container {
+        height: 200px !important;
+    }
+    
+    .graph-card .chart-container canvas {
+        font-size: 12px !important;
+    }
+    
+    #spider-view .chart-container {
+        height: 500px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .graph-card .chart-container {
+        height: 180px !important;
+    }
+    
+    .graph-card .chart-container canvas {
+        font-size: 11px !important;
+    }
+    
+    #spider-view .chart-container {
+        height: 400px !important;
+    }
+}
+
+/* Fix for chart.js datalabels plugin - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    pointer-events: auto !important;
+}
+
+/* Ensure proper chart.js initialization - ONLY for bar charts */
+.graph-card .chart-container {
+    overflow: hidden;
+}
+
+/* Fix for chart.js animation issues - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    /* Removed transition property that can cause blurriness */
+}
+
+/* Ensure proper chart.js responsive behavior - ONLY for bar charts */
+.graph-card .chart-container {
+    min-height: 200px;
+}
+
+/* Fix for chart.js legend positioning - ONLY for bar charts */
+.graph-card .chart-container {
+    position: relative;
+}
+
+/* Spider chart specific settings */
+#spider-view .chart-container {
+    overflow: visible;
+    min-height: 600px;
+    position: relative;
+}
+
+#spider-view .chart-container canvas {
+    pointer-events: auto !important;
+    transition: none !important;
+}
+
+/* Ensure proper chart.js canvas context - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    /* Ensure crisp rendering */
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Fix for chart.js font loading issues */
+@font-face {
+    font-family: 'Noto Nastaliq Urdu';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+    font-display: swap;
+}
+
+/* Fallback font for charts - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    font-family: 'Noto Nastaliq Urdu', 'Arial Unicode MS', 'Arial', sans-serif !important;
+}
+
+/* Fallback font for spider chart */
+#spider-view .chart-container canvas {
+    font-family: 'Noto Nastaliq Urdu', 'Arial Unicode MS', 'Arial', sans-serif !important;
+}
+
+/* Fix for chart.js bar chart rendering - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    background: transparent !important;
+}
+
+/* Ensure proper chart.js axis labels - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    direction: rtl;
+}
+
+/* Spider chart should not have RTL direction */
+#spider-view .chart-container canvas {
+    direction: ltr;
+}
+
+/* Fix for chart.js responsive breakpoints - ONLY for bar charts */
+@media (max-width: 1200px) {
+    .graph-card .chart-container {
+        height: 220px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .graph-card .chart-container {
+        height: 200px !important;
+    }
+}
+
+/* Fix for chart.js canvas scaling issues - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    /* Removed transform-origin that can cause scaling issues */
+}
+
+/* Ensure proper chart.js plugin rendering - ONLY for bar charts */
+.graph-card .chart-container {
+    /* Removed contain property that can cause rendering issues */
+}
+
+/* Fix for chart.js memory issues on mobile - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    /* Removed will-change property that can cause blurriness */
+}
+
+/* Ensure proper chart.js touch events - ONLY for bar charts */
+.graph-card .chart-container canvas {
+    touch-action: manipulation;
+}
+
+/* Spider chart specific responsive and scaling */
+@media (max-width: 1200px) {
+    #spider-view .chart-container {
+        height: 600px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    #spider-view .chart-container {
+        height: 550px !important;
+    }
+}
+
+#spider-view .chart-container canvas {
+    touch-action: manipulation;
+} 

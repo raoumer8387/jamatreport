@@ -169,9 +169,11 @@ def ensure_monthly_reports_columns():
         'awaami_committee_start',  'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
         # جماعتِ اسلامی شعبہ اطفال
         'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+        # Historical data columns
+        'period', 'submitted_by',
     ]
     # Types for each column (default to INTEGER, TEXT for *_activities)
-    text_columns = {'youth_activities'}
+    text_columns = {'youth_activities', 'period', 'submitted_by'}
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute('PRAGMA table_info(monthly_reports)')
@@ -253,25 +255,29 @@ def create_default_users():
             'admin', 
             'airport', 'gadap', 'gharbi', 'wasti', 'gulberg_wasti', 
             'junoobi', 'keemari', 'korangi', 'malir', 'quaideen', 
-            'sharqi', 'shumali', 'site_gharbi'
+            'sharqi', 'shumali', 'site_gharbi',
+            'ismail', 'ahsan', 'farhzan', 'faizan', 'bashar'
         ],
         'password': [
             'admin123',
             'airport123', 'gadap123', 'gharbi123', 'wasti123', 'gulberg123',
             'junoobi123', 'keemari123', 'korangi123', 'malir123', 'quaideen123',
-            'sharqi123', 'shumali123', 'site123'
+            'sharqi123', 'shumali123', 'site123',
+            'ismail123', 'ahsan123', 'farhzan123', 'faizan123', 'bashar123'
         ],
         'zila': [
             'کراچی مرکز',
             'ایئرپورٹ', 'گڈاپ', 'غربی', 'وسطی', 'گلبرگ وسطی',
             'جنوبی', 'کیماڑی', 'کورنگی', 'ملیر', 'قائدین',
-            'شرقی', 'شمالی', 'سائٹ غربی'
+            'شرقی', 'شمالی', 'سائٹ غربی',
+            'کراچی مرکز', 'کراچی مرکز', 'کراچی مرکز', 'کراچی مرکز', 'کراچی مرکز'
         ],
         'role': [
             'admin',
             'user', 'user', 'user', 'user', 'user',
             'user', 'user', 'user', 'user', 'user',
-            'user', 'user', 'user'
+            'user', 'user', 'user',
+            'agent', 'agent', 'agent', 'agent', 'agent'
         ]
     })
     return default_users
@@ -1235,4 +1241,188 @@ def debug_atifal_data():
             
     except Exception as e:
         return f"Error debugging atifal data: {str(e)}"
+
+
+@app.route('/update_historical_columns')
+def update_historical_columns():
+    """Route to add historical data columns to database"""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Add period column if it doesn't exist
+        c.execute("PRAGMA table_info(monthly_reports)")
+        columns = [row[1] for row in c.fetchall()]
+        
+        if 'period' not in columns:
+            c.execute("ALTER TABLE monthly_reports ADD COLUMN period TEXT")
+            msg1 = "Column 'period' added successfully."
+        else:
+            msg1 = "Column 'period' already exists."
+        
+        if 'submitted_by' not in columns:
+            c.execute("ALTER TABLE monthly_reports ADD COLUMN submitted_by TEXT")
+            msg2 = "Column 'submitted_by' added successfully."
+        else:
+            msg2 = "Column 'submitted_by' already exists."
+        
+        conn.commit()
+        conn.close()
+        
+        return f"{msg1}<br>{msg2}"
+        
+    except Exception as e:
+        return f"Error updating columns: {str(e)}"
+
+@app.route('/historical_data_form/<zila>', methods=['GET', 'POST'])
+def historical_data_form(zila):
+    """Route for agents to submit historical quarterly data"""
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    # Check if user is an agent
+    if session.get('role') != 'agent':
+        flash("صرف ایجنٹ صارفین تاریخی ڈیٹا جمع کر سکتے ہیں", "error")
+        return redirect(url_for('dashboard'))
+    
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    
+    if request.method == 'GET':
+        # Get existing historical submissions for this zila
+        c.execute('''
+            SELECT period, submitted_by, timestamp 
+            FROM monthly_reports 
+            WHERE zila = ? AND period IS NOT NULL 
+            ORDER BY timestamp DESC
+        ''', (zila,))
+        existing_submissions = c.fetchall()
+        
+        conn.close()
+        
+        return render_template('historical_data_form.html', 
+                             zila=zila, 
+                             existing_submissions=existing_submissions,
+                             username=session['username'])
+    
+    elif request.method == 'POST':
+        try:
+            # Get form data
+            quarter = request.form.get('quarter')
+            year = request.form.get('year')
+            period = f"{quarter} {year}"
+            
+            # Create new entry with historical data
+            new_entry = {
+                'zila': zila,
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'submitted_by': session['username'],
+                'period': period
+            }
+            
+            # Add all form fields (similar to the main report form)
+            form_fields = [
+                'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
+                'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
+                'alaqajat_start', 'alaqajat_end', 'alaqajat_target', 'alaqajat_izafa', 'alaqajat_kami', 'alaqajat_ikhtitaam',
+                'halqajat_start', 'halqajat_end', 'halqajat_target', 'halqajat_izafa', 'halqajat_kami', 'halqajat_ikhtitaam',
+                'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target', 'halqajat_ward_izafa', 'halqajat_ward_kami', 'halqajat_ward_ikhtitaam',
+                'block_code_start', 'block_code_end', 'block_code_target', 'block_code_izafa', 'block_code_kami', 'block_code_ikhtitaam',
+                'arkaan_start', 'arkaan_end', 'arkaan_target', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
+                'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
+                'hangami_start', 'hangami_end', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
+                'muawanin_start', 'muawanin_end', 'muawanin_target', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
+                'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
+                'member_start', 'member_end', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam',
+                'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programat_name',
+                'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
+                'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
+                'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
+                'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
+                'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
+                'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
+                'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
+                'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
+                'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
+                'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
+                'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
+                'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
+                'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
+                'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
+                'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
+                'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
+                'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
+                'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
+                'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
+                'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
+                'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
+                'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
+                'quran_courses', 'quran_classes', 'quran_participants',
+                'fahem_quran_attendance', 'quran_target', 'quran_distributed',
+                'central_training_target', 'central_training_actual', 'other_trainings',
+                'atifal_programs', 'awaami_committees', 'awaami_committees_count',
+                'koi_or_bat', 'haq_do_karachi',
+                'hangami_start', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam', 'hangami_end',
+                'member_start', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam', 'member_end',
+                'nizam_e_fajar_start', 'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
+                'awaami_committee_start', 'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+                'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
+            ]
+            
+            for field in form_fields:
+                value = request.form.get(field, '')
+                if value == '':
+                    new_entry[field] = 0
+                else:
+                    try:
+                        new_entry[field] = int(value)
+                    except ValueError:
+                        new_entry[field] = 0
+            
+            # Check if this period already exists for this zila
+            c.execute('SELECT id FROM monthly_reports WHERE zila = ? AND period = ?', (zila, period))
+            existing = c.fetchone()
+            
+            if existing:
+                # Update existing record with all form fields
+                update_fields = []
+                update_values = []
+                
+                for field in form_fields:
+                    if field in new_entry:
+                        update_fields.append(f"{field} = ?")
+                        update_values.append(new_entry[field])
+                
+                update_fields.extend(['timestamp = ?', 'submitted_by = ?'])
+                update_values.extend([new_entry['timestamp'], new_entry['submitted_by']])
+                update_values.extend([zila, period])
+                
+                update_query = f'''
+                    UPDATE monthly_reports SET 
+                    {', '.join(update_fields)}
+                    WHERE zila = ? AND period = ?
+                '''
+                c.execute(update_query, update_values)
+                flash(f"{period} کے لیے ڈیٹا کامیابی سے اپ ڈیٹ ہو گیا", "success")
+            else:
+                # Insert new record
+                columns = ', '.join(new_entry.keys())
+                placeholders = ', '.join(['?' for _ in new_entry])
+                c.execute(f'INSERT INTO monthly_reports ({columns}) VALUES ({placeholders})', list(new_entry.values()))
+                flash(f"{period} کے لیے ڈیٹا کامیابی سے جمع ہو گیا", "success")
+            
+            conn.commit()
+            conn.close()
+            
+            return redirect(url_for('historical_data_form', zila=zila))
+            
+        except Exception as e:
+            conn.close()
+            flash(f"ڈیٹا جمع کرنے میں خرابی: {str(e)}", "error")
+            return redirect(url_for('historical_data_form', zila=zila))
+
+
+if __name__ == '__main__':
+    init_db()
+    app.run(debug=True)
 

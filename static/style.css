@@ -355,7 +355,8 @@ body {
     padding: 12px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     transition: border-color 0.3s ease;
 }
 
@@ -1267,7 +1268,8 @@ body {
     padding: 12px 15px;
     border: 2px solid #ddd;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     font-family: 'Noto Nastaliq Urdu', serif;
     transition: all 0.3s ease;
     background: white;
@@ -1356,7 +1358,8 @@ body {
     padding: 10px 12px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: bold;
     text-align: center;
     transition: all 0.3s ease;
     background: white;
@@ -1647,7 +1650,8 @@ body {
     
     .form-group input {
         padding: 10px 12px;
-        font-size: 14px;
+        font-size: 18px;
+        font-weight: bold;
     }
 }
       
@@ -1663,7 +1667,8 @@ body {
     padding: 12px 15px;
     border: 2px solid #3498db;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     font-family: 'Noto Nastaliq Urdu', serif;
     transition: all 0.3s ease;
     background: white;
@@ -1683,7 +1688,8 @@ body {
     padding: 12px 15px;
     border: 2px solid #3498db;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: bold;
     font-family: 'Noto Nastaliq Urdu', serif;
     transition: all 0.3s ease;
     background: white;
@@ -2079,6 +2085,26 @@ body {
     justify-content: center;
 }
 
+/* Spider chart specific styling */
+#spider-view .chart-container {
+    height: 700px;
+}
+
+/* Chart.js Label Styles - Make labels bigger */
+.chart-container canvas {
+    font-size: 16px !important;
+}
+
+/* Target Chart.js legend labels */
+.chart-container canvas + div {
+    font-size: 16px !important;
+}
+
+/* Chart.js axis labels and tick labels */
+.chart-container canvas {
+    font-family: 'Noto Nastaliq Urdu', serif !important;
+}
+
 .chart-center-text {
     position: absolute;
     top: 50%;
@@ -2118,6 +2144,10 @@ body {
     
     .chart-container {
         height: 200px;
+    }
+    
+    #spider-view .chart-container {
+        height: 500px;
     }
     
     .center-ratio {

@@ -59,6 +59,7 @@
                                 <th>ہدف</th>
                             {% endif %}
                             <th>رپورٹ دیکھیں</th>
+                            <th>تاریخی ڈیٹا</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,6 +90,16 @@
                                     {% else %}
                                         <a href="{{ url_for('view_report', zila=zila.zila) }}" class="view-btn">رپورٹ دیکھیں</a>
                                     {% endif %}
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    {% if session['role'] in ['agent', 'admin'] %}
+                                        <a href="{{ url_for('historical_data_form', zila=zila.zila) }}" class="historical-btn" style="text-decoration: none; display: inline-block; padding: 8px 16px; background: #27ae60; color: white; border-radius: 5px; font-size: 14px;">سہ ماہی ڈیٹا درج کریں</a>
+                                    {% else %}
+                                        <span style="color: #999; font-style: italic;">صرف ایجنٹ اور ایڈمن صارفین</span>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
@@ -97,5 +108,6 @@
                 </table>
             </div>
         </div>
+        
 </body>
 </html>

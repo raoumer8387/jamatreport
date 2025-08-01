@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاریخی ڈیٹا فارم - {{ zila }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="report-header">
+            <div class="header-content">
+                <h1>جماعت اسلامی ضلعی رپورٹنگ سسٹم</h1>
+                <h2>{{ zila }} - تاریخی ڈیٹا فارم</h2>
+            </div>
+            <div class="header-actions">
+                <a href="{{ url_for('dashboard') }}" class="back-btn">ڈیش بورڈ پر واپس جائیں</a>
+                <a href="{{ url_for('logout') }}" class="logout-btn">لاگ آؤٹ</a>
+            </div>
+        </header>
+
+        <!-- Submit New Historical Data Button -->
+        <div class="submit-new-section" style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin-top: 0; color: #2c3e50;">نیا تاریخی ڈیٹا جمع کریں</h3>
+            <p style="margin-bottom: 15px; color: #555;">نیا سہ ماہی ڈیٹا جمع کرنے کے لیے نیچے دیا گیا بٹن استعمال کریں</p>
+            <a href="{{ url_for('submit_historical_data', zila=zila) }}" target="_blank" class="submit-new-btn" style="background: #27ae60; color: white; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-size: 16px; display: inline-block;">
+                نیا تاریخی ڈیٹا جمع کریں
+            </a>
+        </div>
+
+        <!-- Existing Submissions Section -->
+        {% if existing_submissions %}
+        <div class="existing-submissions-section" style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">پہلے سے جمع شدہ سہ ماہی ڈیٹا</h3>
+            <div class="table-responsive">
+                <table class="dashboard-table">
+                    <thead>
+                        <tr>
+                            <th>سہ ماہی</th>
+                            <th>جمع کرنے والا</th>
+                            <th>تاریخ</th>
+                            <th>عمل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for submission in existing_submissions %}
+                        <tr>
+                            <td>{{ submission[0] }}</td>
+                            <td>{{ submission[1] }}</td>
+                            <td>{{ submission[2] }}</td>
+                            <td>
+                                <a href="{{ url_for('submit_historical_data', zila=zila, edit_period=submission[0]) }}" target="_blank" class="edit-btn" style="background: #3498db; color: white; text-decoration: none; padding: 5px 10px; border-radius: 3px; display: inline-block;">ترمیم کریں</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+
+
+                </table>
+            </div>
+
+
+                </div>
+            </div>
+
+
+
+
+                    </div>
+            </div>
+
+
+    </div>
+
+    <script>
+        // Calculate ikhtitaam (end) values automatically
+        function calculateIkhtitaam() {
+            const rows = document.querySelectorAll('.organizational-table tbody tr');
+            rows.forEach(row => {
+                const startInput = row.querySelector('input[name$="_start"]');
+                const izafaInput = row.querySelector('input[name$="_izafa"]');
+                const kamiInput = row.querySelector('input[name$="_kami"]');
+                const ikhtitaamInput = row.querySelector('input[name$="_ikhtitaam"]');
+                
+                if (startInput && izafaInput && kamiInput && ikhtitaamInput) {
+                    const calculate = () => {
+                        const start = parseInt(startInput.value) || 0;
+                        const izafa = parseInt(izafaInput.value) || 0;
+                        const kami = parseInt(kamiInput.value) || 0;
+                        ikhtitaamInput.value = start + izafa - kami;
+                    };
+                    
+                    startInput.addEventListener('input', calculate);
+                    izafaInput.addEventListener('input', calculate);
+                    kamiInput.addEventListener('input', calculate);
+                    calculate(); // Initial calculation
+                }
+            });
+        }
+
+        // Render program fields
+        function renderProgramatFields() {
+            const count = parseInt(document.getElementById('youth_programat_count').value) || 0;
+            const container = document.getElementById('programat-fields-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const row = document.createElement('div');
+                row.className = 'form-row programat-row';
+                row.innerHTML = `
+                    <div class="form-group">
+                        <label for="programat_${i+1}">نوعیت ${i+1}</label>
+                        <input type="text" id="programat_${i+1}" name="programat_${i+1}" placeholder="نوعیت">
+                    </div>
+                    <div class="form-group">
+                        <label for="programat_count_${i+1}">حاضری</label>
+                        <input type="number" id="programat_count_${i+1}" name="programat_count_${i+1}" min="0" placeholder="0">
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        // Render atifal program fields
+        function renderAtifalProgramatFields() {
+            const count = parseInt(document.getElementById('atifal_programat_count').value) || 0;
+            const container = document.getElementById('atifal-programat-fields-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const row = document.createElement('div');
+                row.className = 'form-row programat-row';
+                row.innerHTML = `
+                    <div class="form-group">
+                        <label for="atifal_programat_${i+1}">نوعیت ${i+1}</label>
+                        <input type="text" id="atifal_programat_${i+1}" name="atifal_programat_${i+1}" placeholder="نوعیت">
+                    </div>
+                    <div class="form-group">
+                        <label for="atifal_programat_count_${i+1}">حاضری</label>
+                        <input type="number" id="atifal_programat_count_${i+1}" name="atifal_programat_count_${i+1}" min="0" placeholder="0">
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+                       function loadExistingData(period) {
+                   // Redirect to the form with edit_period parameter
+                   window.location.href = window.location.pathname + '?edit_period=' + encodeURIComponent(period);
+               }
+
+        // Initialize calculations when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateIkhtitaam();
+        });
+    </script>
+</body>
+</html> 
