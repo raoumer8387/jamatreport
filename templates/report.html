@@ -36,6 +36,10 @@
         <div style="background: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold;">
             آپ اس وقت ایڈمن ہدف درج کرنے کے موڈ میں ہیں۔ صرف مخصوص فیلڈز قابل تدوین ہیں۔
         </div>
+        {% elif is_report_locked and session['role'] != 'admin' %}
+        <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: bold;">
+            یہ رپورٹ ایڈمن کے ذریعے لاک کر دی گئی ہے۔ آپ اسے تدوین نہیں کر سکتے۔
+        </div>
         {% endif %}
 
         <!-- Reporting Period Section -->
@@ -44,7 +48,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>موجودہ رپورٹنگ پیریڈ:</label>
-                    <input type="text" value="Q2 2025" readonly style="background-color: #f8f9fa; font-weight: bold; color: #2c3e50;">
+                    <input type="text" value="سہ ماہی دوم" readonly style="background-color: #f8f9fa; font-weight: bold; color: #2c3e50;">
                 </div>
             </div>
         </div>
@@ -686,7 +690,7 @@
         <!-- فارم بٹن -->
         {% if can_submit and not is_view_mode %}
         <div class="form-actions">
-            <button type="submit" class="submit-btn" onclick="return confirm('کیا آپ واقعی رپورٹ جمع کروانا چاہتے ہیں؟ جمع کروانے کے بعد فارم قابل تدوین نہیں رہے گا۔')">رپورٹ جمع کروائیں</button>
+            <button type="submit" class="submit-btn" onclick="return confirm('کیا آپ واقعی رپورٹ محفوظ کرنا چاہتے ہیں؟')">رپورٹ محفوظ کریں</button>
         </div>
         {% elif is_view_mode %}
         <div class="form-actions">
@@ -698,7 +702,7 @@
         </div>
         {% else %}
         <div class="form-actions">
-            <div class="alert alert-info">تمام فیلڈز مکمل ہیں۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
+            <div class="alert alert-info">رپورٹ لاک ہے۔ آپ صرف رپورٹ دیکھ سکتے ہیں۔</div>
         </div>
         {% endif %}
 

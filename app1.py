@@ -108,11 +108,15 @@ def force_update_database_schema():
     c.execute('PRAGMA table_info(monthly_reports)')
     existing_cols = [row[1] for row in c.fetchall()]
     
+    # Define text columns that should be TEXT type
+    text_columns = {'youth_activities', 'period', 'submitted_by', 'koi_or_bat', 'haq_do_karachi', 'other_trainings'}
+    
     # Add missing columns
     for col in required_columns:
         if col not in existing_cols:
             try:
-                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} INTEGER DEFAULT 0')
+                col_type = 'TEXT' if col in text_columns else 'INTEGER DEFAULT 0'
+                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} {col_type}')
             except Exception as e:
                 pass
     
@@ -120,71 +124,188 @@ def force_update_database_schema():
     conn.close()
 
 def ensure_monthly_reports_columns():
-    required_columns = [
-        'union_committee_count', 'wards_count', 'block_code_count', 'cantonment_board_count',
-        'nazm_qaim_union', 'nazm_qaim_wards', 'nazm_qaim_blockcode', 'nazm_qaim_cantonment',
-        'alaqajat_start', 'alaqajat_end', 'alaqajat_target','alaqajat_izafa','alaqajat_kami','alaqajat_ikhtitaam',
-        'halqajat_start', 'halqajat_end', 'halqajat_target','halqajat_izafa','halqajat_kami','halqajat_ikhtitaam',
-        'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target','halqajat_ward_izafa','halqajat_ward_kami','halqajat_ward_ikhtitaam',
-        'block_code_start', 'block_code_end', 'block_code_target','block_code_izafa','block_code_kami','block_code_ikhtitaam',
-        'arkaan_start', 'arkaan_end', 'arkaan_target','arkaan_izafa','arkaan_kami','arkaan_ikhtitaam',
-        'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target','umeedwaran_izafa','umeedwaran_kami','umeedwaran_ikhtitaam',
-        'hangami_start', 'hangami_end', 'hangami_target','hangami_izafa','hangami_kami','hangami_ikhtitaam',
-        'muawanin_start', 'muawanin_end', 'muawanin_target','muawanin_izafa','muawanin_kami','muawanin_ikhtitaam',
-        'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target','mutayyin_afrad_izafa','mutayyin_afrad_kami','mutayyin_afrad_ikhtitaam',
-        'member_start', 'member_end', 'member_target','member_izafa','member_kami','member_ikhtitaam',
-        'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programat_name',
-        'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
-        'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
-        'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
-        'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
-        'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
-        'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
-        'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
-        'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
-        'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
-        'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
-        'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
-        'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
-        'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
-        'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
-        'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
-        'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
-        'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
-        'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
-        'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
-        'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
-        'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
-        'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
-        'quran_courses', 'quran_classes', 'quran_participants',
-        'fahem_quran_attendance', 'quran_target', 'quran_distributed',
-        'central_training_target', 'central_training_actual', 'other_trainings',
-        'atifal_programs', 'awaami_committees', 'awaami_committees_count',
-        'koi_or_bat', 'haq_do_karachi',
-        # Hangami/other workers
-        'hangami_start', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam', 'hangami_end',
-        # Members
-        'member_start', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam', 'member_end',
-        # Nizam e Fajar
-        'nizam_e_fajar_start',  'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
-        # Awaami Committee
-        'awaami_committee_start',  'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
-        # جماعتِ اسلامی شعبہ اطفال
-        'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
-    ]
-    # Types for each column (default to INTEGER, TEXT for *_activities)
-    text_columns = {'youth_activities', 'period', 'submitted_by'}
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    c.execute('PRAGMA table_info(monthly_reports)')
-    existing_cols = [row[1] for row in c.fetchall()]
-    for col in required_columns:
-        if col not in existing_cols:
-            col_type = 'TEXT' if col in text_columns else 'INTEGER'
+    
+    # Get current columns
+    c.execute("PRAGMA table_info(monthly_reports)")
+    existing_columns = [column[1] for column in c.fetchall()]
+    
+    # Add missing columns if they don't exist
+    columns_to_add = [
+        ('period', 'TEXT'),
+        ('alaqajat_start', 'INTEGER'),
+        ('alaqajat_end', 'INTEGER'),
+        ('alaqajat_target', 'INTEGER'),
+        ('alaqajat_izafa', 'INTEGER'),
+        ('alaqajat_kami', 'INTEGER'),
+        ('alaqajat_ikhtitaam', 'INTEGER'),
+        ('halqajat_start', 'INTEGER'),
+        ('halqajat_end', 'INTEGER'),
+        ('halqajat_target', 'INTEGER'),
+        ('halqajat_izafa', 'INTEGER'),
+        ('halqajat_kami', 'INTEGER'),
+        ('halqajat_ikhtitaam', 'INTEGER'),
+        ('halqajat_ward_start', 'INTEGER'),
+        ('halqajat_ward_end', 'INTEGER'),
+        ('halqajat_ward_target', 'INTEGER'),
+        ('halqajat_ward_izafa', 'INTEGER'),
+        ('halqajat_ward_kami', 'INTEGER'),
+        ('halqajat_ward_ikhtitaam', 'INTEGER'),
+        ('block_code_start', 'INTEGER'),
+        ('block_code_end', 'INTEGER'),
+        ('block_code_target', 'INTEGER'),
+        ('block_code_izafa', 'INTEGER'),
+        ('block_code_kami', 'INTEGER'),
+        ('block_code_ikhtitaam', 'INTEGER'),
+        ('arkaan_start', 'INTEGER'),
+        ('arkaan_end', 'INTEGER'),
+        ('arkaan_target', 'INTEGER'),
+        ('arkaan_izafa', 'INTEGER'),
+        ('arkaan_kami', 'INTEGER'),
+        ('arkaan_ikhtitaam', 'INTEGER'),
+        ('umeedwaran_start', 'INTEGER'),
+        ('umeedwaran_end', 'INTEGER'),
+        ('umeedwaran_target', 'INTEGER'),
+        ('umeedwaran_izafa', 'INTEGER'),
+        ('umeedwaran_kami', 'INTEGER'),
+        ('umeedwaran_ikhtitaam', 'INTEGER'),
+        ('karkunan_start', 'INTEGER'),
+        ('karkunan_end', 'INTEGER'),
+        ('karkunan_target', 'INTEGER'),
+        ('karkunan_izafa', 'INTEGER'),
+        ('karkunan_kami', 'INTEGER'),
+        ('karkunan_ikhtitaam', 'INTEGER'),
+        ('hangami_start', 'INTEGER'),
+        ('hangami_end', 'INTEGER'),
+        ('hangami_target', 'INTEGER'),
+        ('hangami_izafa', 'INTEGER'),
+        ('hangami_kami', 'INTEGER'),
+        ('hangami_ikhtitaam', 'INTEGER'),
+        ('muawanin_start', 'INTEGER'),
+        ('muawanin_end', 'INTEGER'),
+        ('muawanin_target', 'INTEGER'),
+        ('muawanin_izafa', 'INTEGER'),
+        ('muawanin_kami', 'INTEGER'),
+        ('muawanin_ikhtitaam', 'INTEGER'),
+        ('mutayyin_afrad_start', 'INTEGER'),
+        ('mutayyin_afrad_end', 'INTEGER'),
+        ('mutayyin_afrad_target', 'INTEGER'),
+        ('mutayyin_afrad_izafa', 'INTEGER'),
+        ('mutayyin_afrad_kami', 'INTEGER'),
+        ('mutayyin_afrad_ikhtitaam', 'INTEGER'),
+        ('member_start', 'INTEGER'),
+        ('member_end', 'INTEGER'),
+        ('member_target', 'INTEGER'),
+        ('member_izafa', 'INTEGER'),
+        ('member_kami', 'INTEGER'),
+        ('member_ikhtitaam', 'INTEGER'),
+        ('youth_nazm_areas', 'INTEGER'),
+        ('youth_karkunan', 'INTEGER'),
+        ('youth_programat_count', 'INTEGER'),
+        ('youth_programs_json', 'TEXT'),
+        ('atifal_nazm_areas', 'INTEGER'),
+        ('atifal_members', 'INTEGER'),
+        ('atifal_programat_count', 'INTEGER'),
+        ('atifal_programs_json', 'TEXT'),
+        ('zilai_shura_planned', 'INTEGER'),
+        ('zilai_shura_held', 'INTEGER'),
+        ('zilai_shura_attendance', 'INTEGER'),
+        ('nazm_zila_planned', 'INTEGER'),
+        ('nazm_zila_held', 'INTEGER'),
+        ('nazm_zila_attendance', 'INTEGER'),
+        ('nazimin_alaqajat_planned', 'INTEGER'),
+        ('nazimin_alaqajat_held', 'INTEGER'),
+        ('nazimin_alaqajat_attendance', 'INTEGER'),
+        ('zilai_ijtima_arkaan_planned', 'INTEGER'),
+        ('zilai_ijtima_arkaan_held', 'INTEGER'),
+        ('zilai_ijtima_arkaan_attendance', 'INTEGER'),
+        ('zilai_ijtima_umeedwaran_planned', 'INTEGER'),
+        ('zilai_ijtima_umeedwaran_held', 'INTEGER'),
+        ('zilai_ijtima_umeedwaran_attendance', 'INTEGER'),
+        ('ijtima_arkaan_alaqah_planned', 'INTEGER'),
+        ('ijtima_arkaan_alaqah_held', 'INTEGER'),
+        ('ijtima_arkaan_alaqah_attendance', 'INTEGER'),
+        ('ijtima_umeedwaran_alaqah_planned', 'INTEGER'),
+        ('ijtima_umeedwaran_alaqah_held', 'INTEGER'),
+        ('ijtima_umeedwaran_alaqah_attendance', 'INTEGER'),
+        ('ijtima_karkunaan_alaqah_planned', 'INTEGER'),
+        ('ijtima_karkunaan_alaqah_held', 'INTEGER'),
+        ('ijtima_karkunaan_alaqah_attendance', 'INTEGER'),
+        ('ijtima_karkunaan_halqajat_planned', 'INTEGER'),
+        ('ijtima_karkunaan_halqajat_held', 'INTEGER'),
+        ('ijtima_karkunaan_halqajat_attendance', 'INTEGER'),
+        ('ijtima_nazimin_halqajat_planned', 'INTEGER'),
+        ('ijtima_nazimin_halqajat_held', 'INTEGER'),
+        ('ijtima_nazimin_halqajat_attendance', 'INTEGER'),
+        ('dars_quran_planned', 'INTEGER'),
+        ('dars_quran_held', 'INTEGER'),
+        ('dars_quran_attendance', 'INTEGER'),
+        ('dawati_camp_planned', 'INTEGER'),
+        ('dawati_camp_held', 'INTEGER'),
+        ('dawati_camp_attendance', 'INTEGER'),
+        ('gharon_tak_dawat_planned', 'INTEGER'),
+        ('gharon_tak_dawat_held', 'INTEGER'),
+        ('gharon_tak_dawat_attendance', 'INTEGER'),
+        ('taqseem_literature_planned', 'INTEGER'),
+        ('taqseem_literature_held', 'INTEGER'),
+        ('taqseem_literature_attendance', 'INTEGER'),
+        ('study_circle_maqamat', 'INTEGER'),
+        ('study_circle_daurajat', 'INTEGER'),
+        ('study_circle_attendance', 'INTEGER'),
+        ('ijtimai_tuaam_maqamat', 'INTEGER'),
+        ('ijtimai_tuaam_daurajat', 'INTEGER'),
+        ('ijtimai_tuaam_attendance', 'INTEGER'),
+        ('ijtimai_ahle_khana_maqamat', 'INTEGER'),
+        ('ijtimai_ahle_khana_daurajat', 'INTEGER'),
+        ('ijtimai_ahle_khana_attendance', 'INTEGER'),
+        ('quran_course_maqamat', 'INTEGER'),
+        ('quran_course_daurajat', 'INTEGER'),
+        ('quran_course_attendance', 'INTEGER'),
+        ('retreat_maqamat', 'INTEGER'),
+        ('retreat_daurajat', 'INTEGER'),
+        ('retreat_attendance', 'INTEGER'),
+        ('quran_courses', 'INTEGER'),
+        ('quran_classes', 'INTEGER'),
+        ('quran_participants', 'INTEGER'),
+        ('fahem_quran_attendance', 'INTEGER'),
+        ('quran_distributed', 'INTEGER'),
+        ('central_training_target', 'INTEGER'),
+        ('central_training_actual', 'INTEGER'),
+        ('other_trainings', 'TEXT'),
+        ('atifal_programs', 'INTEGER'),
+        ('amir_zila_maqamat', 'INTEGER'),
+        ('amir_zila_daurajat', 'INTEGER'),
+        ('amir_zila_mulaqat', 'INTEGER'),
+        ('qaim_zila_maqamat', 'INTEGER'),
+        ('qaim_zila_daurajat', 'INTEGER'),
+        ('qaim_zila_mulaqat', 'INTEGER'),
+        ('naib_amir_zila_maqamat', 'INTEGER'),
+        ('naib_amir_zila_daurajat', 'INTEGER'),
+        ('naib_amir_zila_mulaqat', 'INTEGER'),
+        ('koi_or_bat', 'TEXT'),
+        ('haq_do_karachi', 'TEXT'),
+        ('nizam_e_fajar_start', 'INTEGER'),
+        ('nizam_e_fajar_target', 'INTEGER'),
+        ('nizam_e_fajar_izafa', 'INTEGER'),
+        ('nizam_e_fajar_kami', 'INTEGER'),
+        ('nizam_e_fajar_ikhtitaam', 'INTEGER'),
+        ('awaami_committee_start', 'INTEGER'),
+        ('awaami_committee_target', 'INTEGER'),
+        ('awaami_committee_izafa', 'INTEGER'),
+        ('awaami_committee_kami', 'INTEGER'),
+        ('awaami_committee_ikhtitaam', 'INTEGER'),
+        ('is_locked', 'INTEGER DEFAULT 0')  # Add is_locked column with default value 0 (unlocked)
+    ]
+    
+    for column_name, column_type in columns_to_add:
+        if column_name not in existing_columns:
             try:
-                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} {col_type}')
+                c.execute(f"ALTER TABLE monthly_reports ADD COLUMN {column_name} {column_type}")
+                print(f"Added column: {column_name}")
             except Exception as e:
-                pass
+                print(f"Error adding column {column_name}: {e}")
+    
     conn.commit()
     conn.close()
 
@@ -915,20 +1036,22 @@ def report():
                     save_report_to_db(new_entry)
                     flash("Report submitted!", "success")
             return redirect(url_for('report'))
-        # For GET: lock fields that are non-empty in DB, keep empty fields editable
+        # For GET: Check if report is locked by admin
         locked_fields = {}
+        is_report_locked = False
         if report_exists:
             row = existing_report.iloc[0]
-            # Ensure atifal_programat_count is in visible_fields
-            if 'atifal_programat_count' not in visible_fields:
-                visible_fields.append('atifal_programat_count')
-            # Locking logic for all visible fields - only lock if current user submitted the data
-            current_user = session.get('username', '')
-            submitted_by = row.get('submitted_by', '')
-            for key in visible_fields:
-                # Only lock fields if the current user submitted them
-                field_has_data = str(row.get(key, '')).strip() not in ['', 'nan', 'None']
-                locked_fields[key] = field_has_data and (current_user == submitted_by)
+            # Check if report is locked by admin
+            is_report_locked = bool(row.get('is_locked', 0))
+            
+            # If report is locked by admin, lock all fields for non-admin users
+            if is_report_locked and session.get('role') != 'admin':
+                for key in visible_fields:
+                    locked_fields[key] = True
+            else:
+                # No locking - allow editing of all fields
+                for key in visible_fields:
+                    locked_fields[key] = False
         
         # Get form data (now includes properly loaded JSON data)
         form_data = get_form_data(zila)
@@ -989,8 +1112,8 @@ def report():
         atifal_count_has_data = atifal_count and str(atifal_count).strip() not in ['', '0', 'nan', 'None']
         locked_fields['atifal_programat_count'] = atifal_count_has_data and (current_user == submitted_by)
         
-        # Set can_submit to True if any field is not locked, else False
-        can_submit = any(not locked for locked in locked_fields.values())
+        # Set can_submit based on whether report is locked
+        can_submit = not is_report_locked or session.get('role') == 'admin'
         
         # Debug: Print locked fields for atifal programs
         atifal_locked_fields = {k: v for k, v in locked_fields.items() if 'atifal' in k}
@@ -1003,7 +1126,8 @@ def report():
                              locked_fields=locked_fields,
                              can_submit=can_submit,
                              is_view_mode=False,
-                             is_admin_target_setting=False)
+                             is_admin_target_setting=False,
+                             is_report_locked=is_report_locked)
     except Exception as e:
         import logging
         logging.error("Exception in /report route", exc_info=True)
@@ -1089,9 +1213,12 @@ def dashboard():
                 else:
                     zila_dict['status'] = 'partial'
                 zila_dict['has_report'] = True
+                # Add lock status
+                zila_dict['is_locked'] = bool(row.get('is_locked', 0))
             else:
                 zila_dict['status'] = 'not_started'
                 zila_dict['has_report'] = False
+                zila_dict['is_locked'] = False
             zila_status.append(zila_dict)
         
         # Calculate summary statistics
@@ -1726,6 +1853,7 @@ def admin_target_setting(zila):
             'koi_or_bat', 'haq_do_karachi',
             'nizam_e_fajar_start', 'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
             'awaami_committee_start', 'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
+            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json',
         ]
         
         # Lock fields that are not admin editable
@@ -1821,153 +1949,337 @@ def view_combined_report(zila):
         from urllib.parse import unquote
         zila = unquote(zila)
         
-        # Load report data
-        global report_df
-        report_df = load_reports_from_db()
+        # Get quarterly comparison data
+        q1_form_data, q2_form_data = get_quarterly_comparison_data(zila)
         
-        # Try exact match first
-        report_row = report_df[report_df['zila'] == zila]
+        # Use Q2 data as primary data (for backward compatibility)
+        form_data = q2_form_data if q2_form_data else q1_form_data
         
-        # If no exact match, try case-insensitive and normalized matching
-        if report_row.empty:
-            # Normalize the zila name (remove extra spaces, etc.)
-            normalized_zila = zila.strip()
-            report_row = report_df[report_df['zila'].str.strip() == normalized_zila]
-            
-            # If still no match, try partial matching
-            if report_row.empty:
-                for db_zila in report_df['zila'].unique():
-                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
-                        report_row = report_df[report_df['zila'] == db_zila]
-                        logging.info(f"Found partial match: {db_zila} for {normalized_zila}")
-                        break
-        
-        if report_row.empty:
-            # No data available, create empty data structures
-            form_data = {}
-        else:
-            form_data = report_row.iloc[0].to_dict()
-            form_data = {k: (0 if pd.isna(v) else v) for k, v in form_data.items()}
-        
-        # Prepare data for Tanzeemi Hayyat charts
-        alaqajat_data = {
-            'hadaf': form_data.get('alaqajat_target', 0),
-            'izafa': form_data.get('alaqajat_izafa', 0)
-        }
-        
-        halqajat_data = {
-            'hadaf': form_data.get('halqajat_target', 0),
-            'izafa': form_data.get('halqajat_izafa', 0)
-        }
-        
-        halqajat_ward_data = {
-            'hadaf': form_data.get('halqajat_ward_target', 0),
-            'izafa': form_data.get('halqajat_ward_izafa', 0)
-        }
-        
+        # Prepare quarterly comparison data for Tanzeemi Hayyat charts
         block_code_data = {
-            'hadaf': form_data.get('block_code_target', 0),
-            'izafa': form_data.get('block_code_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('block_code_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('block_code_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('block_code_target', 0),
+                'izafa': q2_form_data.get('block_code_izafa', 0)
+            }
         }
         
         nizam_fajar_data = {
-            'hadaf': form_data.get('nizam_e_fajar_target', 0),
-            'izafa': form_data.get('nizam_e_fajar_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('nizam_e_fajar_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('nizam_e_fajar_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('nizam_e_fajar_target', 0),
+                'izafa': q2_form_data.get('nizam_e_fajar_izafa', 0)
+            }
         }
         
         awaami_committee_data = {
-            'hadaf': form_data.get('awaami_committee_target', 0),
-            'izafa': form_data.get('awaami_committee_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('awaami_committee_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('awaami_committee_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('awaami_committee_target', 0),
+                'izafa': q2_form_data.get('awaami_committee_izafa', 0)
+            }
         }
         
-        # Prepare data for Afradi Quwat charts
+        # Prepare ikhtitam data for Tanzeemi Hayyat charts
+        alaqajat_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('alaqajat_target', 0),
+                'izafa': q1_form_data.get('alaqajat_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('alaqajat_target', 0),
+                'izafa': q2_form_data.get('alaqajat_ikhtitaam', 0)
+            }
+        }
+        
+        halqajat_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('halqajat_target', 0),
+                'izafa': q1_form_data.get('halqajat_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('halqajat_target', 0),
+                'izafa': q2_form_data.get('halqajat_ikhtitaam', 0)
+            }
+        }
+        
+        halqajat_ward_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('halqajat_ward_target', 0),
+                'izafa': q1_form_data.get('halqajat_ward_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('halqajat_ward_target', 0),
+                'izafa': q2_form_data.get('halqajat_ward_ikhtitaam', 0)
+            }
+        }
+        
+        block_code_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('block_code_target', 0),
+                'izafa': q1_form_data.get('block_code_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('block_code_target', 0),
+                'izafa': q2_form_data.get('block_code_ikhtitaam', 0)
+            }
+        }
+        
+        nizam_fajar_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('nizam_e_fajar_target', 0),
+                'izafa': q1_form_data.get('nizam_e_fajar_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('nizam_e_fajar_target', 0),
+                'izafa': q2_form_data.get('nizam_e_fajar_ikhtitaam', 0)
+            }
+        }
+        
+        awaami_committee_ikhtitam_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('awaami_committee_target', 0),
+                'izafa': q1_form_data.get('awaami_committee_ikhtitaam', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('awaami_committee_target', 0),
+                'izafa': q2_form_data.get('awaami_committee_ikhtitaam', 0)
+            }
+        }
+        
+        # Add missing data structures for backward compatibility
+        alaqajat_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('alaqajat_target', 0),
+                'izafa': q1_form_data.get('alaqajat_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('alaqajat_target', 0),
+                'izafa': q2_form_data.get('alaqajat_izafa', 0)
+            }
+        }
+        
+        halqajat_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('halqajat_target', 0),
+                'izafa': q1_form_data.get('halqajat_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('halqajat_target', 0),
+                'izafa': q2_form_data.get('halqajat_izafa', 0)
+            }
+        }
+        
+        halqajat_ward_data = {
+            'q1': {
+                'hadaf': q2_form_data.get('halqajat_ward_target', 0),
+                'izafa': q1_form_data.get('halqajat_ward_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('halqajat_ward_target', 0),
+                'izafa': q2_form_data.get('halqajat_ward_izafa', 0)
+            }
+        }
+        
+        # Prepare quarterly comparison data for Afradi Quwat charts
         arkaan_data = {
-            'hadaf': form_data.get('arkaan_target', 0),
-            'izafa': form_data.get('arkaan_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('arkaan_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('arkaan_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('arkaan_target', 0),
+                'izafa': q2_form_data.get('arkaan_izafa', 0)
+            }
         }
         
         umeedwaran_data = {
-            'hadaf': form_data.get('umeedwaran_target', 0),
-            'izafa': form_data.get('umeedwaran_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('umeedwaran_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('umeedwaran_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('umeedwaran_target', 0),
+                'izafa': q2_form_data.get('umeedwaran_izafa', 0)
+            }
         }
         
         karkunan_data = {
-            'hadaf': form_data.get('karkunan_target', 0),
-            'izafa': form_data.get('karkunan_izafa', 0)
+            'q1': {
+                'hadaf': q2_form_data.get('karkunan_target', 0),  # Q2 target used for both quarters
+                'izafa': q1_form_data.get('karkunan_izafa', 0)
+            },
+            'q2': {
+                'hadaf': q2_form_data.get('karkunan_target', 0),
+                'izafa': q2_form_data.get('karkunan_izafa', 0)
+            }
         }
         
-        # Prepare data for Ijtimaat charts - Individual charts for each type
+        # Prepare quarterly comparison data for Ijtimaat charts
         # Zilai Ijtimaat (individual charts)
         zilai_shura_data = {
-            'planned': form_data.get('zilai_shura_planned', 0),
-            'held': form_data.get('zilai_shura_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('zilai_shura_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('zilai_shura_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('zilai_shura_planned', 0),
+                'held': q2_form_data.get('zilai_shura_held', 0)
+            }
         }
         
         nazm_zila_data = {
-            'planned': form_data.get('nazm_zila_planned', 0),
-            'held': form_data.get('nazm_zila_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('nazm_zila_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('nazm_zila_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('nazm_zila_planned', 0),
+                'held': q2_form_data.get('nazm_zila_held', 0)
+            }
         }
         
         nazimin_alaqajat_data = {
-            'planned': form_data.get('nazimin_alaqajat_planned', 0),
-            'held': form_data.get('nazimin_alaqajat_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('nazimin_alaqajat_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('nazimin_alaqajat_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('nazimin_alaqajat_planned', 0),
+                'held': q2_form_data.get('nazimin_alaqajat_held', 0)
+            }
         }
         
         zilai_ijtima_arkaan_data = {
-            'planned': form_data.get('zilai_ijtima_arkaan_planned', 0),
-            'held': form_data.get('zilai_ijtima_arkaan_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('zilai_ijtima_arkaan_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('zilai_ijtima_arkaan_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('zilai_ijtima_arkaan_planned', 0),
+                'held': q2_form_data.get('zilai_ijtima_arkaan_held', 0)
+            }
         }
         
         zilai_ijtima_umeedwaran_data = {
-            'planned': form_data.get('zilai_ijtima_umeedwaran_planned', 0),
-            'held': form_data.get('zilai_ijtima_umeedwaran_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('zilai_ijtima_umeedwaran_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('zilai_ijtima_umeedwaran_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('zilai_ijtima_umeedwaran_planned', 0),
+                'held': q2_form_data.get('zilai_ijtima_umeedwaran_held', 0)
+            }
         }
         
         # Tanzeemi Ijtimaat (individual charts)
         ijtima_arkaan_alaqah_data = {
-            'planned': form_data.get('ijtima_arkaan_alaqah_planned', 0),
-            'held': form_data.get('ijtima_arkaan_alaqah_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('ijtima_arkaan_alaqah_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('ijtima_arkaan_alaqah_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('ijtima_arkaan_alaqah_planned', 0),
+                'held': q2_form_data.get('ijtima_arkaan_alaqah_held', 0)
+            }
         }
         
         ijtima_umeedwaran_alaqah_data = {
-            'planned': form_data.get('ijtima_umeedwaran_alaqah_planned', 0),
-            'held': form_data.get('ijtima_umeedwaran_alaqah_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('ijtima_umeedwaran_alaqah_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('ijtima_umeedwaran_alaqah_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('ijtima_umeedwaran_alaqah_planned', 0),
+                'held': q2_form_data.get('ijtima_umeedwaran_alaqah_held', 0)
+            }
         }
         
         ijtima_karkunan_alaqah_data = {
-            'planned': form_data.get('ijtima_karkunaan_alaqah_planned', 0),
-            'held': form_data.get('ijtima_karkunaan_alaqah_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('ijtima_karkunaan_alaqah_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('ijtima_karkunaan_alaqah_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('ijtima_karkunaan_alaqah_planned', 0),
+                'held': q2_form_data.get('ijtima_karkunaan_alaqah_held', 0)
+            }
         }
         
         ijtima_karkunan_halqajat_data = {
-            'planned': form_data.get('ijtima_karkunaan_halqajat_planned', 0),
-            'held': form_data.get('ijtima_karkunaan_halqajat_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('ijtima_karkunaan_halqajat_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('ijtima_karkunaan_halqajat_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('ijtima_karkunaan_halqajat_planned', 0),
+                'held': q2_form_data.get('ijtima_karkunaan_halqajat_held', 0)
+            }
         }
         
         ijtima_nazimin_halqajat_data = {
-            'planned': form_data.get('ijtima_nazimin_halqajat_planned', 0),
-            'held': form_data.get('ijtima_nazimin_halqajat_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('ijtima_nazimin_halqajat_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('ijtima_nazimin_halqajat_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('ijtima_nazimin_halqajat_planned', 0),
+                'held': q2_form_data.get('ijtima_nazimin_halqajat_held', 0)
+            }
         }
         
         # Dawati Ijtimaat (individual charts)
         dars_quran_data = {
-            'planned': form_data.get('dars_quran_planned', 0),
-            'held': form_data.get('dars_quran_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('dars_quran_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('dars_quran_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('dars_quran_planned', 0),
+                'held': q2_form_data.get('dars_quran_held', 0)
+            }
         }
         
         dawati_camp_data = {
-            'planned': form_data.get('dawati_camp_planned', 0),
-            'held': form_data.get('dawati_camp_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('dawati_camp_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('dawati_camp_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('dawati_camp_planned', 0),
+                'held': q2_form_data.get('dawati_camp_held', 0)
+            }
         }
         
         gharon_tak_dawat_data = {
-            'planned': form_data.get('gharon_tak_dawat_planned', 0),
-            'held': form_data.get('gharon_tak_dawat_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('gharon_tak_dawat_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('gharon_tak_dawat_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('gharon_tak_dawat_planned', 0),
+                'held': q2_form_data.get('gharon_tak_dawat_held', 0)
+            }
         }
         
         taqseem_literature_data = {
-            'planned': form_data.get('taqseem_literature_planned', 0),
-            'held': form_data.get('taqseem_literature_held', 0)
+            'q1': {
+                'planned': q2_form_data.get('taqseem_literature_planned', 0),  # Q2 planned used for both quarters
+                'held': q1_form_data.get('taqseem_literature_held', 0)
+            },
+            'q2': {
+                'planned': q2_form_data.get('taqseem_literature_planned', 0),
+                'held': q2_form_data.get('taqseem_literature_held', 0)
+            }
         }
         
         # Haq do Karachi and Koi or Baat text content
@@ -1977,6 +2289,12 @@ def view_combined_report(zila):
         return render_template('combined_report.html', 
                              zila=zila,
                              alaqajat_data=alaqajat_data,
+                             alaqajat_ikhtitam_data=alaqajat_ikhtitam_data,
+                             halqajat_ikhtitam_data=halqajat_ikhtitam_data,
+                             halqajat_ward_ikhtitam_data=halqajat_ward_ikhtitam_data,
+                             block_code_ikhtitam_data=block_code_ikhtitam_data,
+                             nizam_fajar_ikhtitam_data=nizam_fajar_ikhtitam_data,
+                             awaami_committee_ikhtitam_data=awaami_committee_ikhtitam_data,
                              halqajat_data=halqajat_data,
                              halqajat_ward_data=halqajat_ward_data,
                              block_code_data=block_code_data,
@@ -2206,70 +2524,118 @@ def view_graphs(zila):
         flash("Error loading graphs", "error")
         return redirect(url_for('dashboard'))
 
+@app.route('/toggle_report_lock/<zila>', methods=['POST'])
+def toggle_report_lock(zila):
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("آپ کو یہ عمل کرنے کی اجازت نہیں ہے", "error")
+            return redirect(url_for('dashboard'))
+        
+        # URL decode the zila name properly
+        from urllib.parse import unquote
+        decoded_zila = unquote(zila)
+        
+        # First, ensure the is_locked column exists
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        
+        # Check if is_locked column exists
+        c.execute("PRAGMA table_info(monthly_reports)")
+        columns = [row[1] for row in c.fetchall()]
+        
+        if 'is_locked' not in columns:
+            # Add the is_locked column if it doesn't exist
+            try:
+                c.execute("ALTER TABLE monthly_reports ADD COLUMN is_locked INTEGER DEFAULT 0")
+                conn.commit()
+            except Exception as e:
+                # Column might already exist, continue
+                pass
+        
+        # Find the report for this zila in Q2 2025 - try multiple approaches
+        c.execute("""
+            SELECT is_locked FROM monthly_reports 
+            WHERE zila = ? AND period = 'Q2 2025'
+        """, (decoded_zila,))
+        
+        result = c.fetchone()
+        
+        # If not found, try to find by partial match
+        if not result:
+            c.execute("""
+                SELECT is_locked, zila FROM monthly_reports 
+                WHERE period = 'Q2 2025'
+            """)
+            all_reports = c.fetchall()
+            
+            # Look for the best match
+            best_match = None
+            for report in all_reports:
+                if decoded_zila == report[1] or decoded_zila in report[1] or report[1] in decoded_zila:
+                    best_match = report
+                    break
+            
+            if best_match:
+                result = (best_match[0],)
+                decoded_zila = best_match[1]  # Use the exact name from database
+            else:
+                flash(f"رپورٹ نہیں ملی: {decoded_zila}", "error")
+                conn.close()
+                return redirect(url_for('dashboard'))
+        
+        # Get current lock status
+        current_lock_status = bool(result[0])
+        
+        # Toggle the lock status
+        new_lock_status = not current_lock_status
+        
+        # Update the lock status using the exact name from database
+        c.execute("""
+            UPDATE monthly_reports 
+            SET is_locked = ? 
+            WHERE zila = ? AND period = 'Q2 2025'
+        """, (1 if new_lock_status else 0, decoded_zila))
+        
+        conn.commit()
+        conn.close()
+        
+        # Reload reports
+        global report_df
+        report_df = load_reports_from_db()
+        
+        status_text = "لاک" if new_lock_status else "انلاک"
+        flash(f"{decoded_zila} کی رپورٹ {status_text} کر دی گئی ہے", "success")
+        
+    except Exception as e:
+        # Log the error for debugging
+        logging.error(f"Error in toggle_report_lock for {zila}: {str(e)}")
+        flash("خطا: " + str(e), "error")
+    
+    # Check if this is an AJAX request
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'success': True,
+            'message': f"{decoded_zila} کی رپورٹ {status_text} کر دی گئی ہے",
+            'new_status': new_lock_status
+        })
+    
+    return redirect(url_for('dashboard'))
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash("آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں", "info")
     return redirect(url_for('login'))
 
-@app.route('/debug_db')
-def debug_db():
-    """Debug route to check database status"""
-    try:
-        info = {
-            'db_file': DB_FILE,
-            'db_exists': os.path.exists(DB_FILE),
-            'current_dir': os.getcwd(),
-            'session_user': session.get('username'),
-            'session_role': session.get('role'),
-            'session_zila': session.get('zila')
-        }
-        
-        # Test database connection
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        
-        # Check tables
-        c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = c.fetchall()
-        info['tables'] = [table[0] for table in tables]
-        
-        # Check users
-        if 'users' in info['tables']:
-            c.execute("SELECT COUNT(*) FROM users")
-            user_count = c.fetchone()[0]
-            info['user_count'] = user_count
-            
-            # Get sample users
-            c.execute("SELECT username, role, zila FROM users LIMIT 10")
-            sample_users = c.fetchall()
-            info['sample_users'] = sample_users
-        
-        # Check reports
-        if 'monthly_reports' in info['tables']:
-            c.execute("SELECT COUNT(*) FROM monthly_reports")
-            report_count = c.fetchone()[0]
-            info['report_count'] = report_count
-            
-            # Get sample reports
-            c.execute("SELECT zila, submitted_by, timestamp FROM monthly_reports LIMIT 5")
-            sample_reports = c.fetchall()
-            info['sample_reports'] = sample_reports
-            
-            # Get unique zilas
-            c.execute("SELECT DISTINCT zila FROM monthly_reports")
-            zilas = c.fetchall()
-            info['available_zilas'] = [zila[0] for zila in zilas]
-        
-        conn.close()
-        
-        return jsonify(info)
-    except Exception as e:
-        return jsonify({
-            'error': str(e),
-            'db_file': DB_FILE,
-            'db_exists': os.path.exists(DB_FILE) if 'DB_FILE' in globals() else False
-        })
+
+
+
+
+
+
+
+
+
 
 @app.route('/spider_graph/<zila>')
 def spider_graph(zila):
@@ -2551,232 +2917,14 @@ def update_historical_columns():
         return f"Error updating columns: {str(e)}"
 
 
-@app.route('/test_historical_submission')
-def test_historical_submission():
-    """Test route to verify historical data submission works"""
-    try:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        
-        # Check current table structure
-        c.execute("PRAGMA table_info(monthly_reports)")
-        columns = [row[1] for row in c.fetchall()]
-        print(f"Available columns: {columns}")
-        
-        # Test inserting a historical record
-        test_data = {
-            'zila': 'کراچی مرکز',
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            'submitted_by': 'test_agent',
-            'period': 'Q1 2024',
-            'union_committee_count': 10,
-            'wards_count': 20
-        }
-        
-        # Only use columns that exist in the table
-        existing_test_data = {k: v for k, v in test_data.items() if k in columns}
-        
-        columns_str = ', '.join(existing_test_data.keys())
-        placeholders = ', '.join(['?' for _ in existing_test_data])
-        
-        print(f"Test insert query: INSERT INTO monthly_reports ({columns_str}) VALUES ({placeholders})")
-        print(f"Test insert values: {list(existing_test_data.values())}")
-        
-        c.execute(f'INSERT INTO monthly_reports ({columns_str}) VALUES ({placeholders})', list(existing_test_data.values()))
-        
-        # Check if it was inserted
-        c.execute('SELECT COUNT(*) FROM monthly_reports WHERE zila = ? AND period = ?', ('کراچی مرکز', 'Q1 2024'))
-        count = c.fetchone()[0]
-        
-        conn.commit()
-        conn.close()
-        
-        return f"Test successful! Found {count} record(s) for کراچی مرکز Q1 2024<br>Available columns: {columns}"
-        
-    except Exception as e:
-        import traceback
-        return f"Test failed: {str(e)}<br><br>Traceback: {traceback.format_exc()}"
 
 
-@app.route('/force_fix_database')
-def force_fix_database():
-    """Force fix the database by recreating the table without constraints"""
-    try:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        
-        # Backup existing data
-        c.execute("SELECT * FROM monthly_reports")
-        existing_data = c.fetchall()
-        c.execute("PRAGMA table_info(monthly_reports)")
-        columns_info = c.fetchall()
-        
-        # Drop the current table
-        c.execute("DROP TABLE monthly_reports")
-        
-        # Create new table without UNIQUE constraint
-        c.execute('''
-            CREATE TABLE monthly_reports (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                zila TEXT NOT NULL,
-                timestamp TEXT NOT NULL,
-                submitted_by TEXT NOT NULL,
-                last_submitted_by TEXT,
-                period TEXT,
-                union_committee_count INTEGER DEFAULT 0,
-                wards_count INTEGER DEFAULT 0,
-                block_code_count INTEGER DEFAULT 0,
-                cantonment_board_count INTEGER DEFAULT 0,
-                nazm_qaim_union INTEGER DEFAULT 0,
-                nazm_qaim_wards INTEGER DEFAULT 0,
-                nazm_qaim_blockcode INTEGER DEFAULT 0,
-                nazm_qaim_cantonment INTEGER DEFAULT 0
-            )
-        ''')
-        
-        # Add all the required columns
-        required_columns = [
-            'alaqajat_start', 'alaqajat_end', 'alaqajat_target', 'alaqajat_izafa', 'alaqajat_kami', 'alaqajat_ikhtitaam',
-            'halqajat_start', 'halqajat_end', 'halqajat_target', 'halqajat_izafa', 'halqajat_kami', 'halqajat_ikhtitaam',
-            'halqajat_ward_start', 'halqajat_ward_end', 'halqajat_ward_target', 'halqajat_ward_izafa', 'halqajat_ward_kami', 'halqajat_ward_ikhtitaam',
-            'block_code_start', 'block_code_end', 'block_code_target', 'block_code_izafa', 'block_code_kami', 'block_code_ikhtitaam',
-            'arkaan_start', 'arkaan_end', 'arkaan_target', 'arkaan_izafa', 'arkaan_kami', 'arkaan_ikhtitaam',
-            'umeedwaran_start', 'umeedwaran_end', 'umeedwaran_target', 'umeedwaran_izafa', 'umeedwaran_kami', 'umeedwaran_ikhtitaam',
-            'karkunan_start', 'karkunan_end', 'karkunan_target', 'karkunan_izafa', 'karkunan_kami', 'karkunan_ikhtitaam',
-            'hangami_start', 'hangami_end', 'hangami_target', 'hangami_izafa', 'hangami_kami', 'hangami_ikhtitaam',
-            'muawanin_start', 'muawanin_end', 'muawanin_target', 'muawanin_izafa', 'muawanin_kami', 'muawanin_ikhtitaam',
-            'mutayyin_afrad_start', 'mutayyin_afrad_end', 'mutayyin_afrad_target', 'mutayyin_afrad_izafa', 'mutayyin_afrad_kami', 'mutayyin_afrad_ikhtitaam',
-            'member_start', 'member_end', 'member_target', 'member_izafa', 'member_kami', 'member_ikhtitaam',
-            'youth_nazm_areas', 'youth_karkunan', 'youth_programat_count', 'youth_programs_json',
-            'zilai_shura_planned', 'zilai_shura_held', 'zilai_shura_attendance',
-            'nazm_zila_planned', 'nazm_zila_held', 'nazm_zila_attendance',
-            'nazimin_alaqajat_planned', 'nazimin_alaqajat_held', 'nazimin_alaqajat_attendance',
-            'zilai_ijtima_arkaan_planned', 'zilai_ijtima_arkaan_held', 'zilai_ijtima_arkaan_attendance',
-            'zilai_ijtima_umeedwaran_planned', 'zilai_ijtima_umeedwaran_held', 'zilai_ijtima_umeedwaran_attendance',
-            'ijtima_arkaan_alaqah_planned', 'ijtima_arkaan_alaqah_held', 'ijtima_arkaan_alaqah_attendance',
-            'ijtima_umeedwaran_alaqah_planned', 'ijtima_umeedwaran_alaqah_held', 'ijtima_umeedwaran_alaqah_attendance',
-            'ijtima_karkunaan_alaqah_planned', 'ijtima_karkunaan_alaqah_held', 'ijtima_karkunaan_alaqah_attendance',
-            'ijtima_karkunaan_halqajat_planned', 'ijtima_karkunaan_halqajat_held', 'ijtima_karkunaan_halqajat_attendance',
-            'ijtima_nazimin_halqajat_planned', 'ijtima_nazimin_halqajat_held', 'ijtima_nazimin_halqajat_attendance',
-            'dars_quran_planned', 'dars_quran_held', 'dars_quran_attendance',
-            'dawati_camp_planned', 'dawati_camp_held', 'dawati_camp_attendance',
-            'gharon_tak_dawat_planned', 'gharon_tak_dawat_held', 'gharon_tak_dawat_attendance',
-            'taqseem_literature_planned', 'taqseem_literature_held', 'taqseem_literature_attendance',
-            'amir_zila_maqamat', 'amir_zila_daurajat', 'amir_zila_mulaqat',
-            'qaim_zila_maqamat', 'qaim_zila_daurajat', 'qaim_zila_mulaqat',
-            'naib_amir_zila_maqamat', 'naib_amir_zila_daurajat', 'naib_amir_zila_mulaqat',
-            'study_circle_maqamat', 'study_circle_daurajat', 'study_circle_attendance',
-            'ijtimai_tuaam_maqamat', 'ijtimai_tuaam_daurajat', 'ijtimai_tuaam_attendance',
-            'ijtimai_ahle_khana_maqamat', 'ijtimai_ahle_khana_daurajat', 'ijtimai_ahle_khana_attendance',
-            'quran_course_maqamat', 'quran_course_daurajat', 'quran_course_attendance',
-            'retreat_maqamat', 'retreat_daurajat', 'retreat_attendance',
-            'quran_courses', 'quran_classes', 'quran_participants',
-            'fahem_quran_attendance', 'quran_target', 'quran_distributed',
-            'central_training_target', 'central_training_actual', 'other_trainings',
-            'atifal_programs', 'awaami_committees', 'awaami_committees_count',
-            'koi_or_bat', 'haq_do_karachi',
-            'nizam_e_fajar_start', 'nizam_e_fajar_target', 'nizam_e_fajar_izafa', 'nizam_e_fajar_kami', 'nizam_e_fajar_ikhtitaam',
-            'awaami_committee_start', 'awaami_committee_target', 'awaami_committee_izafa', 'awaami_committee_kami', 'awaami_committee_ikhtitaam',
-            'atifal_nazm_areas', 'atifal_members', 'atifal_programat_count', 'atifal_programs_json'
-        ]
-        
-        # Add dynamic program fields (up to 50 for each type)
-        for i in range(1, 51):
-            required_columns.extend([
-                f'programat_{i}',
-                f'programat_count_{i}',
-                f'atifal_programat_{i}',
-                f'atifal_programat_count_{i}'
-            ])
-        
-        for column in required_columns:
-            # Text fields should be TEXT, others should be INTEGER
-            if 'programat_' in column and not column.endswith('_count'):
-                c.execute(f"ALTER TABLE monthly_reports ADD COLUMN {column} TEXT DEFAULT ''")
-            else:
-                c.execute(f"ALTER TABLE monthly_reports ADD COLUMN {column} INTEGER DEFAULT 0")
-        
-        # Restore existing data (if any)
-        if existing_data:
-            # This is a simplified restore - you might need to adjust based on your data structure
-            pass
-        
-        conn.commit()
-        conn.close()
-        
-        return "Database forcefully recreated without UNIQUE constraint. All required columns added."
-        
-    except Exception as e:
-        return f"Force fix failed: {str(e)}"
 
 
-@app.route('/debug_historical_submission')
-def debug_historical_submission():
-    """Debug route to check database structure and form data"""
-    try:
-        conn = sqlite3.connect(DB_FILE)
-        c = conn.cursor()
-        
-        # Check table structure
-        c.execute("PRAGMA table_info(monthly_reports)")
-        columns = c.fetchall()
-        
-        # Check if UNIQUE constraint exists
-        c.execute("PRAGMA index_list(monthly_reports)")
-        indexes = c.fetchall()
-        
-        # Check existing data
-        c.execute("SELECT COUNT(*) FROM monthly_reports")
-        total_records = c.fetchone()[0]
-        
-        # Check records with period
-        c.execute("SELECT COUNT(*) FROM monthly_reports WHERE period IS NOT NULL")
-        historical_records = c.fetchone()[0]
-        
-        # Check recent records
-        c.execute("SELECT zila, period, submitted_by, timestamp FROM monthly_reports ORDER BY timestamp DESC LIMIT 5")
-        recent_records = c.fetchall()
-        
-        conn.close()
-        
-        result = f"""
-        <h3>Database Debug Info:</h3>
-        <p><strong>Total Records:</strong> {total_records}</p>
-        <p><strong>Historical Records:</strong> {historical_records}</p>
-        
-        <h3>Recent Records:</h3>
-        <ul>
-        """
-        
-        for record in recent_records:
-            result += f"<li>{record[0]} - {record[1]} - {record[2]} - {record[3]}</li>"
-        
-        result += "</ul>"
-        
-        result += f"""
-        <h3>Table Columns:</h3>
-        <ul>
-        """
-        
-        for col in columns:
-            result += f"<li>{col[1]} ({col[2]})</li>"
-        
-        result += "</ul>"
-        
-        result += f"""
-        <h3>Indexes:</h3>
-        <ul>
-        """
-        
-        for idx in indexes:
-            result += f"<li>{idx[1]} (unique: {idx[2]})</li>"
-        
-        result += "</ul>"
-        
-        return result
-        
-    except Exception as e:
-        return f"Debug failed: {str(e)}"
+
+
+
+
 
 
 @app.route('/historical_data_form/<zila>', methods=['GET'])
@@ -3024,15 +3172,23 @@ def submit_historical_data(zila):
             # Only use fields that exist in the database
             form_fields = [field for field in all_form_fields if field in existing_columns]
             
+            # Define text fields that should not be converted to integers
+            text_fields = ['koi_or_bat', 'haq_do_karachi', 'other_trainings']
+            
             for field in form_fields:
                 value = request.form.get(field, '')
-                if value == '':
-                    new_entry[field] = 0
+                if field in text_fields:
+                    # Handle text fields - store as string
+                    new_entry[field] = value
                 else:
-                    try:
-                        new_entry[field] = int(value)
-                    except ValueError:
+                    # Handle numeric fields
+                    if value == '':
                         new_entry[field] = 0
+                    else:
+                        try:
+                            new_entry[field] = int(value)
+                        except ValueError:
+                            new_entry[field] = 0
             
             # Handle dynamic youth programs (convert to JSON)
             youth_programat_count = request.form.get('youth_programat_count', '0')
@@ -3178,6 +3334,16 @@ def add_missing_columns():
         else:
             print("atifal_programs_json column already exists")
         
+        # Add missing text columns
+        text_columns = ['koi_or_bat', 'haq_do_karachi', 'other_trainings']
+        for col in text_columns:
+            if col not in existing_columns:
+                c.execute(f'ALTER TABLE monthly_reports ADD COLUMN {col} TEXT')
+                missing_columns.append(col)
+                print(f"Added {col} column")
+            else:
+                print(f"{col} column already exists")
+        
         conn.commit()
         conn.close()
         
@@ -3194,60 +3360,7 @@ def add_missing_columns():
         return redirect(url_for('dashboard'))
 
 
-@app.route('/test_quarter_logic/<zila>')
-def test_quarter_logic(zila):
-    """Test route to verify quarter calculation logic"""
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    
-    if session.get('role') not in ['admin', 'agent']:
-        flash("Access denied", "error")
-        return redirect(url_for('dashboard'))
-    
-    previous_quarter, previous_year = get_previous_quarter_for_zila(zila)
-    
-    # Get all existing periods for this zila
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute('''
-        SELECT period FROM monthly_reports 
-        WHERE zila = ? AND period IS NOT NULL AND period != 'None None'
-    ''', (zila,))
-    
-    all_periods = c.fetchall()
-    conn.close()
-    
-    # Parse and sort periods chronologically (highest year, then highest quarter)
-    valid_periods = []
-    for row in all_periods:
-        period = row[0]
-        if period and ' ' in period:
-            try:
-                quarter, year_str = period.split(' ')
-                year = int(year_str)
-                valid_periods.append((period, quarter, year))
-            except ValueError:
-                continue
-    
-    # Sort by year (descending) then by quarter (Q4, Q3, Q2, Q1)
-    quarter_order = {'Q4': 4, 'Q3': 3, 'Q2': 2, 'Q1': 1}
-    valid_periods.sort(key=lambda x: (x[2], quarter_order.get(x[1], 0)), reverse=True)
-    
-    existing_periods = [(period,) for period, _, _ in valid_periods]
-    
-    # Test the next quarter ikhtitam function
-    next_ikhtitam_values = get_next_quarter_ikhtitam(zila, previous_quarter, int(previous_year))
-    
-    result = {
-        'zila': zila,
-        'existing_periods': existing_periods,
-        'suggested_quarter': previous_quarter,
-        'suggested_year': previous_year,
-        'suggested_period': f"{previous_quarter} {previous_year}",
-        'next_ikhtitam_values': next_ikhtitam_values
-    }
-    
-    return jsonify(result)
+
 
 @app.route('/test_json_saving')
 def test_json_saving():
@@ -3515,6 +3628,58 @@ def debug_json_loading(zila):
         
     except Exception as e:
         return f"Error: {str(e)}"
+
+def get_q1_2025_data(zila):
+    """Helper function to get Q1 2025 data for a zila"""
+    try:
+        global report_df
+        report_df = load_reports_from_db()
+        
+        # Try exact match first
+        report_row = report_df[(report_df['zila'] == zila) & (report_df['period'] == 'Q1 2025')]
+        
+        # If no exact match, try case-insensitive and normalized matching
+        if report_row.empty:
+            # Normalize the zila name (remove extra spaces, etc.)
+            normalized_zila = zila.strip()
+            report_row = report_df[(report_df['zila'].str.strip() == normalized_zila) & (report_df['period'] == 'Q1 2025')]
+            
+            # If still no match, try partial matching
+            if report_row.empty:
+                for db_zila in report_df['zila'].unique():
+                    if db_zila and (normalized_zila in db_zila or db_zila in normalized_zila):
+                        report_row = report_df[(report_df['zila'] == db_zila) & (report_df['period'] == 'Q1 2025')]
+                        break
+        
+        return report_row
+    except Exception as e:
+        import logging
+        logging.error(f"Error getting Q1 2025 data: {e}", exc_info=True)
+        return pd.DataFrame()
+
+def get_quarterly_comparison_data(zila):
+    """Get data for both Q1 and Q2 2025 for quarterly comparison"""
+    try:
+        q1_data = get_q1_2025_data(zila)
+        q2_data = get_q2_2025_data(zila)
+        
+        # Initialize empty data structures
+        q1_form_data = {}
+        q2_form_data = {}
+        
+        if not q1_data.empty:
+            q1_form_data = q1_data.iloc[0].to_dict()
+            q1_form_data = {k: (0 if pd.isna(v) else v) for k, v in q1_form_data.items()}
+        
+        if not q2_data.empty:
+            q2_form_data = q2_data.iloc[0].to_dict()
+            q2_form_data = {k: (0 if pd.isna(v) else v) for k, v in q2_form_data.items()}
+        
+        return q1_form_data, q2_form_data
+    except Exception as e:
+        import logging
+        logging.error(f"Error getting quarterly comparison data: {e}", exc_info=True)
+        return {}, {}
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

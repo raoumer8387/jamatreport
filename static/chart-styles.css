@@ -4,7 +4,7 @@
 .graph-card .chart-container {
     position: relative;
     width: 100% !important;
-    height: 250px !important;
+    height: 400px !important;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@
 #spider-view .chart-container {
     position: relative;
     width: 100% !important;
-    height: 700px !important;
+    height: 900px !important;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -80,7 +80,7 @@
 /* Ensure proper chart rendering on different screen sizes - ONLY for bar charts */
 @media (max-width: 768px) {
     .graph-card .chart-container {
-        height: 200px !important;
+        height: 300px !important;
     }
     
     .graph-card .chart-container canvas {
@@ -88,13 +88,13 @@
     }
     
     #spider-view .chart-container {
-        height: 500px !important;
+        height: 600px !important;
     }
 }
 
 @media (max-width: 480px) {
     .graph-card .chart-container {
-        height: 180px !important;
+        height: 250px !important;
     }
     
     .graph-card .chart-container canvas {
@@ -186,13 +186,13 @@
 /* Fix for chart.js responsive breakpoints - ONLY for bar charts */
 @media (max-width: 1200px) {
     .graph-card .chart-container {
-        height: 220px !important;
+        height: 350px !important;
     }
 }
 
 @media (max-width: 992px) {
     .graph-card .chart-container {
-        height: 200px !important;
+        height: 320px !important;
     }
 }
 
@@ -219,13 +219,13 @@
 /* Spider chart specific responsive and scaling */
 @media (max-width: 1200px) {
     #spider-view .chart-container {
-        height: 600px !important;
+        height: 750px !important;
     }
 }
 
 @media (max-width: 992px) {
     #spider-view .chart-container {
-        height: 550px !important;
+        height: 650px !important;
     }
 }
 

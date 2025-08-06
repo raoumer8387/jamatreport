@@ -4,11 +4,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ڈیش بورڈ - جماعت اسلامی ضلعی رپورٹنگ سسٹم</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ range(1, 1000) | random }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Switch button styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #e74c3c;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #e74c3c;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        /* Download button styles */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+        
+        .download-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <script>
+        function toggleLock(checkbox, zila) {
+            // Show loading state
+            checkbox.disabled = true;
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('action', 'toggle');
+            
+            // Send POST request
+            fetch(`/toggle_report_lock/${encodeURIComponent(zila)}`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Force page refresh to show updated state
+                    window.location.reload(true);
+                } else {
+                    // Revert checkbox state on error
+                    checkbox.checked = !checkbox.checked;
+                    alert('Error toggling lock status');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Revert checkbox state on error
+                checkbox.checked = !checkbox.checked;
+                alert('Error toggling lock status');
+            })
+            .finally(() => {
+                checkbox.disabled = false;
+            });
+        }
+        
+        // Add timestamp to prevent caching
+        window.onload = function() {
+            // Force refresh if page is loaded from cache
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+                window.location.reload(true);
+            }
+        };
+        
+    </script>
 </head>
 <body>
     <div class="container">
@@ -53,6 +183,9 @@
                 <table class="dashboard-table">
                     <thead>
                         <tr>
+                            {% if session['role'] == 'admin' %}
+                                <th>لاک/انلاک</th>
+                            {% endif %}
                             <th>ضلع</th>
                             <th>اسٹیٹس</th>
                             {% if session['role'] == 'admin' %}
@@ -65,6 +198,21 @@
                     <tbody>
                         {% for zila in zila_status %}
                         <tr>
+                            {% if session['role'] == 'admin' %}
+                                <td>
+                                    {% if zila.has_report %}
+                                        <form method="POST" action="{{ url_for('toggle_report_lock', zila=zila.zila) }}" style="display: inline;">
+                                            <input type="hidden" name="action" value="toggle">
+                                            <label class="switch">
+                                                <input type="checkbox" {% if zila.is_locked %}checked{% endif %} onchange="toggleLock(this, '{{ zila.zila }}')">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </form>
+                                    {% else %}
+                                        <span style="color: #999; font-style: italic;">رپورٹ نہیں ہے</span>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                             <td>{{ zila.zila }}</td>
                             <td>
                                 {% if zila.status == 'not_started' %}
@@ -86,11 +234,9 @@
                                 <div class="action-buttons">
                                     {% if session['role'] == 'admin' %}
                                         <a href="{{ url_for('view_combined_report', zila=zila.zila) }}" class="view-btn">رپورٹ دیکھیں</a>
-                                        <a href="{{ url_for('print_report', zila=zila.zila) }}" class="print-btn">پی ڈی ایف ڈاؤن لوڈ</a>
                                     {% else %}
                                         <a href="{{ url_for('view_report', zila=zila.zila) }}" class="view-btn">رپورٹ دیکھیں</a>
                                     {% endif %}
-
                                 </div>
                             </td>
                             <td>
