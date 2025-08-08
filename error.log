@@ -8438,3 +8438,5 @@ NameError: name 'alaqajat_data' is not defined
 2025-08-08 11:31:03,214 INFO werkzeug Thread-74 (process_request_thread) : 127.0.0.1 - - [08/Aug/2025 11:31:03] "[36mGET /static/style.css?v= HTTP/1.1[0m" 304 -
 2025-08-08 11:31:13,896 INFO werkzeug Thread-75 (process_request_thread) : 127.0.0.1 - - [08/Aug/2025 11:31:13] "GET /dashboard HTTP/1.1" 200 -
 2025-08-08 11:31:14,172 INFO werkzeug Thread-76 (process_request_thread) : 127.0.0.1 - - [08/Aug/2025 11:31:14] "GET /static/style.css?v=303 HTTP/1.1" 200 -
+2025-08-08 13:51:40,341 INFO werkzeug MainThread :  * Detected change in 'd:\\Office\\jamatreport\\passenger_wsgi.py', reloading
+2025-08-08 13:51:40,455 INFO werkzeug MainThread :  * Restarting with stat
