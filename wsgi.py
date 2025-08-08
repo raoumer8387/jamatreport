@@ -1,8 +1,8 @@
 import os
 import sys
 
-# Add the app directory to the Python path
+# Add your app directory to Python path
 sys.path.insert(0, os.path.dirname(__file__))
 
-# Import the Flask app object from this file
-from main import application
+# Import the Flask application from app.py
+from app import application
