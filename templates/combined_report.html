@@ -126,6 +126,26 @@
             flex: 2;
         }
 
+        h3 {
+            font-size: 32px !important;
+            font-family: 'Noto Nastaliq Urdu', serif !important;
+            font-weight: bold !important;
+            color: #333 !important;
+        }
+        th {
+            font-size: 18px !important;
+            font-family: 'Noto Nastaliq Urdu', serif !important;
+            font-weight: bold !important;
+            color: #333 !important;
+        }
+
+        td {
+            font-size: 24px !important;
+            font-family: 'Noto Nastaliq Urdu', serif !important;
+            font-weight: normal !important;
+            color: #333 !important;
+        }
+
     </style>
 </head>
 <body>
@@ -166,7 +186,6 @@
                     <div class="section-container">
                         <!-- Data Table -->
                         <div class="data-table-container">
-                            <h3>تفصیلی اعداد و شمار</h3>
                             <table class="data-table">
                                 <thead>
                                     <tr>
@@ -232,7 +251,6 @@
                     <div class="section-container">
                         <!-- Data Table -->
                         <div class="data-table-container">
-                            <h3>تفصیلی اعداد و شمار</h3>
                             <table class="data-table">
                                 <thead>
                                     <tr>
@@ -294,7 +312,6 @@
                     <div class="section-container">
                         <!-- Data Table -->
                         <div class="data-table-container">
-                            <h3>تفصیلی اعداد و شمار</h3>
                             <table class="data-table">
                                 <thead>
                                     <tr>
@@ -457,12 +474,12 @@
                             datalabels: {
                                 display: true,
                                 color: '#333',
-                                anchor: 'end',
-                                align: 'top',
-                                offset: 0,
+                                anchor: 'center',
+                                align: 'bottom',
+                                offset: 10,
                                 font: {
                                     family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                    size: 20,
+                                    size: 32,
                                     weight: 'bold'
                                 },
                                 formatter: function(value, context) {
@@ -488,7 +505,7 @@
                         ticks: {
                             font: {
                                 family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                size: 16
+                                size: 24
                             },
                             color: '#333',
                             maxRotation: 0,
@@ -552,28 +569,28 @@
                 // Set labels based on chart type
                 let q1Label, q2Label;
                 if (canvasId === 'blockCodeChart') {
-                    q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                    q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                    q1Label = ['سہ ماہی اول', `${q1Percentage}%`];
+                    q2Label = ['سہ ماہی دوم', `${q2Percentage}%`];
                 } else if (canvasId === 'nizamFajarChart' || canvasId === 'awaamiCommitteeChart') {
-                    q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                    q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                    q1Label = ['سہ ماہی اول', `${q1Percentage}%`];
+                    q2Label = ['سہ ماہی دوم', `${q2Percentage}%`];
                 } else if (canvasId.includes('Ikhtitam')) {
                     if (canvasId === 'nizamFajarIkhtitamChart') {
-                        q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                        q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                        q1Label = ['سہ ماہی اول', `${q1Percentage}%`];
+                        q2Label = ['سہ ماہی دوم', `${q2Percentage}%`];
                     } else if (canvasId === 'blockCodeIkhtitamChart') {
-                        q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                        q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                        q1Label = ['سہ ماہی اول', `${q1Percentage}%`];
+                        q2Label = ['سہ ماہی دوم', `${q2Percentage}%`];
                     } else if (canvasId === 'awaamiCommitteeIkhtitamChart') {
-                        q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                        q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                        q1Label = ['سہ ماہی اول', `${q1Percentage}%`];
+                        q2Label = ['سہ ماہی دوم', `${q2Percentage}%`];
                     } else {
-                        q1Label = [`سہ ماہی اول `, `(${q1Izafa}) % ${q1Percentage}`];
-                        q2Label = [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`];
+                        q1Label = ['سہ ماہی اول اضافہ', `${q1Percentage}%`];
+                        q2Label = ['سہ ماہی دوم اضافہ', `${q2Percentage}%`];
                     }
                 } else {
-                    q1Label = [`سہ ماہی اول اضافہ`, `(${q1Izafa}) % ${q1Percentage}`];
-                    q2Label = [`سہ ماہی دوم اضافہ`, `(${q2Izafa}) % ${q2Percentage}`];
+                    q1Label = ['سہ ماہی اول اضافہ', `${q1Percentage}%`];
+                    q2Label = ['سہ ماہی دوم اضافہ', `${q2Percentage}%`];
                 }
                 
                 // Destroy existing chart if it exists
@@ -589,7 +606,7 @@
                         datasets: [{
                             label: 'Quarterly Data',
                             data: [q1Izafa, q2Izafa],
-                            backgroundColor: ['#3498db', '#2ecc71'],
+                            backgroundColor: ['#6c7a8c', '#48EF62'],
                             borderWidth: 0,
                             categoryPercentage: 0.9,
                             barPercentage: 0.8
@@ -633,10 +650,11 @@
                                 color: '#333',
                                 anchor: 'end',
                                 align: 'top',
+                                textAlign: 'center',
                                 offset: 0,
                                 font: {
                                     family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                    size: 20,
+                                    size: 32,
                                     weight: 'bold'
                                 },
                                 formatter: function(value, context) {
@@ -663,7 +681,7 @@
                                 ticks: {
                                     font: {
                                         family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                        size: 16
+                                        size: 20
                                     },
                                     color: '#333',
                                     maxRotation: 0,
@@ -771,11 +789,11 @@
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: [[`سہ ماہی اول`, `(${q1Izafa}) % ${q1Percentage}`], [`سہ ماہی دوم`, `(${q2Izafa}) % ${q2Percentage}`]],
+                        labels: [['سہ ماہی اول', `${q1Percentage}%`], ['سہ ماہی دوم', `${q2Percentage}%`]],
                         datasets: [{
                             label: 'Quarterly Data',
                             data: [q1Izafa, q2Izafa],
-                            backgroundColor: ['#f39c12', '#e74c3c'],
+                            backgroundColor: ['#6c7a8c', '#48EF62'],
                             borderWidth: 0,
                             categoryPercentage: 0.9,
                             barPercentage: 0.8
@@ -820,10 +838,11 @@
                                 color: '#333',
                                 anchor: 'end',
                                 align: 'top',
+                                textAlign: 'center',
                                 offset: 0,
                                 font: {
                                     family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                    size: 20,
+                                    size: 32,
                                     weight: 'bold'
                                 },
                                 formatter: function(value, context) {
@@ -850,7 +869,7 @@
                                 ticks: {
                                     font: {
                                         family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                        size: 16
+                                        size: 20
                                     },
                                     color: '#333',
                                     maxRotation: 0,
@@ -958,11 +977,11 @@
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: [[`سہ ماہی اول `, `(${q1Held}) % ${q1Percentage}`], [`سہ ماہی دوم`, `(${q2Held}) % ${q2Percentage}`]],
+                        labels: [['سہ ماہی اول', `${q1Percentage}%`], ['سہ ماہی دوم', `${q2Percentage}%`]],
                         datasets: [{
                             label: 'Quarterly Data',
                             data: [q1Held, q2Held],
-                            backgroundColor: ['#1abc9c', '#9b59b6'],
+                            backgroundColor: ['#6c7a8c', '#48EF62'],
                             borderWidth: 0,
                             categoryPercentage: 0.9,
                             barPercentage: 0.8
@@ -1007,10 +1026,11 @@
                                 color: '#333',
                                 anchor: 'end',
                                 align: 'top',
+                                textAlign: 'center',
                                 offset: 0,
                                 font: {
                                     family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                    size: 20,
+                                    size: 32,
                                     weight: 'bold'
                                 },
                                 formatter: function(value, context) {
@@ -1037,7 +1057,7 @@
                                 ticks: {
                                     font: {
                                         family: 'Noto Nastaliq Urdu, Arial, sans-serif',
-                                        size: 16
+                                        size: 20
                                     },
                                     color: '#333',
                                     maxRotation: 0,
@@ -1138,17 +1158,17 @@
             const taqseemLiteratureData = JSON.parse('{{ taqseem_literature_data | tojson | safe }}');
 
             const labels = [
-                `بلاک کوڈ انچارجز اختتام (%${calculatePercentage(blockCodeIkhtitamData, 'tanzeemi')})`,
-                `نظام فجر (%${calculatePercentage(nizamFajarData, 'tanzeemi')})`,
-                `عوامی کمیٹی (%${calculatePercentage(awaamiCommitteeData, 'tanzeemi')})`,
-                `ارکان سازی (%${calculatePercentage(arkaanData, 'afradi')})`,
-                `امیدواران رکنیت (%${calculatePercentage(umeedwaranData, 'afradi')})`,
-                `کارکنان (%${calculatePercentage(karkunanData, 'afradi')})`,
-                `اجتماع کارکنان (علاقہ) (%${calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat')})`,
-                `اجتماع کارکنان (حلقہ جات) (%${calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat')})`,
-                `درس قرآن (حلقہ جات) (%${calculatePercentage(darsQuranData, 'ijtimaat')})`,
-                `گھروں تک دعوت (%${calculatePercentage(gharonTakDawatData, 'ijtimaat')})`,
-                `تقسیم لٹریچر (%${calculatePercentage(taqseemLiteratureData, 'ijtimaat')})`
+                `بلاک کوڈ انچارجز اختتام (${calculatePercentage(blockCodeIkhtitamData, 'tanzeemi')}%)`,
+                `نظام فجر (${calculatePercentage(nizamFajarData, 'tanzeemi')}%)`,
+                `عوامی کمیٹی (${calculatePercentage(awaamiCommitteeData, 'tanzeemi')}%)`,
+                `ارکان سازی (${calculatePercentage(arkaanData, 'afradi')}%)`,
+                `امیدواران رکنیت (${calculatePercentage(umeedwaranData, 'afradi')}%)`,
+                `کارکنان (${calculatePercentage(karkunanData, 'afradi')}%)`,
+                `اجتماع کارکنان (علاقہ) (${calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat')}%)`,
+                `اجتماع کارکنان (حلقہ جات) (${calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat')}%)`,
+                `درس قرآن (حلقہ جات) (${calculatePercentage(darsQuranData, 'ijtimaat')}%)`,
+                `گھروں تک دعوت (${calculatePercentage(gharonTakDawatData, 'ijtimaat')}%)`,
+                `تقسیم لٹریچر (${calculatePercentage(taqseemLiteratureData, 'ijtimaat')}%)`
             ];
 
             const percentages = [
