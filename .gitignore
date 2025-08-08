@@ -172,3 +172,4 @@ secrets.py
 *.bak
 *.backup
 zila_data.db
+wsgi.py
