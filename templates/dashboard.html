@@ -91,6 +91,13 @@
             width: 20px;
             height: 20px;
         }
+        
+        /* Compiled report button hover effect */
+        .compiled-report-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            background: linear-gradient(135deg, #c0392b, #a93226);
+        }
     </style>
     <script>
         function toggleLock(checkbox, zila) {
@@ -173,7 +180,13 @@
                     <p class="summary-number danger">{{ summary.total_not_submitted_reports }}</p>
                 </div>
             </div>
-        
+            {% if session['role'] == 'admin' %}
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{{ url_for('compiled_report') }}" class="compiled-report-btn" style="text-decoration: none; display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border-radius: 10px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); transition: all 0.3s ease; position: relative; z-index: 100; cursor: pointer;" onclick="console.log('Button clicked!'); window.location.href = '{{ url_for('compiled_report') }}'; return false;">
+                    📊 تمام اضلاع کی مجموعی گرافیکل رپورٹ دیکھیں
+                </a>
+            </div>
+            {% endif %}
         </div>
         
         <!-- Zila Status Table -->

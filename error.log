@@ -8440,3 +8440,653 @@ NameError: name 'alaqajat_data' is not defined
 2025-08-08 11:31:14,172 INFO werkzeug Thread-76 (process_request_thread) : 127.0.0.1 - - [08/Aug/2025 11:31:14] "GET /static/style.css?v=303 HTTP/1.1" 200 -
 2025-08-08 13:51:40,341 INFO werkzeug MainThread :  * Detected change in 'd:\\Office\\jamatreport\\passenger_wsgi.py', reloading
 2025-08-08 13:51:40,455 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-09 17:39:10,662 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-08-09 17:39:10,662 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2025-08-09 17:39:10,673 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-09 17:39:11,650 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-09 17:39:11,655 INFO werkzeug MainThread :  * Debugger PIN: 871-170-084
+2025-08-09 17:39:19,035 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:19] "GET /dashboard HTTP/1.1" 200 -
+2025-08-09 17:39:19,291 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:19] "GET /static/style.css?v=880 HTTP/1.1" 200 -
+2025-08-09 17:39:19,402 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:19] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 17:39:21,256 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:21] "[32mGET /logout HTTP/1.1[0m" 302 -
+2025-08-09 17:39:21,263 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:21] "GET / HTTP/1.1" 200 -
+2025-08-09 17:39:21,519 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:39:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-09 17:43:30,979 INFO werkzeug MainThread :  * Detected change in 'd:\\Office\\jamatreport\\app.py', reloading
+2025-08-09 17:43:31,310 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-09 17:43:33,475 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-09 17:43:33,482 INFO werkzeug MainThread :  * Debugger PIN: 871-170-084
+2025-08-09 17:43:45,499 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:43:45] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-08-09 17:43:45,544 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:43:45] "GET /dashboard HTTP/1.1" 200 -
+2025-08-09 17:43:45,901 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 17:43:45] "GET /static/style.css?v=535 HTTP/1.1" 200 -
+2025-08-09 18:31:37,381 INFO werkzeug MainThread :  * Detected change in 'd:\\Office\\jamatreport\\app.py', reloading
+2025-08-09 18:31:37,560 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-09 18:31:38,688 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-09 18:31:38,695 INFO werkzeug MainThread :  * Debugger PIN: 871-170-084
+2025-08-09 18:31:47,385 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 18:31:47] "GET /dashboard HTTP/1.1" 200 -
+2025-08-09 18:31:47,692 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [09/Aug/2025 18:31:47] "GET /static/style.css?v=433 HTTP/1.1" 200 -
+2025-08-18 15:14:34,155 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-08-18 15:14:34,155 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2025-08-18 15:14:34,157 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:14:35,443 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:14:35,450 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:15:39,061 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:15:39] "GET / HTTP/1.1" 200 -
+2025-08-18 15:15:39,450 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:15:39] "GET /static/style.css HTTP/1.1" 200 -
+2025-08-18 15:15:39,669 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:15:39] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-18 15:15:44,339 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:15:44] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-08-18 15:15:44,425 ERROR root Thread-6 (process_request_thread) : Exception in /dashboard route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 1270, in dashboard
+    return render_template("dashboard.html",
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\Office\jamatreport\templates\dashboard.html", line 185, in top-level template code
+    <a href="{{ url_for('compiled_report') }}" class="compiled-report-btn" style="text-decoration: none; display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border-radius: 10px; font-size: 18px; font-weight: bold; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); transition: all 0.3s ease;">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\HC\AppData\Roaming\Python\Python312\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'compiled_report'. Did you mean 'view_combined_report' instead?
+2025-08-18 15:15:44,500 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:15:44] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-08-18 15:16:11,842 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:16:12,049 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:16:13,847 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:16:13,853 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:16:24,433 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:16:24,536 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:16:25,755 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:16:25,760 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:16:26,603 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:16:26] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:16:26,721 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:16:26] "GET /static/style.css?v=84 HTTP/1.1" 200 -
+2025-08-18 15:17:13,484 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:13] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:17:13,754 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:13] "GET /static/style.css?v=991 HTTP/1.1" 200 -
+2025-08-18 15:17:17,057 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:17] "POST /toggle_report_lock/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 15:17:17,274 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:17] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:17:17,381 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:17] "GET /static/style.css?v=377 HTTP/1.1" 200 -
+2025-08-18 15:17:18,162 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:18] "POST /toggle_report_lock/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 15:17:18,532 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:18] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:17:18,548 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:17:18] "GET /static/style.css?v=162 HTTP/1.1" 200 -
+2025-08-18 15:18:20,921 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:20] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:18:20,978 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:20] "GET /static/style.css?v=32 HTTP/1.1" 200 -
+2025-08-18 15:18:26,337 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:26] "GET / HTTP/1.1" 200 -
+2025-08-18 15:18:26,695 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-18 15:18:30,131 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:18:30,216 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:18:31,315 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:18:31,320 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:18:36,154 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:36] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:18:36,259 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:36] "GET /static/style.css?v=5 HTTP/1.1" 200 -
+2025-08-18 15:18:36,287 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:18:36] "GET /static/chart-styles.css?v=5 HTTP/1.1" 200 -
+2025-08-18 15:20:59,006 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:20:59] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:20:59,022 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:20:59] "GET /static/style.css?v=842 HTTP/1.1" 200 -
+2025-08-18 15:39:00,495 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:39:00] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:39:00,516 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:39:00] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:39:00,711 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:39:00] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:39:55,727 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:39:55] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:39:55,754 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:39:55] "GET /static/style.css?v=148 HTTP/1.1" 200 -
+2025-08-18 15:40:09,214 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:09] "GET / HTTP/1.1" 200 -
+2025-08-18 15:40:09,562 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-18 15:40:18,461 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:18] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:40:18,710 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:18] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:40:18,802 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:18] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:40:48,339 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:48] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:40:48,356 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:48] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:40:48,552 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:40:48] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:42:05,584 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:05] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:42:05,600 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:05] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:42:05,799 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:42:30,925 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:30] "GET / HTTP/1.1" 200 -
+2025-08-18 15:42:30,953 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-08-18 15:42:35,878 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:35] "[32mPOST / HTTP/1.1[0m" 302 -
+2025-08-18 15:42:36,241 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:36] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:42:36,570 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:36] "GET /static/style.css?v=999 HTTP/1.1" 200 -
+2025-08-18 15:42:41,698 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:41] "GET /view_combined_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 15:42:41,963 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:41] "GET /static/style.css?v=4 HTTP/1.1" 200 -
+2025-08-18 15:42:42,020 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:42] "GET /static/chart-styles.css?v=4 HTTP/1.1" 200 -
+2025-08-18 15:42:42,620 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:42] "GET /view_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679?hide_header=true HTTP/1.1" 200 -
+2025-08-18 15:42:42,631 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:42:42] "GET /static/style.css?v= HTTP/1.1" 200 -
+2025-08-18 15:46:19,305 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:46:19,533 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:46:21,258 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:46:21,266 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:46:22,635 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:22] "GET /view_combined_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 15:46:22,746 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:22] "[36mGET /static/style.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 15:46:22,851 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:22] "[36mGET /static/chart-styles.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 15:46:23,541 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:23] "GET /view_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679?hide_header=true HTTP/1.1" 200 -
+2025-08-18 15:46:23,555 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:23] "[36mGET /static/style.css?v= HTTP/1.1[0m" 304 -
+2025-08-18 15:46:28,637 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:28] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 15:46:28,689 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:28] "GET /static/style.css?v=10 HTTP/1.1" 200 -
+2025-08-18 15:46:29,022 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:46:29,291 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:46:31,708 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:46:31,719 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:46:37,154 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:37] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:46:37,268 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:37] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:46:37,281 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:46:37] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:46:47,322 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:46:47,515 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:46:49,872 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:46:49,879 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:47:02,153 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:47:02,274 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:47:04,080 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:47:04,087 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:47:05,448 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:05] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:47:05,602 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:05] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:47:05,613 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:47:30,999 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:30] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:47:31,016 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:31] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:47:31,020 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:31] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:47:57,906 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:57] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:47:57,937 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:57] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:47:57,937 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:47:57] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:48:04,187 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 15:48:04,277 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 15:48:05,587 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 15:48:05,593 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 15:59:18,887 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:59:18] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 15:59:19,034 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:59:19] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 15:59:19,037 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 15:59:19] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:01:06,849 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:06] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:01:06,871 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:06] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:01:06,872 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:06] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:01:43,799 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:43] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:01:43,817 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:43] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:01:43,820 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:01:43] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:02:04,147 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:02:04,333 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:02:05,690 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:02:05,695 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:02:25,277 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:25] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:02:25,429 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:25] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:02:25,451 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:25] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:02:55,091 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:02:55,205 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:02:56,390 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:02:56,395 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:02:57,440 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:57] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:02:57,554 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:57] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:02:57,585 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:02:57] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:03:10,393 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:03:10,476 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:03:11,410 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:03:11,415 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:06:09,057 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:06:09] "[32mGET /compiled_report HTTP/1.1[0m" 302 -
+2025-08-18 16:06:28,301 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:06:28] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:06:28,404 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:06:28] "GET /static/style.css?v=585 HTTP/1.1" 200 -
+2025-08-18 16:07:17,984 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-08-18 16:07:17,984 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2025-08-18 16:07:17,986 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:07:19,234 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:07:19,239 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:12:15,633 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:15] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:12:15,668 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:15] "GET /static/style.css?v=400 HTTP/1.1" 200 -
+2025-08-18 16:12:17,248 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:17] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:12:17,280 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:17] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:12:17,590 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:17] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:12:27,454 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:27] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:12:27,487 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:27] "GET /static/style.css?v=913 HTTP/1.1" 200 -
+2025-08-18 16:12:47,331 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:47] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:12:47,611 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:47] "GET /static/style.css?v=620 HTTP/1.1" 200 -
+2025-08-18 16:12:49,726 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:49] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:12:49,744 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:49] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:12:49,751 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:12:49] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:20:41,147 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:41] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:20:41,195 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:41] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:20:41,195 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:41] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:20:52,789 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:52] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:20:52,804 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:52] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:20:52,805 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:20:52] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:07,971 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:07] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:22:07,987 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:07] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:07,987 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:07] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:39,411 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:39] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:22:39,428 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:39] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:39,430 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:39] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:43,781 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:43] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:22:43,802 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:43] "GET /static/style.css?v=202 HTTP/1.1" 200 -
+2025-08-18 16:22:48,804 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:48] "GET /view_combined_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 16:22:49,081 INFO werkzeug Thread-33 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:49] "[36mGET /static/style.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:49,146 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:49] "[36mGET /static/chart-styles.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 16:22:49,793 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:49] "GET /view_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679?hide_header=true HTTP/1.1" 200 -
+2025-08-18 16:22:49,805 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:22:49] "[36mGET /static/style.css?v= HTTP/1.1[0m" 304 -
+2025-08-18 16:23:15,301 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:15] "GET /print_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 16:23:25,706 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:25] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:23:25,726 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:25] "GET /static/style.css?v=3 HTTP/1.1" 200 -
+2025-08-18 16:23:28,194 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:28] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:23:28,213 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:28] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:23:28,218 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:28] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:23:40,137 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:40] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 16:23:40,154 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:40] "GET /static/style.css?v=941 HTTP/1.1" 200 -
+2025-08-18 16:23:42,151 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:42] "GET /view_combined_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679 HTTP/1.1" 200 -
+2025-08-18 16:23:42,454 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:42] "[36mGET /static/style.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 16:23:42,489 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:42] "[36mGET /static/chart-styles.css?v=4 HTTP/1.1[0m" 304 -
+2025-08-18 16:23:42,838 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:42] "GET /view_report/\u0627\u06cc\u0626\u0631\u067e\u0648\u0631\u0679?hide_header=true HTTP/1.1" 200 -
+2025-08-18 16:23:43,145 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:23:43] "[36mGET /static/style.css?v= HTTP/1.1[0m" 304 -
+2025-08-18 16:26:28,656 INFO werkzeug Thread-51 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:26:28] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:26:28,671 INFO werkzeug Thread-53 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:26:28] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:26:28,680 INFO werkzeug Thread-52 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:26:28] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:31:29,647 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:29,812 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:31:30,080 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:30,269 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:31:34,053 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:31:34,055 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:31:34,059 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:31:34,060 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:31:35,648 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:35] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:31:35,657 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:35] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:31:35,882 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:35] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:31:36,101 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:36] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:31:47,752 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:47,849 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:31:48,778 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:49,113 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:31:49,940 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:31:49,945 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:31:50,325 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:31:50,331 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:31:51,393 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:51] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:31:51,523 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:51] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:31:51,524 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:31:51] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:31:59,740 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:59,878 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:31:59,917 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:00,272 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:02,200 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:02,207 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:32:02,237 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:02,242 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:32:06,029 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:06] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:32:06,147 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:06] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:32:06,156 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:06] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:32:19,905 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:32:19,965 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:32:20,088 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:20,138 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:22,558 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:22,563 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:32:22,745 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:22,754 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:32:23,838 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:23] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:32:23,955 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:23] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:32:23,967 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:32:23] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:32:34,728 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:32:34,816 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:34,846 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:32:34,953 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:32:35,855 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:35,861 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:32:36,004 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:32:36,009 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:32,574 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:32,757 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:32,978 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:33,318 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:34,626 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:34,633 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:34,877 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:34,884 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:45,026 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:45,175 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:45,228 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:45,388 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:46,781 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:46,786 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:46,941 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:46,947 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:55,899 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:56,039 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:34:56,073 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:56,252 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:34:57,702 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:57,708 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:34:57,797 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:34:57,803 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:35:07,787 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:35:07,934 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:35:07,986 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:35:08,136 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:35:09,407 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:35:09,413 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:35:09,541 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:35:09,547 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:35:13,103 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:35:13,143 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 16:35:13,227 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:35:13,257 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 16:35:14,332 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:35:14,338 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:35:14,358 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 16:35:14,365 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 16:35:15,386 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:35:15] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 16:35:15,532 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:35:15] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 16:35:15,538 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 16:35:15] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:11:01,330 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:11:01] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 17:11:01,351 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:11:01] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:11:01,352 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:11:01] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:12:45,460 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:12:45] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 17:12:45,479 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:12:45] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:12:45,479 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:12:45] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:17:16,043 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:17:16] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 17:17:16,070 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:17:16] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:17:16,071 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:17:16] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:17:49,895 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:17:50,029 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:17:50,116 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:17:50,381 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:17:51,975 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:17:51,981 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:17:52,252 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:17:52,258 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:17:55,747 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:17:55,964 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:17:57,700 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:17:57,900 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:17:58,483 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:17:58,490 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:17:59,223 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:17:59,229 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:18:19,893 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:20,369 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:20,679 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:21,079 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:22,889 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:18:22,895 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:18:22,975 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:18:22,980 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:18:42,661 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:42,811 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:42,849 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:42,994 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:44,878 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:18:44,883 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:18:44,890 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:18:44,896 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:18:57,189 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:57,463 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:58,565 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:18:58,732 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:18:59,417 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:18:59,424 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:00,682 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:00,687 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:02,825 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:02,948 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:03,807 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:04,285 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:04,694 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:04,699 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:05,415 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:05,421 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:06,408 ERROR root Thread-2 (process_request_thread) : Exception in /compiled_report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 1295, in compiled_report
+    available_periods = sorted(report_df['period'].unique().tolist(), reverse=True)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'str'
+2025-08-18 17:19:06,410 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:19:06] "[35m[1mGET /compiled_report HTTP/1.1[0m" 500 -
+2025-08-18 17:19:07,804 ERROR root Thread-3 (process_request_thread) : Exception in /compiled_report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 1295, in compiled_report
+    available_periods = sorted(report_df['period'].unique().tolist(), reverse=True)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'str'
+2025-08-18 17:19:07,805 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:19:07] "[35m[1mGET /compiled_report HTTP/1.1[0m" 500 -
+2025-08-18 17:19:13,590 ERROR root Thread-4 (process_request_thread) : Exception in /compiled_report route
+Traceback (most recent call last):
+  File "D:\Office\jamatreport\app.py", line 1295, in compiled_report
+    available_periods = sorted(report_df['period'].unique().tolist(), reverse=True)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'str'
+2025-08-18 17:19:13,591 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:19:13] "[35m[1mGET /compiled_report HTTP/1.1[0m" 500 -
+2025-08-18 17:19:19,555 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:19,652 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:19,905 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:20,547 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:21,994 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:21,999 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:22,279 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:22,285 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:43,574 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:43,760 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:44,597 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:44,763 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:45,636 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:45,644 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:45,974 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:45,980 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:52,040 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:52,154 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:52,432 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:19:52,542 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:19:53,483 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:53,491 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:19:53,794 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:19:53,799 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:25:57,662 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:25:57,732 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:25:57,812 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:25:57,875 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:25:59,430 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:25:59,436 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:25:59,502 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:25:59,509 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:26:00,267 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:00] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 17:26:00,399 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:00] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:00,405 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:00] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:04,856 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:04] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:26:04,876 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:04] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:05,071 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:09,382 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:09] "GET /compiled_report?period=Q1+2025 HTTP/1.1" 200 -
+2025-08-18 17:26:09,404 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:09] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:09,600 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:09] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:26,886 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:26] "GET /compiled_report?period=Q4+2024 HTTP/1.1" 200 -
+2025-08-18 17:26:26,908 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:26] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:26:27,086 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:26:27] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:03,033 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:03] "GET /compiled_report?period=Q4+2024 HTTP/1.1" 200 -
+2025-08-18 17:27:03,054 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:03] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:03,249 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:03] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:05,442 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:05] "GET /compiled_report?period=Q1+2025 HTTP/1.1" 200 -
+2025-08-18 17:27:05,465 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:05] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:05,679 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:08,132 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:08] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:27:08,150 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:08] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:27:08,326 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:27:08] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:30:21,881 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:30:21] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:30:21,898 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:30:21] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:30:22,062 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:30:22] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:30:29,638 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:29,786 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:29,881 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:30,020 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:32,052 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:32,059 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:30:32,073 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:32,078 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:30:45,213 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:45,258 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:45,379 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:45,443 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:47,015 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:47,023 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:30:47,036 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:47,041 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:30:56,225 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:56,315 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:30:56,424 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:56,860 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:30:58,776 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:58,782 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:30:58,944 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:30:58,949 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:31:25,974 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:31:26,053 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:31:26,106 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:31:26,185 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:31:27,152 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:31:27,157 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:31:27,203 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:31:27,208 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:31:30,168 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:31:30,169 INFO werkzeug MainThread :  * Detected change in 'D:\\Office\\jamatreport\\app.py', reloading
+2025-08-18 17:31:30,373 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:31:30,374 INFO werkzeug MainThread :  * Restarting with stat
+2025-08-18 17:31:32,187 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:31:32,193 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:31:32,205 WARNING werkzeug MainThread :  * Debugger is active!
+2025-08-18 17:31:32,211 INFO werkzeug MainThread :  * Debugger PIN: 564-344-488
+2025-08-18 17:31:33,408 INFO werkzeug Thread-2 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:31:33] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:31:33,528 INFO werkzeug Thread-3 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:31:33] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:31:33,608 INFO werkzeug Thread-4 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:31:33] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:32:48,382 INFO werkzeug Thread-5 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:48] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:32:48,401 INFO werkzeug Thread-6 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:48] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:32:48,590 INFO werkzeug Thread-7 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:48] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:32:57,952 INFO werkzeug Thread-8 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:57] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:32:57,972 INFO werkzeug Thread-9 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:57] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:32:58,135 INFO werkzeug Thread-10 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:32:58] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:05,162 INFO werkzeug Thread-11 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:05] "GET /compiled_report?period=Q1+2025 HTTP/1.1" 200 -
+2025-08-18 17:33:05,203 INFO werkzeug Thread-12 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:05] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:05,370 INFO werkzeug Thread-13 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:23,319 INFO werkzeug Thread-14 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:23] "GET /compiled_report?period=Q1+2025 HTTP/1.1" 200 -
+2025-08-18 17:33:23,332 INFO werkzeug Thread-15 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:23] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:23,521 INFO werkzeug Thread-16 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:23] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:25,616 INFO werkzeug Thread-17 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:25] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:33:25,636 INFO werkzeug Thread-18 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:25] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:33:25,771 INFO werkzeug Thread-19 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:33:25] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:34:16,862 INFO werkzeug Thread-20 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:16] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:34:16,881 INFO werkzeug Thread-21 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:16] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:34:17,050 INFO werkzeug Thread-22 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:17] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:34:27,886 INFO werkzeug Thread-23 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:27] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:34:27,900 INFO werkzeug Thread-24 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:27] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:34:28,080 INFO werkzeug Thread-25 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:34:28] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:37:26,142 INFO werkzeug Thread-26 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:26] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:37:26,186 INFO werkzeug Thread-27 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:26] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:37:26,342 INFO werkzeug Thread-28 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:26] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:37:40,412 INFO werkzeug Thread-29 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:40] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:37:40,426 INFO werkzeug Thread-30 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:40] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:37:40,611 INFO werkzeug Thread-31 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:37:40] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:38:29,714 INFO werkzeug Thread-32 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:29] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:38:30,044 INFO werkzeug Thread-34 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:30] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:38:30,045 INFO werkzeug Thread-35 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:30] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:38:39,166 INFO werkzeug Thread-36 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:39] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:38:39,427 INFO werkzeug Thread-37 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:39] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:38:39,491 INFO werkzeug Thread-38 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:38:39] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:39:23,568 INFO werkzeug Thread-39 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:39:23] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:39:23,596 INFO werkzeug Thread-40 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:39:23] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:39:23,773 INFO werkzeug Thread-41 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:39:23] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:40:14,174 INFO werkzeug Thread-42 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:40:14] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:40:14,195 INFO werkzeug Thread-43 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:40:14] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:40:14,382 INFO werkzeug Thread-44 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:40:14] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:44:11,554 INFO werkzeug Thread-45 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:44:11] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:44:11,575 INFO werkzeug Thread-46 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:44:11] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:44:11,721 INFO werkzeug Thread-47 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:44:11] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:51:15,992 INFO werkzeug Thread-48 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:51:15] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:51:16,008 INFO werkzeug Thread-49 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:51:16] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:51:16,172 INFO werkzeug Thread-50 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:51:16] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:52:35,770 INFO werkzeug Thread-51 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:35] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:52:35,784 INFO werkzeug Thread-52 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:35] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:52:35,986 INFO werkzeug Thread-53 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:35] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:52:51,673 INFO werkzeug Thread-54 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:51] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:52:51,692 INFO werkzeug Thread-55 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:51] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:52:51,817 INFO werkzeug Thread-56 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:52:51] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:02,416 INFO werkzeug Thread-57 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:02] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:54:02,431 INFO werkzeug Thread-58 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:02] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:02,630 INFO werkzeug Thread-59 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:02] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:37,579 INFO werkzeug Thread-60 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:37] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:54:37,604 INFO werkzeug Thread-61 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:37] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:37,791 INFO werkzeug Thread-62 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:37] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:58,073 INFO werkzeug Thread-63 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:58] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:54:58,089 INFO werkzeug Thread-64 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:58] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:54:58,286 INFO werkzeug Thread-65 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:54:58] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:55:35,192 INFO werkzeug Thread-66 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:35] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:55:35,209 INFO werkzeug Thread-67 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:35] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:55:35,400 INFO werkzeug Thread-68 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:35] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:55:52,834 INFO werkzeug Thread-69 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:52] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:55:52,853 INFO werkzeug Thread-70 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:52] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:55:53,002 INFO werkzeug Thread-71 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:55:53] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:56:06,776 INFO werkzeug Thread-72 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:06] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:56:06,791 INFO werkzeug Thread-73 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:06] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:56:06,993 INFO werkzeug Thread-74 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:06] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:56:33,657 INFO werkzeug Thread-75 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:33] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:56:33,671 INFO werkzeug Thread-76 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:33] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:56:33,859 INFO werkzeug Thread-77 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:56:33] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:57:01,150 INFO werkzeug Thread-78 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:57:01] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:57:01,169 INFO werkzeug Thread-79 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:57:01] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:57:01,266 INFO werkzeug Thread-80 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:57:01] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:58:17,296 INFO werkzeug Thread-81 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:58:17] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 17:58:17,309 INFO werkzeug Thread-82 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:58:17] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 17:58:17,482 INFO werkzeug Thread-83 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 17:58:17] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:00:11,412 INFO werkzeug Thread-84 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:00:11] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:00:11,429 INFO werkzeug Thread-85 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:00:11] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:00:11,611 INFO werkzeug Thread-86 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:00:11] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:01:16,929 INFO werkzeug Thread-87 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:16] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:01:16,954 INFO werkzeug Thread-88 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:16] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:01:17,135 INFO werkzeug Thread-89 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:17] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:01:28,202 INFO werkzeug Thread-90 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:28] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:01:28,213 INFO werkzeug Thread-91 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:28] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:01:28,429 INFO werkzeug Thread-92 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:01:28] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:03:11,738 INFO werkzeug Thread-93 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:11] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:03:11,759 INFO werkzeug Thread-94 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:11] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:03:11,959 INFO werkzeug Thread-95 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:11] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:03:30,632 INFO werkzeug Thread-97 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:30] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:03:30,648 INFO werkzeug Thread-96 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:30] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:03:30,843 INFO werkzeug Thread-98 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:03:30] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:04:23,023 INFO werkzeug Thread-99 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:04:23] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:04:23,041 INFO werkzeug Thread-100 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:04:23] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:04:23,119 INFO werkzeug Thread-101 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:04:23] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:09:05,516 INFO werkzeug Thread-102 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:05] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:09:05,535 INFO werkzeug Thread-103 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:05] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:09:05,715 INFO werkzeug Thread-104 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:05] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:09:34,199 INFO werkzeug Thread-105 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:34] "GET /compiled_report?period=Q1+2025 HTTP/1.1" 200 -
+2025-08-18 18:09:34,219 INFO werkzeug Thread-106 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:34] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:09:34,400 INFO werkzeug Thread-107 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:09:34] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:00,479 INFO werkzeug Thread-108 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:00] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:10:00,508 INFO werkzeug Thread-109 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:00] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:00,653 INFO werkzeug Thread-110 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:00] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:30,704 INFO werkzeug Thread-111 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:30] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:10:30,717 INFO werkzeug Thread-112 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:30] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:30,897 INFO werkzeug Thread-113 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:30] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:47,810 INFO werkzeug Thread-114 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:47] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:10:47,833 INFO werkzeug Thread-115 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:47] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:10:48,021 INFO werkzeug Thread-116 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:10:48] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:11:07,722 INFO werkzeug Thread-117 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:11:07] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:11:07,738 INFO werkzeug Thread-118 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:11:07] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:11:07,906 INFO werkzeug Thread-119 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:11:07] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:12:02,460 INFO werkzeug Thread-120 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:02] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:12:02,477 INFO werkzeug Thread-121 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:02] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:12:02,694 INFO werkzeug Thread-122 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:02] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:12:21,009 INFO werkzeug Thread-123 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:21] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:12:21,028 INFO werkzeug Thread-124 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:21] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:12:21,223 INFO werkzeug Thread-125 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:12:21] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:13:36,874 INFO werkzeug Thread-126 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:13:36] "GET /compiled_report?period=Q2+2025 HTTP/1.1" 200 -
+2025-08-18 18:13:36,893 INFO werkzeug Thread-127 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:13:36] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:13:37,074 INFO werkzeug Thread-128 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:13:37] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:13:46,575 INFO werkzeug Thread-129 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:13:46] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 18:13:46,596 INFO werkzeug Thread-130 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:13:46] "GET /static/style.css?v=725 HTTP/1.1" 200 -
+2025-08-18 18:33:48,705 INFO werkzeug Thread-132 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:33:48] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 18:33:48,755 INFO werkzeug Thread-133 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:33:48] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:33:48,934 INFO werkzeug Thread-134 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:33:48] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:35:26,049 INFO werkzeug Thread-136 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:26] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 18:35:26,104 INFO werkzeug Thread-137 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:26] "GET /static/style.css?v=788 HTTP/1.1" 200 -
+2025-08-18 18:35:28,553 INFO werkzeug Thread-138 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:28] "GET /compiled_report HTTP/1.1" 200 -
+2025-08-18 18:35:28,843 INFO werkzeug Thread-139 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:28] "[36mGET /static/style.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:35:28,911 INFO werkzeug Thread-140 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:28] "[36mGET /static/chart-styles.css?v=5 HTTP/1.1[0m" 304 -
+2025-08-18 18:35:34,636 INFO werkzeug Thread-141 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:34] "GET /dashboard HTTP/1.1" 200 -
+2025-08-18 18:35:34,700 INFO werkzeug Thread-142 (process_request_thread) : 127.0.0.1 - - [18/Aug/2025 18:35:34] "GET /static/style.css?v=973 HTTP/1.1" 200 -
