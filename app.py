@@ -1276,6 +1276,275 @@ def dashboard():
         logging.error("Exception in /dashboard route", exc_info=True)
         return "Internal Server Error. Please check error.log for details.", 500
 
+@app.route('/compiled_report')
+def compiled_report():
+    try:
+        if 'username' not in session or session.get('role') != 'admin':
+            flash("صرف ایڈمن تمام اضلاع کی مجموعی رپورٹ دیکھ سکتا ہے", "error")
+            return redirect(url_for('dashboard'))
+        
+        # Load all reports data
+        global report_df, users_df
+        report_df = load_reports_from_db()
+        users_df = load_users_from_db()
+        
+        # Get all zilas that have users
+        all_zilas = list(pd.Series(users_df[users_df['role'] == 'user']['zila']).drop_duplicates())
+        
+        # Get all available periods from database, filtering out None values
+        available_periods = sorted([p for p in report_df['period'].unique().tolist() if p is not None], reverse=True)
+        
+        # Get selected period from query parameter, default to latest period
+        selected_period = request.args.get('period', available_periods[0] if available_periods else 'Q2 2025')
+        
+        # Validate selected period exists in database
+        if selected_period not in available_periods:
+            selected_period = available_periods[0] if available_periods else 'Q2 2025'
+        
+        # Filter to show reports for selected period
+        current_reports = report_df[report_df['period'] == selected_period]
+        
+        # Prepare compiled data for all zilas
+        compiled_data = {
+            'zilas': [],
+            'summary_stats': {
+                'total_zilas': len(all_zilas),
+                'reporting_zilas': 0,
+                'total_arkaan': 0,
+                'total_arkaan_target': 0,
+                'total_umeedwaran': 0,
+                'total_umeedwaran_target': 0,
+                'total_karkunan': 0,
+                'total_karkunan_target': 0,
+                'total_members': 0,
+                'total_members_target': 0,
+                'total_halqajat': 0,
+                'total_halqajat_target': 0,
+                'total_alaqajat': 0,
+                'total_alaqajat_target': 0,
+                'total_nizam_fajar': 0,
+                'total_nizam_fajar_target': 0
+            },
+            'chart_data': {
+                'arkaan_by_zila': {'labels': [], 'achieved': [], 'targets': []},
+                'members_by_zila': {'labels': [], 'achieved': [], 'targets': []},
+                'halqajat_by_zila': {'labels': [], 'achieved': [], 'targets': []},
+                'alaqajat_by_zila': {'labels': [], 'achieved': [], 'targets': []},
+                'overall_progress': {'categories': [], 'percentages': []}
+            }
+        }
+        
+        # Helper function for safe conversion
+        def safe_int(value, default=0):
+            try:
+                if pd.isna(value) or value == '' or value == 'nan':
+                    return default
+                return int(float(str(value)))
+            except (ValueError, TypeError):
+                return default
+        
+        # Process each zila's data
+        for zila in all_zilas:
+            zila_report = current_reports[current_reports['zila'] == zila]
+            
+            if not zila_report.empty:
+                row = zila_report.iloc[0]
+                compiled_data['summary_stats']['reporting_zilas'] += 1
+                
+                # Get data for the selected period
+                period_form_data = get_period_data(zila, selected_period)
+                
+                # For chart compatibility, use the same data for both q1 and q2
+                q1_form_data = period_form_data
+                q2_form_data = period_form_data
+                
+                # Extract key metrics with safe conversion
+                arkaan_start = safe_int(row.get('arkaan_start', 0))
+                arkaan_izafa = safe_int(row.get('arkaan_izafa', 0))
+                arkaan_kami = safe_int(row.get('arkaan_kami', 0))
+                arkaan_achieved = arkaan_start + arkaan_izafa - arkaan_kami
+                arkaan_target = safe_int(row.get('arkaan_target', 0))
+                
+                umeedwaran_start = safe_int(row.get('umeedwaran_start', 0))
+                umeedwaran_izafa = safe_int(row.get('umeedwaran_izafa', 0))
+                umeedwaran_kami = safe_int(row.get('umeedwaran_kami', 0))
+                umeedwaran_achieved = umeedwaran_start + umeedwaran_izafa - umeedwaran_kami
+                umeedwaran_target = safe_int(row.get('umeedwaran_target', 0))
+                
+                karkunan_start = safe_int(row.get('karkunan_start', 0))
+                karkunan_izafa = safe_int(row.get('karkunan_izafa', 0))
+                karkunan_kami = safe_int(row.get('karkunan_kami', 0))
+                karkunan_achieved = karkunan_start + karkunan_izafa - karkunan_kami
+                karkunan_target = safe_int(row.get('karkunan_target', 0))
+                
+                members_start = safe_int(row.get('member_start', 0))
+                members_izafa = safe_int(row.get('member_izafa', 0))
+                members_kami = safe_int(row.get('member_kami', 0))
+                members_achieved = members_start + members_izafa - members_kami
+                members_target = safe_int(row.get('member_target', 0))
+                
+                halqajat_start = safe_int(row.get('halqajat_start', 0))
+                halqajat_izafa = safe_int(row.get('halqajat_izafa', 0))
+                halqajat_kami = safe_int(row.get('halqajat_kami', 0))
+                halqajat_achieved = halqajat_start + halqajat_izafa - halqajat_kami
+                halqajat_target = safe_int(row.get('halqajat_target', 0))
+                
+                alaqajat_start = safe_int(row.get('alaqajat_start', 0))
+                alaqajat_izafa = safe_int(row.get('alaqajat_izafa', 0))
+                alaqajat_kami = safe_int(row.get('alaqajat_kami', 0))
+                alaqajat_achieved = alaqajat_start + alaqajat_izafa - alaqajat_kami
+                alaqajat_target = safe_int(row.get('alaqajat_target', 0))
+                
+                nizam_fajar_start = safe_int(row.get('nizam_e_fajar_start', 0))
+                nizam_fajar_izafa = safe_int(row.get('nizam_e_fajar_izafa', 0))
+                nizam_fajar_kami = safe_int(row.get('nizam_e_fajar_kami', 0))
+                nizam_fajar_achieved = nizam_fajar_start + nizam_fajar_izafa - nizam_fajar_kami
+                nizam_fajar_target = safe_int(row.get('nizam_e_fajar_target', 0))
+                
+                # Prepare detailed chart data for this zila (using izafa and houye)
+                detailed_charts = {
+                    # Tanzeemi Hayyat data
+                    'block_code_data': {
+                        'q1': {'izafa': q1_form_data.get('block_code_izafa', 0), 'held': q1_form_data.get('block_code_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('block_code_izafa', 0), 'held': q2_form_data.get('block_code_houye', 0)}
+                    },
+                    'nizam_fajar_data': {
+                        'q1': {'izafa': q1_form_data.get('nizam_e_fajar_izafa', 0), 'held': q1_form_data.get('nizam_e_fajar_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('nizam_e_fajar_izafa', 0), 'held': q2_form_data.get('nizam_e_fajar_houye', 0)}
+                    },
+                    'awaami_committee_data': {
+                        'q1': {'izafa': q1_form_data.get('awaami_committee_izafa', 0), 'held': q1_form_data.get('awaami_committee_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('awaami_committee_izafa', 0), 'held': q2_form_data.get('awaami_committee_houye', 0)}
+                    },
+                    # Afradi Quwat data
+                    'arkaan_data': {
+                        'q1': {'izafa': q1_form_data.get('arkaan_izafa', 0), 'held': q1_form_data.get('arkaan_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('arkaan_izafa', 0), 'held': q2_form_data.get('arkaan_houye', 0)}
+                    },
+                    'umeedwaran_data': {
+                        'q1': {'izafa': q1_form_data.get('umeedwaran_izafa', 0), 'held': q1_form_data.get('umeedwaran_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('umeedwaran_izafa', 0), 'held': q2_form_data.get('umeedwaran_houye', 0)}
+                    },
+                    'karkunan_data': {
+                        'q1': {'izafa': q1_form_data.get('karkunan_izafa', 0), 'held': q1_form_data.get('karkunan_houye', 0)},
+                        'q2': {'izafa': q2_form_data.get('karkunan_izafa', 0), 'held': q2_form_data.get('karkunan_houye', 0)}
+                    },
+                    # Ijtimaat data (using izafa and held)
+                    'ijtima_karkunan_alaqah_data': {
+                        'q1': {'izafa': q1_form_data.get('ijtima_karkunaan_alaqah_izafa', 0), 'held': q1_form_data.get('ijtima_karkunaan_alaqah_held', 0)},
+                        'q2': {'izafa': q2_form_data.get('ijtima_karkunaan_alaqah_izafa', 0), 'held': q2_form_data.get('ijtima_karkunaan_alaqah_held', 0)}
+                    },
+                    'ijtima_karkunan_halqajat_data': {
+                        'q1': {'izafa': q1_form_data.get('ijtima_karkunaan_halqajat_izafa', 0), 'held': q1_form_data.get('ijtima_karkunaan_halqajat_held', 0)},
+                        'q2': {'izafa': q2_form_data.get('ijtima_karkunaan_halqajat_izafa', 0), 'held': q2_form_data.get('ijtima_karkunaan_halqajat_held', 0)}
+                    },
+                    'dars_quran_data': {
+                        'q1': {'izafa': q1_form_data.get('dars_quran_izafa', 0), 'held': q1_form_data.get('dars_quran_held', 0)},
+                        'q2': {'izafa': q2_form_data.get('dars_quran_izafa', 0), 'held': q2_form_data.get('dars_quran_held', 0)}
+                    },
+                    'gharon_tak_dawat_data': {
+                        'q1': {'izafa': q1_form_data.get('gharon_tak_dawat_izafa', 0), 'held': q1_form_data.get('gharon_tak_dawat_held', 0)},
+                        'q2': {'izafa': q2_form_data.get('gharon_tak_dawat_izafa', 0), 'held': q2_form_data.get('gharon_tak_dawat_held', 0)}
+                    },
+                    'taqseem_literature_data': {
+                        'q1': {'izafa': q1_form_data.get('taqseem_literature_izafa', 0), 'held': q1_form_data.get('taqseem_literature_held', 0)},
+                        'q2': {'izafa': q2_form_data.get('taqseem_literature_izafa', 0), 'held': q2_form_data.get('taqseem_literature_held', 0)}
+                    }
+                }
+                
+                # Store zila data
+                zila_data = {
+                    'name': zila,
+                    'arkaan_achieved': arkaan_achieved,
+                    'arkaan_target': arkaan_target,
+                    'members_achieved': members_achieved,
+                    'members_target': members_target,
+                    'halqajat_achieved': halqajat_achieved,
+                    'halqajat_target': halqajat_target,
+                    'alaqajat_achieved': alaqajat_achieved,
+                    'alaqajat_target': alaqajat_target,
+                    'has_data': True,
+                    'detailed_charts': detailed_charts
+                }
+                compiled_data['zilas'].append(zila_data)
+                
+                # Add to chart data
+                compiled_data['chart_data']['arkaan_by_zila']['labels'].append(zila)
+                compiled_data['chart_data']['arkaan_by_zila']['achieved'].append(arkaan_achieved)
+                compiled_data['chart_data']['arkaan_by_zila']['targets'].append(arkaan_target)
+                
+                compiled_data['chart_data']['members_by_zila']['labels'].append(zila)
+                compiled_data['chart_data']['members_by_zila']['achieved'].append(members_achieved)
+                compiled_data['chart_data']['members_by_zila']['targets'].append(members_target)
+                
+                compiled_data['chart_data']['halqajat_by_zila']['labels'].append(zila)
+                compiled_data['chart_data']['halqajat_by_zila']['achieved'].append(halqajat_achieved)
+                compiled_data['chart_data']['halqajat_by_zila']['targets'].append(halqajat_target)
+                
+                compiled_data['chart_data']['alaqajat_by_zila']['labels'].append(zila)
+                compiled_data['chart_data']['alaqajat_by_zila']['achieved'].append(alaqajat_achieved)
+                compiled_data['chart_data']['alaqajat_by_zila']['targets'].append(alaqajat_target)
+                
+                # Add to summary totals
+                compiled_data['summary_stats']['total_arkaan'] += arkaan_achieved
+                compiled_data['summary_stats']['total_arkaan_target'] += arkaan_target
+                compiled_data['summary_stats']['total_umeedwaran'] += umeedwaran_achieved
+                compiled_data['summary_stats']['total_umeedwaran_target'] += umeedwaran_target
+                compiled_data['summary_stats']['total_karkunan'] += karkunan_achieved
+                compiled_data['summary_stats']['total_karkunan_target'] += karkunan_target
+                compiled_data['summary_stats']['total_members'] += members_achieved
+                compiled_data['summary_stats']['total_members_target'] += members_target
+                compiled_data['summary_stats']['total_halqajat'] += halqajat_achieved
+                compiled_data['summary_stats']['total_halqajat_target'] += halqajat_target
+                compiled_data['summary_stats']['total_alaqajat'] += alaqajat_achieved
+                compiled_data['summary_stats']['total_alaqajat_target'] += alaqajat_target
+                compiled_data['summary_stats']['total_nizam_fajar'] += nizam_fajar_achieved
+                compiled_data['summary_stats']['total_nizam_fajar_target'] += nizam_fajar_target
+            else:
+                # Zila with no report data
+                zila_data = {
+                    'name': zila,
+                    'arkaan_achieved': 0,
+                    'arkaan_target': 0,
+                    'members_achieved': 0,
+                    'members_target': 0,
+                    'halqajat_achieved': 0,
+                    'halqajat_target': 0,
+                    'alaqajat_achieved': 0,
+                    'alaqajat_target': 0,
+                    'has_data': False,
+                    'detailed_charts': {}
+                }
+                compiled_data['zilas'].append(zila_data)
+        
+        # Calculate overall progress percentages
+        def calc_percentage(achieved, target):
+            return round((achieved / target * 100), 1) if target > 0 else 0
+        
+        compiled_data['chart_data']['overall_progress']['categories'] = [
+            'ارکان', 'ممبرز', 'حلقہ جات', 'علاقہ جات'
+        ]
+        compiled_data['chart_data']['overall_progress']['percentages'] = [
+            calc_percentage(compiled_data['summary_stats']['total_arkaan'], 
+                          compiled_data['summary_stats']['total_arkaan_target']),
+            calc_percentage(compiled_data['summary_stats']['total_members'], 
+                          compiled_data['summary_stats']['total_members_target']),
+            calc_percentage(compiled_data['summary_stats']['total_halqajat'], 
+                          compiled_data['summary_stats']['total_halqajat_target']),
+            calc_percentage(compiled_data['summary_stats']['total_alaqajat'], 
+                          compiled_data['summary_stats']['total_alaqajat_target'])
+        ]
+        
+        return render_template("compiled_report.html", 
+                             compiled_data=compiled_data,
+                             current_period=selected_period,
+                             available_periods=available_periods)
+                             
+    except Exception as e:
+        import logging
+        logging.error("Exception in /compiled_report route", exc_info=True)
+        return "Internal Server Error. Please check error.log for details.", 500
+
 @app.route('/update_zila_info', methods=['POST'])
 def update_zila_info():
     try:
@@ -3656,6 +3925,27 @@ def get_q1_2025_data(zila):
         import logging
         logging.error(f"Error getting Q1 2025 data: {e}", exc_info=True)
         return pd.DataFrame()
+
+def get_period_data(zila, period):
+    """Get data for a specific period and zila"""
+    try:
+        global report_df
+        if report_df is None:
+            report_df = load_reports_from_db()
+        
+        # Filter data for specific zila and period
+        period_data = report_df[(report_df['zila'] == zila) & (report_df['period'] == period)]
+        
+        if not period_data.empty:
+            form_data = period_data.iloc[0].to_dict()
+            # Replace NaN values with 0
+            form_data = {k: (0 if pd.isna(v) else v) for k, v in form_data.items()}
+            return form_data
+        else:
+            return {}
+    except Exception as e:
+        print(f"Error in get_period_data: {e}")
+        return {}
 
 def get_quarterly_comparison_data(zila):
     """Get data for both Q1 and Q2 2025 for quarterly comparison"""
