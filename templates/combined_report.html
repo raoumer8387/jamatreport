@@ -1158,17 +1158,17 @@
             const taqseemLiteratureData = JSON.parse('{{ taqseem_literature_data | tojson | safe }}');
 
             const labels = [
-                `بلاک کوڈ انچارجز اختتام (${calculatePercentage(blockCodeIkhtitamData, 'tanzeemi')}%)`,
-                `نظام فجر (${calculatePercentage(nizamFajarData, 'tanzeemi')}%)`,
-                `عوامی کمیٹی (${calculatePercentage(awaamiCommitteeData, 'tanzeemi')}%)`,
-                `ارکان سازی (${calculatePercentage(arkaanData, 'afradi')}%)`,
-                `امیدواران رکنیت (${calculatePercentage(umeedwaranData, 'afradi')}%)`,
-                `کارکنان (${calculatePercentage(karkunanData, 'afradi')}%)`,
-                `اجتماع کارکنان (علاقہ) (${calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat')}%)`,
-                `اجتماع کارکنان (حلقہ جات) (${calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat')}%)`,
-                `درس قرآن (حلقہ جات) (${calculatePercentage(darsQuranData, 'ijtimaat')}%)`,
-                `گھروں تک دعوت (${calculatePercentage(gharonTakDawatData, 'ijtimaat')}%)`,
-                `تقسیم لٹریچر (${calculatePercentage(taqseemLiteratureData, 'ijtimaat')}%)`
+                `بلاک کوڈ انچارجز اختتام (%${calculatePercentage(blockCodeIkhtitamData, 'tanzeemi')})`,
+                `نظام فجر (%${calculatePercentage(nizamFajarData, 'tanzeemi')})`,
+                `عوامی کمیٹی (%${calculatePercentage(awaamiCommitteeData, 'tanzeemi')})`,
+                `ارکان سازی (%${calculatePercentage(arkaanData, 'afradi')})`,
+                `امیدواران رکنیت (%${calculatePercentage(umeedwaranData, 'afradi')})`,
+                `کارکنان (%${calculatePercentage(karkunanData, 'afradi')})`,
+                `اجتماع کارکنان (علاقہ) (%${calculatePercentage(ijtimaKarkunanAlaqahData, 'ijtimaat')})`,
+                `اجتماع کارکنان (حلقہ جات) (%${calculatePercentage(ijtimaKarkunanHalqajatData, 'ijtimaat')})`,
+                `درس قرآن (حلقہ جات) (%${calculatePercentage(darsQuranData, 'ijtimaat')})`,
+                `گھروں تک دعوت (%${calculatePercentage(gharonTakDawatData, 'ijtimaat')})`,
+                `تقسیم لٹریچر (%${calculatePercentage(taqseemLiteratureData, 'ijtimaat')})`
             ];
 
             const percentages = [
@@ -1225,11 +1225,11 @@
                             pointLabels: {
                                 font: {
                                     family: 'Noto Nastaliq Urdu, serif',
-                                    size: 12,
+                                    size: 24,
                                     weight: 'bold'
                                 },
                                 color: '#333',
-                                padding: 15
+                                padding: 20
                             },
                             grid: {
                                 color: 'rgba(0, 0, 0, 0.1)'
